@@ -1,0 +1,16 @@
+@import url('./assets/fonts/fonts.css');
+
+:root {
+  --primary-color: #e99fb4;
+  --secondary-color: #B5A2D7;
+  --accent-color: #EFC3A7;
+  --success-color: #A7C49F;
+  --category-color: #A7CBE0;
+  --bg-color: #FCF8F5;
+  --card-color: #FFFFFF;
+  --hover-color: #F5F0E7;
+
+  --title-font: 'Bentham';
+  --main-font: 'Libre Franklin';
+  --main-font-italic: 'Libre Franklin Italic';
+}
