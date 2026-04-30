@@ -2,7 +2,7 @@ const AbstractManager = require("./AbstractManager");
 
 class ArticleManager extends AbstractManager {
     constructor() {
-        super({table: "aricles"});
+        super({table: "articles"});
     }
 
     insert(article) {
