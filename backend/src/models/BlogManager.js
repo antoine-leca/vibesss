@@ -17,11 +17,13 @@ class BlogManager extends AbstractManager {
         );
     }
 
-    update(id) {
+    update(blog) {
         return this.database.query(
             `UPDATE ${this.table} SET theme_id = ?, title = ? WHERE id = ?`, 
             [
-                id
+                blog.theme_id,
+                blog.title,
+                blog.id
             ]
         );
     }
