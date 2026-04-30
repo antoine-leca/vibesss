@@ -41,6 +41,12 @@ const NotifManager = require("./NotifManager");
 models.notifs = new NotifManager();
 models.notifs.setDatabase(pool);
 
+const CategoryManager = require("./categoryManager");
+
+models.categories = new CategoryManager();
+models.categories.setDatabase(pool);
+
+
 // bonus: use a proxy to personalize error message,
 // when asking for a non existing model
 
