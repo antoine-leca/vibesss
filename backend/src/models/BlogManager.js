@@ -7,11 +7,12 @@ class BlogManager extends AbstractManager {
 
     insert(blog) {
         return this.database.query(
-            `INSERT INTO ${this.table} (user_id, theme_id, title, creation_date) VALUES (?, ?, ?, ?)`,
+            `INSERT INTO ${this.table} (user_id, theme_id, title, description, creation_date) VALUES (?, ?, ?, ?)`,
             [
                 blog.user_id,
                 blog.theme_id,
                 blog.title,
+                blog.description,
                 blog.creation_date
             ]
         );
