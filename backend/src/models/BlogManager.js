@@ -20,10 +20,11 @@ class BlogManager extends AbstractManager {
 
     update(blog) {
         return this.database.query(
-            `UPDATE ${this.table} SET theme_id = ?, title = ? WHERE id = ?`, 
+            `UPDATE ${this.table} SET theme_id = ?, title = ?, description = ? WHERE id = ?`, 
             [
                 blog.theme_id,
                 blog.title,
+                blog.description,
                 blog.id
             ]
         );
