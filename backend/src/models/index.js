@@ -34,9 +34,9 @@ const ItemManager = require("./ItemManager");
 models.item = new ItemManager();
 models.item.setDatabase(pool);
 
-const CategoriesManager = require("./categoriesManager");
+const CategoryManager = require("./categoryManager");
 
-models.categories = new CategoriesManager();
+models.categories = new CategoryManager();
 models.categories.setDatabase(pool);
 
 
