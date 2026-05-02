@@ -76,10 +76,25 @@ const destroy = async (req, res) => {
 };
 
 
+
+const destroyAllbyUser = async (req, res) => {
+    const userId = parseInt(req.params.userId, 10);
+
+    try {
+        const [result] = await models.article.deleteAllByUserId(userId);
+        res.sendStatus(204); 
+    } catch (err) {
+        console.error(err);
+        res.sendStatus(500);
+    }
+};
+
+
     module.exports = {
         browse,
         read,
         edit,
         add,
-        destroy
+        destroy,
+        destroyAllbyUser
     }
