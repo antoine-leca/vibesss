@@ -29,8 +29,38 @@ class UserManager extends AbstractManager {
                 user.password,
                 user.bio,
                 user.profile_picture,
-                user.status
+                user.status,
+                user_id
             ]
+        );
+    }
+
+    // 
+    //  ----------------------------------- FIND AVEC RETRAIT DU CHAMPS PASSWORD -------------------------------
+    findUserByEmail(email) {
+        return this.database.query(
+            `SELECT id, firstname, lastname, pseudo, email, bio, profile_picture, status, created_at FROM users WHERE email = ?`, 
+            [email]
+        );
+    }
+
+    findUserByPseudo(pseudo) {
+        return this.database.query(
+            `SELECT id, firstname, lastname, pseudo, email, bio, profile_picture, status, created_at FROM users WHERE pseudo = ?`, 
+            [pseudo]
+        );
+    }
+
+    findAllUsers() {
+        return this.database.query(
+            `SELECT id, firstname, lastname, pseudo, email, bio, profile_picture, status, created_at FROM users`
+        );
+    }
+
+    findUser(id) {
+        return this.database.query(
+            `SELECT id, firstname, lastname, pseudo, email, bio, profile_picture, status, created_at FROM users where id = ?`,
+            [id]
         );
     }
 }
