@@ -65,7 +65,7 @@ const getUserByPseudo = (req, res, next) => {
 const add = async (req, res) => {
     try {
         const user = req.body;
-        const [result] = await models.user.insert(users);
+        const [result] = await models.user.insert(user);
         res.location(`/users/${result.insertId}`).sendStatus(201);
     } catch (err) {
         console.error(err);
