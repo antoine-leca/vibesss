@@ -47,6 +47,14 @@ router.post("/reports", reportController.add);
 router.get("/reports/:id", reportController.edit);
 router.delete("/reports/:id", reportController.destroy);
 
+const categoryController = require("./controllers/categoryController");
+
+router.get("/categories", categoryController.getAllCategories);
+router.get("/categories/:id", categoryController.getCategoryById);
+router.put("/categories/:id", categoryController.updateCategory);
+router.delete("/categories/:id", categoryController.deleteCategory);
+
+
 
 
 
