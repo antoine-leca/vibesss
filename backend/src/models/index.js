@@ -34,6 +34,9 @@ const ArticleManager = require("./ArticleManager");
 models.article = new ArticleManager();
 models.article.setDatabase(pool);
 
+const ReportManager = require("./ReportManager");
+models.article = new ArticleManager();
+models.article.setDatabase(pool);
 
 
 const NotifManager = require("./NotifManager");
