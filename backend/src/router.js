@@ -28,15 +28,8 @@ router.get("/articles", articleController.browse);
 router.get("/articles/:id", articleController.read);
 router.put("/articles/:id", articleController.edit);
 router.delete("/articles/:id", articleController.destroy);
-
 router.post("/articles", articleController.add);
-
 router.delete("/articles/user/:userId", articleController.destroyAllbyUser);
-
-
-
-
-
 
 
 module.exports = router;
