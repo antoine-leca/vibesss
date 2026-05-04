@@ -44,10 +44,10 @@ const reportController = require("./controllers/reportController")
 
 router.get("/reports", reportController.browse);
 router.post("/reports", reportController.add);
-router.get("/reports/:id", reportController.edit);
+router.put("/reports/:id", reportController.edit);
 router.delete("/reports/:id", reportController.destroy);
 
-const CommentController = require("./controllers/CommentController");
+const CommentController = require("./controllers/commentController");
 
 router.get("/comments", CommentController.browse);
 router.get("/comments/:id", CommentController.read);
