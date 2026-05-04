@@ -5,7 +5,7 @@ const models = require("../models");
     const browse = async (req, res) => {
         try {
             const [articles] = await models.article.findAll();
-            res.json(articles)
+            res.json(articles);
         } catch (err) {
             console.error(err);
             res.sendStatus(500);
