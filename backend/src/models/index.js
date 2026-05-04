@@ -55,6 +55,11 @@ const BlogManager = require("./BlogManager");
 models.blog = new BlogManager();
 models.blog.setDatabase(pool);
 
+const CommentManager = require("./CommentManager");
+
+models.comment = new CommentManager();
+models.comment.setDatabase(pool);
+
 const UserManager = require("./UserManager");
 
 models.user = new UserManager();
