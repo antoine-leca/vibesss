@@ -37,6 +37,13 @@ class ArticleManager extends AbstractManager {
     ]
     );
 }
+
+    deleteAllByUserId(userId) {
+        return this.database.query(
+            `DELETE FROM ${this.table} WHERE user_id = ?`,
+            [userId]
+        );
+    }
 }
 
 
