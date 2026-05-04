@@ -47,6 +47,16 @@ router.post("/reports", reportController.add);
 router.get("/reports/:id", reportController.edit);
 router.delete("/reports/:id", reportController.destroy);
 
+const CommentController = require("./controllers/CommentController");
+
+router.get("/comments", CommentController.browse);
+router.get("/comments/:id", CommentController.read);
+router.post("/comments", CommentController.add);
+router.put("/comments/:id", CommentController.edit);
+router.delete("/comments/:id", CommentController.destroy);
+
+module.exports = router;
+
 
 
 
