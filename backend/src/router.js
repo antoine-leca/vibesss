@@ -44,19 +44,24 @@ const reportController = require("./controllers/reportController")
 
 router.get("/reports", reportController.browse);
 router.post("/reports", reportController.add);
-router.get("/reports/:id", reportController.edit);
+router.put("/reports/:id", reportController.edit);
 router.delete("/reports/:id", reportController.destroy);
 
-const CommentController = require("./controllers/CommentController");
+const CommentController = require("./controllers/commentController");
 
-router.get("/comments", CommentController.browse);
-router.get("/comments/:id", CommentController.read);
-router.post("/comments", CommentController.add);
-router.put("/comments/:id", CommentController.edit);
-router.delete("/comments/:id", CommentController.destroy);
+router.get("/comments", commentController.browse);
+router.get("/comments/:id", commentController.read);
+router.post("/comments", commentController.add);
+router.put("/comments/:id", commentController.edit);
+router.delete("/comments/:id", commentController.destroy);
 
-module.exports = router;
+const blogController = require("./controllers/blogController");
 
+router.get("/blogs", blogController.browse);
+router.get("/blogs/:id", blogController.read);
+router.post("/blogs", blogController.add);
+router.put("/blogs/:id", blogController.edit);
+router.delete("/blogs/:id", blogController.destroy);
 
 
 
