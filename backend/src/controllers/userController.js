@@ -1,5 +1,5 @@
 const models = require("../models");
-const auth = require("../services/auth"); // à ajouter en haut
+const auth = require("../auth");
 
 const browse = async (req, res) => {
     try {
