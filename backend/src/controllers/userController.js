@@ -1,4 +1,5 @@
 const models = require("../models");
+const auth = require("../services/auth"); // à ajouter en haut
 
 const browse = async (req, res) => {
     try {
@@ -65,6 +66,7 @@ const getUserByPseudo = (req, res, next) => {
 const add = async (req, res) => {
     try {
         const user = req.body;
+        user.password = await auth.hashPassword(user.password);
         const [result] = await models.user.insert(user);
         res.location(`/users/${result.insertId}`).sendStatus(201);
     } catch (err) {
@@ -73,26 +75,25 @@ const add = async (req, res) => {
     }
 };
 
-const edit = (req, res) => {
-  const user = req.body;
+const edit = async (req, res) => {
+  try {
+    const user = req.body;
+    user.id = parseInt(req.params.id, 10);
+    
+    if (user.password) {
+      user.password = await auth.hashPassword(user.password);
+    }
 
-  // TODO validations (length, format...)
-
-  user.id = parseInt(req.params.id, 10);
-
-  models.user
-    .update(user)
-    .then(([result]) => {
-      if (result.affectedRows === 0) {
-        res.sendStatus(404);
-      } else {
-        res.sendStatus(204);
-      }
-    })
-    .catch((err) => {
-      console.error(err);
-      res.sendStatus(500);
-    });
+    const [result] = await models.user.update(user);
+    if (result.affectedRows === 0) {
+      res.sendStatus(404);
+    } else {
+      res.sendStatus(204);
+    }
+  } catch (err) {
+    console.error(err);
+    res.sendStatus(500);
+  }
 };
 
 const destroy = (req, res) => {
