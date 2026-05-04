@@ -40,5 +40,14 @@ router.delete("/articles/:id", articleController.destroy);
 router.post("/articles", articleController.add);
 router.delete("/articles/user/:userId", articleController.destroyAllbyUser);
 
+const reportController = require("./controllers/reportController")
+
+router.get("/reports", reportController.browse);
+router.post("/reports", reportController.add);
+router.get("/reports/:id", reportController.edit);
+router.delete("/reports/:id", reportController.destroy);
+
+
+
 
 module.exports = router;
