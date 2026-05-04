@@ -11,56 +11,50 @@ const browse = async (req, res) => {
     }
 };
 
-const read = (req, res) => {
-  models.user
-    .findUser(req.params.id)
-    .then(([rows]) => {
-      if (rows[0] == null) {
-        res.sendStatus(404);
-      } else {
-        res.send(rows[0]);
-      }
-    })
-    .catch((err) => {
-      console.error(err);
-      res.sendStatus(500);
-    });
+const read = async (req, res) => {
+  try {
+    const [rows] = await models.user.findUser(req.params.id);
+    if (rows[0] == null) {
+      res.sendStatus(404);
+    } else {
+      res.send(rows[0]);
+    }
+  } catch (err) {
+    console.error(err);
+    res.sendStatus(500);
+  }
 };
 
-const getUserByEmail = (req, res, next) => {
+const getUserByEmail = async (req, res, next) => {
   const { email } = req.body;
-  models.user
-    .findUserByEmail(email)
-    .then(([users]) => {
-      if (users[0] != null) {
-        req.user = users[0];
-        return res.status(409).json({ message: "Cet email est déjà utilisé" });
-      } else {
-        return next();
-      }
-    })
-    .catch((err) => {
-      console.error(err);
-      res.status(500).send("Error retrieving data from database");
-    });
+  try {
+    const [users] = await models.user.findUserByEmail(email);
+    if (users[0] != null) {
+      req.user = users[0];
+      return res.status(409).json({ message: "Cet email est déjà utilisé" });
+    } else {
+      return next();
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error retrieving data from database");
+  }
 };
 
-const getUserByPseudo = (req, res, next) => {
+const getUserByPseudo = async (req, res, next) => {
   const { pseudo } = req.body;
-  models.user
-    .findUserByPseudo(pseudo)
-    .then(([users]) => {
-      if (users[0] != null) {
-        req.user = users[0];
-        return res.status(409).json({ message: "Ce pseudo est déjà utilisé" });
-      } else {
-        return next();
-      }
-    })
-    .catch((err) => {
-      console.error(err);
-      res.status(500).send("Error retrieving data from database");
-    });
+  try {
+    const [users] = await models.user.findUserByPseudo(pseudo);
+    if (users[0] != null) {
+      req.user = users[0];
+      return res.status(409).json({ message: "Ce pseudo est déjà utilisé" });
+    } else {
+      return next();
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error retrieving data from database");
+  }
 };
 
 const add = async (req, res) => {
@@ -96,20 +90,18 @@ const edit = async (req, res) => {
   }
 };
 
-const destroy = (req, res) => {
-  models.user
-    .delete(req.params.id)
-    .then(([result]) => {
-      if (result.affectedRows === 0) {
-        res.sendStatus(404);
-      } else {
-        res.sendStatus(204);
-      }
-    })
-    .catch((err) => {
-      console.error(err);
-      res.sendStatus(500);
-    });
+const destroy = async (req, res) => {
+  try {
+    const [result] = await models.user.delete(req.params.id);
+    if (result.affectedRows === 0) {
+      res.sendStatus(404);
+    } else {
+      res.sendStatus(204);
+    }
+  } catch (err) {
+    console.error(err);
+    res.sendStatus(500);
+  }
 };
 
 module.exports = {
