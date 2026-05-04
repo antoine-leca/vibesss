@@ -52,6 +52,12 @@ const BlogManager = require("./BlogManager");
 models.blog = new BlogManager();
 models.blog.setDatabase(pool);
 
+const CommentManager = require("./CommentManager");
+
+models.comment = new CommentManager();
+models.comment.setDatabase(pool);
+
+
 // bonus: use a proxy to personalize error message,
 // when asking for a non existing model
 
