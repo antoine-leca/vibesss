@@ -20,6 +20,15 @@ router.post("/notifications", notifController.add);
 router.put("/notifications/:id", notifController.markAsRead);
 router.delete("/notifications/:id", notifController.destroy);
 
+const userController = require("./controllers/userController");
+
+router.get("/users", userController.browse);
+router.get("/users/:id", userController.read);
+router.post("/users/email", userController.getUserByEmail);
+router.post("/users/pseudo", userController.getUserByPseudo);
+router.post("/users", userController.add);
+router.put("/users/:id", userController.edit);
+router.delete("/users/:id", userController.destroy);
 
 const articleController = require("./controllers/articleController")
 
