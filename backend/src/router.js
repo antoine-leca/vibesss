@@ -2,7 +2,7 @@ const express = require("express");
 
 const router = express.Router();
 
-const itemControllers = require("./controllers/itemControllers");
+const itemControllers = require("./controllers/itemController");
 
 router.get("/items", itemControllers.browse);
 router.get("/items/:id", itemControllers.read);
@@ -20,6 +20,15 @@ router.post("/notifications", notifController.add);
 router.put("/notifications/:id", notifController.markAsRead);
 router.delete("/notifications/:id", notifController.destroy);
 
+const userController = require("./controllers/userController");
+
+router.get("/users", userController.browse);
+router.get("/users/:id", userController.read);
+router.post("/users/email", userController.getUserByEmail);
+router.post("/users/pseudo", userController.getUserByPseudo);
+router.post("/users", userController.add);
+router.put("/users/:id", userController.edit);
+router.delete("/users/:id", userController.destroy);
 
 const articleController = require("./controllers/articleController")
 
@@ -28,15 +37,8 @@ router.get("/articles", articleController.browse);
 router.get("/articles/:id", articleController.read);
 router.put("/articles/:id", articleController.edit);
 router.delete("/articles/:id", articleController.destroy);
-
 router.post("/articles", articleController.add);
-
 router.delete("/articles/user/:userId", articleController.destroyAllbyUser);
-
-
-
-
-
 
 
 module.exports = router;
