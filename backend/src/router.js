@@ -11,10 +11,5 @@ router.put("/items/:id", itemControllers.edit);
 router.post("/items", itemControllers.add);
 router.delete("/items/:id", itemControllers.destroy);
 
-// Routes for categories
-router.get("/categories", categoryControllers.getAllCategories);
-router.get("/categories/:id", categoryControllers.getCategoryById);
-router.put("/categories/:id", categoryControllers.updateCategory); // Update category
-router.delete("/categories/:id", categoryControllers.deleteCategory); // Delete category
 
 module.exports = router;
