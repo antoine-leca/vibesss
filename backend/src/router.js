@@ -55,8 +55,13 @@ router.post("/comments", CommentController.add);
 router.put("/comments/:id", CommentController.edit);
 router.delete("/comments/:id", CommentController.destroy);
 
-module.exports = router;
+const blogController = require("./controllers/blogController");
 
+router.get("/blogs", blogController.browse);
+router.get("/blogs/:id", blogController.read);
+router.post("/blogs", blogController.add);
+router.put("/blogs/:id", blogController.edit);
+router.delete("/blogs/:id", blogController.destroy);
 
 
 
