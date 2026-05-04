@@ -30,7 +30,7 @@ class UserManager extends AbstractManager {
                 user.bio,
                 user.profile_picture,
                 user.status,
-                user_id
+                user.id
             ]
         );
     }
