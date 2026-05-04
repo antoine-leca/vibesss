@@ -2,7 +2,7 @@ const express = require("express");
 
 const router = express.Router();
 
-const itemControllers = require("./controllers/itemControllers");
+const itemControllers = require("./controllers/itemController");
 
 router.get("/items", itemControllers.browse);
 router.get("/items/:id", itemControllers.read);
