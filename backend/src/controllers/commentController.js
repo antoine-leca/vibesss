@@ -34,7 +34,6 @@ const add = async (req, res) => {
       user_id,
       moderation_status: moderation_status || "pending",
     });
-    // On peut aussi utiliser res.location(...) comme tu l'as fait dans notif !
     res.status(201).json({ id: result.insertId, content, article_id, user_id });
   } catch (err) {
     console.error(err);
@@ -79,7 +78,6 @@ const destroy = async (req, res) => {
   }
 };
 
-// On exporte toutes les fonctions à la fin
 module.exports = {
   browse,
   read,
@@ -87,3 +85,4 @@ module.exports = {
   edit,
   destroy,
 };
+;
