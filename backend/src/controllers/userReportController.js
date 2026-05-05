@@ -38,14 +38,10 @@ const add = async (req, res) => {
 
 const destroy = async (req, res) => {
   try {
-    const id = parseInt(req.params.id, 10);
-    const [result] = await models.userReport.delete(id);
+    const userId = parseInt(req.params.id, 10); 
+    const [result] = await models.userReport.deleteByUserId(userId);
 
-    if (result.affectedRows === 0) {
-      res.sendStatus(404);
-    } else {
-      res.sendStatus(204);
-    }
+    res.sendStatus(204); 
   } catch (err) {
     console.error(err);
     res.sendStatus(500);
