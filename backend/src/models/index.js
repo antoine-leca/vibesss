@@ -85,4 +85,10 @@ const handler = {
   },
 };
 
+const ThemeManager = require("./ThemeManager");
+
+models.theme = new BlogManager();
+models.theme.setDatabase(pool);
+
+
 module.exports = new Proxy(models, handler);
