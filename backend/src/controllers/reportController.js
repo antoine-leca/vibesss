@@ -23,13 +23,13 @@ const add = async (req, res) => {
   }
 };
 
-// Modifier un rapport existant
 const edit = async (req, res) => {
   try {
-    const report = req.body;
-    report.id = parseInt(req.params.id, 10);
+    const { status } = req.body;
+    const id = parseInt(req.params.id, 10);
 
-    const [result] = await models.report.update(report);
+    // On passe l'objet partiel au manager
+    const [result] = await models.report.update({ id, status });
 
     if (result.affectedRows === 0) {
       res.sendStatus(404);
@@ -40,9 +40,9 @@ const edit = async (req, res) => {
     console.error(err);
     res.sendStatus(500);
   }
-};
+};  
 
-
+// Supprimer un rapport
 const destroy = async (req, res) => {
   try {
     const id = parseInt(req.params.id, 10);
@@ -63,5 +63,6 @@ module.exports = {
   browse,
   add,
   edit,
+  editFull,
   destroy,
 };

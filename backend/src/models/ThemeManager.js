@@ -24,7 +24,8 @@ class ThemeManager extends AbstractManager {
                 theme.label,
                 theme.color_name,
                 theme.font_name,
-                theme.bg_image
+                theme.bg_image,
+                theme.id
             ]
         );
     }

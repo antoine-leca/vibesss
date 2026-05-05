@@ -5,7 +5,6 @@ class CategoryManager extends AbstractManager {
     super({ table: "categories" });
   }
 
-  // Insert a new category
   insert(category) {
     return this.database.query(
       `INSERT INTO ${this.table} (label, description) VALUES (?, ?)`,
@@ -13,7 +12,6 @@ class CategoryManager extends AbstractManager {
     );
   }
 
-  // Update an existing category
   update(category) {
     return this.database.query(
       `UPDATE ${this.table} SET label = ?, description = ? WHERE id = ?`,

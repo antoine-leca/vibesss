@@ -15,8 +15,8 @@ class ReportManager extends AbstractManager {
 
     update(report) {
         return this.database.query(
-            `UPDATE ${this.table} SET report_reason = ?, description = ? WHERE id = ?`,
-            [report.report_reason, report.description, report.id]
+            `UPDATE ${this.table} SET status = ? WHERE id = ?`,
+            [report.status, report.id]
         );
     }
 

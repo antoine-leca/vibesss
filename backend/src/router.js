@@ -13,12 +13,12 @@ router.delete("/items/:id", itemControllers.destroy);
 
 const notifController = require("./controllers/notifController");
 
-
 router.get("/notifications", notifController.browse);
 router.get("/notifications/unread/:userId", notifController.getUnread);
 router.post("/notifications", notifController.add);
 router.put("/notifications/:id", notifController.markAsRead);
 router.delete("/notifications/:id", notifController.destroy);
+
 
 const userController = require("./controllers/userController");
 
@@ -30,8 +30,8 @@ router.post("/users", userController.add);
 router.put("/users/:id", userController.edit);
 router.delete("/users/:id", userController.destroy);
 
-const articleController = require("./controllers/articleController")
 
+const articleController = require("./controllers/articleController")
 
 router.get("/articles", articleController.browse);
 router.get("/articles/:id", articleController.read);
@@ -40,12 +40,22 @@ router.delete("/articles/:id", articleController.destroy);
 router.post("/articles", articleController.add);
 router.delete("/articles/user/:userId", articleController.destroyAllbyUser);
 
+
 const reportController = require("./controllers/reportController")
 
 router.get("/reports", reportController.browse);
 router.post("/reports", reportController.add);
 router.put("/reports/:id", reportController.edit);
 router.delete("/reports/:id", reportController.destroy);
+
+
+const userReportController = require("./controllers/userReportController");
+
+router.get("/users_reports", userReportController.browse);
+router.get("/users_reports/:id", userReportController.read);
+router.post("/users_reports", userReportController.add);
+router.delete("/users_reports/:id", userReportController.destroy);
+
 
 const commentController = require("./controllers/commentController");
 
@@ -54,6 +64,7 @@ router.get("/comments/:id", commentController.read);
 router.post("/comments", commentController.add);
 router.put("/comments/:id", commentController.edit);
 router.delete("/comments/:id", commentController.destroy);
+
 
 const blogController = require("./controllers/blogController");
 
@@ -70,5 +81,12 @@ router.post("/users_articles", userLikeArticleController.add);
 router.delete("/users_articles", userLikeArticleController.destroy);
 
 
+const themeController = require("./controllers/themeController");
+
+router.get("/themes", themeController.browse);
+router.get("/themes/:id", themeController.read);
+router.post("/themes", themeController.add);
+router.put("/themes/:id", themeController.edit);
+router.delete("/themes/:id", themeController.destroy);
 
 module.exports = router;
