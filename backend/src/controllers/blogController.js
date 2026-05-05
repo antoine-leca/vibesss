@@ -32,21 +32,15 @@ const read = async (req, res) => {
 
 const add = async (req, res) => {
 
-  const { user_id, theme_id, title, description } = req.body;
-  
-  if (!title) {
+  const blog = {...req.body, creation_date: new Date()};
+
+  if (!blog.title) {
     return res.status(400).json({ message: "Le titre est requis." });
   }
 
   try {
 
-    const [result] = await models.blog.insert ({
-      user_id,
-      theme_id: theme_id ?? null,
-      title,
-      description: description ?? null,
-      creation_date: new Date(),
-    });
+    const [result] = await models.blog.insert (blog);
 
     res.status(201).json({
       id: result.insertId,
