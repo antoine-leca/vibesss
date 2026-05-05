@@ -65,6 +65,15 @@ const UserManager = require("./UserManager");
 models.user = new UserManager();
 models.user.setDatabase(pool);
 
+
+const UserLikeArticleManager = require("./UserLikeArticleManager");
+
+models.userLikeArticle = new UserLikeArticleManager();
+models.userLikeArticle.setDatabase(pool);
+
+
+
+
 // bonus: use a proxy to personalize error message,
 // when asking for a non existing model
 
