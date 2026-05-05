@@ -40,25 +40,7 @@ const edit = async (req, res) => {
     console.error(err);
     res.sendStatus(500);
   }
-};
-
-const editFull = async (req, res) => {
-  try {
-    const report = req.body;
-    report.id = parseInt(req.params.id, 10);
-
-    const [result] = await models.report.update(report);
-
-    if (result.affectedRows === 0) {
-      res.sendStatus(404);
-    } else {
-      res.sendStatus(204);
-    }
-  } catch (err) {
-    console.error(err);
-    res.sendStatus(500);
-  }
-};
+};  
 
 // Supprimer un rapport
 const destroy = async (req, res) => {
