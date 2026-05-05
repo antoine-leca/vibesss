@@ -86,6 +86,10 @@ models.role = new RoleManager();
 models.role.setDatabase(pool);
 
 
+const ThemeManager = require("./ThemeManager");
+
+models.theme = new ThemeManager();
+models.theme.setDatabase(pool);
 
 
 // bonus: use a proxy to personalize error message,
@@ -107,11 +111,6 @@ const handler = {
     );
   },
 };
-
-const ThemeManager = require("./ThemeManager");
-
-models.theme = new BlogManager();
-models.theme.setDatabase(pool);
 
 
 module.exports = new Proxy(models, handler);
