@@ -47,6 +47,13 @@ router.post("/reports", reportController.add);
 router.put("/reports/:id", reportController.edit);
 router.delete("/reports/:id", reportController.destroy);
 
+const userReportController = require("./controllers/userReportController");
+
+router.get("/user-reports", userReportController.browse);
+router.get("/user-reports/:id", userReportController.read);
+router.post("/user-reports", userReportController.add);
+router.delete("/user-reports/:id", userReportController.destroy);
+
 const commentController = require("./controllers/commentController");
 
 router.get("/comments", commentController.browse);
