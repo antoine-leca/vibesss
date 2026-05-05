@@ -64,5 +64,11 @@ router.put("/blogs/:id", blogController.edit);
 router.delete("/blogs/:id", blogController.destroy);
 
 
+const userLikeArticleController = require("./controllers/userLikeArticleController");
+
+router.post("/user_articles", userLikeArticleController.add);
+router.delete("/user_articles", userLikeArticleController.destroy);
+
+
 
 module.exports = router;
