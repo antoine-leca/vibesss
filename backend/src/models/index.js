@@ -65,6 +65,12 @@ const UserManager = require("./UserManager");
 models.user = new UserManager();
 models.user.setDatabase(pool);
 
+const UserSignalementManager = require('./UserSignalementManager');
+
+models.user_signalement = new UserSignalementManager();
+models.user_signalement.setDatabase(pool);
+
+
 // bonus: use a proxy to personalize error message,
 // when asking for a non existing model
 
