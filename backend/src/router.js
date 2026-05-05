@@ -49,10 +49,10 @@ router.delete("/reports/:id", reportController.destroy);
 
 const userReportController = require("./controllers/userReportController");
 
-router.get("/user-reports", userReportController.browse);
-router.get("/user-reports/:id", userReportController.read);
-router.post("/user-reports", userReportController.add);
-router.delete("/user-reports/:id", userReportController.destroy);
+router.get("/users_reports", userReportController.browse);
+router.get("/users_reports/:id", userReportController.read);
+router.post("/users_reports", userReportController.add);
+router.delete("/users_reports/:id", userReportController.destroy);
 
 const commentController = require("./controllers/commentController");
 
