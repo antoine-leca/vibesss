@@ -6,7 +6,7 @@ const add = async (req, res) => {
 
     try {
     
-        const [result] = await models.user_like_article.insert(userId, articleId);
+        const [result] = await models.userLikeArticle.insert(userId, articleId);
         
         res.sendStatus(201); 
     } catch (err) {
@@ -24,7 +24,7 @@ const destroy = async (req, res) => {
     const { userId, articleId } = req.body;
 
     try {
-        const [result] = await models.user_like_article.delete(userId, articleId);
+        const [result] = await models.userLikeArticle.deleteLike(userId, articleId);
         if (result.affectedRows === 0) {
             res.sendStatus(404);
         } else {
