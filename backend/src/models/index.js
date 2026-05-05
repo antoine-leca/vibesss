@@ -91,6 +91,10 @@ const ThemeManager = require("./ThemeManager");
 models.theme = new ThemeManager();
 models.theme.setDatabase(pool);
 
+const UserBlogManager = require("./UserBlogManager");
+
+models.userblog = new UserBlogManager();
+models.userblog.setDatabase(pool);
 
 // bonus: use a proxy to personalize error message,
 // when asking for a non existing model

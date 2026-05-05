@@ -130,7 +130,6 @@ CREATE TABLE users_articles (
 );
 
 CREATE TABLE users_blogs (
-  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   user_id INT(11) UNSIGNED NOT NULL,
   blog_id INT(11) UNSIGNED NOT NULL,
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
