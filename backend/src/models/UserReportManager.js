@@ -17,6 +17,13 @@ class UserReportManager extends AbstractManager {
       ]
     );
   }
+
+  deleteByUserId(userId) {
+    return this.database.query(
+      `DELETE FROM ${this.table} WHERE user_id = ?`,
+      [userId]
+    )
+  }
 }
 
 module.exports = UserReportManager;

@@ -63,6 +63,5 @@ module.exports = {
   browse,
   add,
   edit,
-  editFull,
   destroy,
 };
