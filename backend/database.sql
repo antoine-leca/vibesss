@@ -53,6 +53,7 @@ CREATE TABLE reports (
   id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   report_reason ENUM('spam','bully','inappropriate','copyright'),
   description VARCHAR(255) NOT NULL,
+  status ENUM('active', 'inactive') DEFAULT 'active',
   report_date DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
