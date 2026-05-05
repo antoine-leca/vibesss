@@ -68,10 +68,10 @@ models.user = new UserManager();
 models.user.setDatabase(pool);
 
 
-const UserSignalementManager = require('./UserSignalementManager');
+const UserReportManager = require('./UserReportManager');
 
-models.user_signalement = new UserSignalementManager();
-models.user_signalement.setDatabase(pool);
+models.user_report = new UserReportManager();
+models.user_report.setDatabase(pool);
 
 
 const UserLikeArticleManager = require("./UserLikeArticleManager");
