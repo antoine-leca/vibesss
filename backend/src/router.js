@@ -89,4 +89,14 @@ router.post("/themes", themeController.add);
 router.put("/themes/:id", themeController.edit);
 router.delete("/themes/:id", themeController.destroy);
 
+
+const roleController = require("./controllers/roleController");
+
+router.get("/roles", roleController.browse);
+router.get("/roles/:id", roleController.read);
+router.post("/roles", roleController.add);
+router.put("/roles/:id", roleController.edit);
+router.delete("/roles/:id", roleController.destroy);
+
+
 module.exports = router;
