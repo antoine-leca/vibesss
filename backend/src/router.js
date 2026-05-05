@@ -52,9 +52,9 @@ router.delete("/reports/:id", reportController.destroy);
 const userReportController = require("./controllers/userReportController");
 
 router.get("/users_reports", userReportController.browse);
-router.get("/users_reports/:id", userReportController.read);
+router.get("/users_reports/:userId/:reportId", userReportController.read);
 router.post("/users_reports", userReportController.add);
-router.delete("/users_reports/:id", userReportController.destroy);
+router.delete("/users_reports/:userId/:reportId", userReportController.destroy);
 
 
 const commentController = require("./controllers/commentController");
