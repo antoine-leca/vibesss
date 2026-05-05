@@ -75,6 +75,15 @@ router.put("/blogs/:id", blogController.edit);
 router.delete("/blogs/:id", blogController.destroy);
 
 
+const blogCategoryController = require("./controllers/blogCategoryController");
+
+router.get("/blogs_categories", blogCategoryController.browse);
+router.get("/blogs_categories/blog/:blogId", blogCategoryController.findByBlogId);
+router.get("/blogs_categories/category/:categoryId", blogCategoryController.findByCategoryId);
+router.post("/blogs_categories", blogCategoryController.add);
+router.delete("/blogs_categories/:blogId/:categoryId", blogCategoryController.destroy);
+
+
 const userLikeArticleController = require("./controllers/userLikeArticleController");
 
 router.post("/users_articles", userLikeArticleController.add);
