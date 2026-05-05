@@ -107,6 +107,7 @@ CREATE TABLE notifs (
 CREATE TABLE blogs_categories (
   blog_id INT(11) UNSIGNED NOT NULL,
   categorie_id INT(11) UNSIGNED NOT NULL,
+  PRIMARY KEY (blog_id, categorie_id),
   FOREIGN KEY (blog_id) REFERENCES blogs(id) ON DELETE CASCADE,
   FOREIGN KEY (categorie_id) REFERENCES categories(id) ON DELETE CASCADE
 );
@@ -114,6 +115,7 @@ CREATE TABLE blogs_categories (
 CREATE TABLE users_roles (
   user_id INT(11) UNSIGNED NOT NULL,
   role_id INT(11) UNSIGNED NOT NULL,
+  PRIMARY KEY (user_id, role_id),
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
   FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE
 );
@@ -121,6 +123,7 @@ CREATE TABLE users_roles (
 CREATE TABLE users_articles (
   user_id INT(11) UNSIGNED NOT NULL,
   article_id INT(11) UNSIGNED NOT NULL,
+  PRIMARY KEY (user_id, article_id),
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
   FOREIGN KEY (article_id) REFERENCES articles(id) ON DELETE CASCADE
 );
