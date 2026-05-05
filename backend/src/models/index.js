@@ -70,8 +70,8 @@ models.user.setDatabase(pool);
 
 const UserReportManager = require('./UserReportManager');
 
-models.user_report = new UserReportManager();
-models.user_report.setDatabase(pool);
+models.userReport = new UserReportManager();
+models.userReport.setDatabase(pool);
 
 
 const UserLikeArticleManager = require("./UserLikeArticleManager");
