@@ -82,8 +82,8 @@ models.userLikeArticle.setDatabase(pool);
 
 const RoleManager = require("./RoleManager");
 
-models.roleLikeArticle = new RoleManager();
-models.roleLikeArticle.setDatabase(pool);
+models.role = new RoleManager();
+models.role.setDatabase(pool);
 
 
 
