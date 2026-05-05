@@ -80,6 +80,14 @@ models.userLikeArticle = new UserLikeArticleManager();
 models.userLikeArticle.setDatabase(pool);
 
 
+const RoleManager = require("./RoleManager");
+
+models.roleLikeArticle = new RoleManager();
+models.roleLikeArticle.setDatabase(pool);
+
+
+
+
 // bonus: use a proxy to personalize error message,
 // when asking for a non existing model
 
