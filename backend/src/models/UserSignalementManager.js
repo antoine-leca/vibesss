@@ -2,18 +2,18 @@ const AbstractManager = require("./AbstractManager");
 
 class UserSignalementManager extends AbstractManager {
   constructor() {
-    super({ table: "user_signalement" });
+    super({ table: "users_reports" });
   }
 
   insert(signalement) {
     return this.database.query(
-      `INSERT INTO ${this.table} (id_user, id_article, id_blog, id_comment, id_signalement) VALUES (?, ?, ?, ?, ?)`,
+      `INSERT INTO ${this.table} (user_id, article_id, blog_id, comment_id, report_id) VALUES (?, ?, ?, ?, ?)`,
       [
-        signalement.id_user,
-        signalement.id_article ?? null, // Utilisation du nullish coalescing pour les champs optionnels
-        signalement.id_blog ?? null,
-        signalement.id_comment ?? null,
-        signalement.id_signalement
+        signalement.user_id,
+        signalement.article_id,
+        signalement.blog_id,
+        signalement.comment_id,
+        signalement.report_id
       ]
     );
   }

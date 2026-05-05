@@ -138,9 +138,9 @@ CREATE TABLE users_blogs (
 
 CREATE TABLE users_reports (
   user_id INT(11) UNSIGNED NOT NULL,
-  article_id INT(11) UNSIGNED NOT NULL,
-  blog_id INT(11) UNSIGNED NOT NULL,
-  comment_id INT(11) UNSIGNED NOT NULL,
+  article_id INT(11) UNSIGNED NULL,
+  blog_id INT(11) UNSIGNED NULL,
+  comment_id INT(11) UNSIGNED NULL,
   report_id INT(11) UNSIGNED NOT NULL,
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
   FOREIGN KEY (article_id) REFERENCES articles(id) ON DELETE CASCADE,
