@@ -63,6 +63,12 @@ router.post("/blogs", blogController.add);
 router.put("/blogs/:id", blogController.edit);
 router.delete("/blogs/:id", blogController.destroy);
 
+const themeController = require("./controllers/themeController");
 
+router.get("/themes", themeController.browse);
+router.get("/themes/:id", themeController.read);
+router.post("/themes", themeController.add);
+router.put("/themes/:id", themeController.edit);
+router.delete("/themes/:id", themeController.destroy);
 
 module.exports = router;
