@@ -55,15 +55,23 @@ const BlogManager = require("./BlogManager");
 models.blog = new BlogManager();
 models.blog.setDatabase(pool);
 
+
 const CommentManager = require("./CommentManager");
 
 models.comment = new CommentManager();
 models.comment.setDatabase(pool);
 
+
 const UserManager = require("./UserManager");
 
 models.user = new UserManager();
 models.user.setDatabase(pool);
+
+
+const UserSignalementManager = require('./UserSignalementManager');
+
+models.user_signalement = new UserSignalementManager();
+models.user_signalement.setDatabase(pool);
 
 
 const UserLikeArticleManager = require("./UserLikeArticleManager");
@@ -99,5 +107,11 @@ const handler = {
     );
   },
 };
+
+const ThemeManager = require("./ThemeManager");
+
+models.theme = new BlogManager();
+models.theme.setDatabase(pool);
+
 
 module.exports = new Proxy(models, handler);
