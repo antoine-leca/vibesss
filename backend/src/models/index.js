@@ -92,6 +92,12 @@ models.theme = new ThemeManager();
 models.theme.setDatabase(pool);
 
 
+const BlogCategoryManager = require("./BlogCategoryManager");
+
+models.blogCategory = new BlogCategoryManager();
+models.blogCategory.setDatabase(pool);
+
+
 // bonus: use a proxy to personalize error message,
 // when asking for a non existing model
 
