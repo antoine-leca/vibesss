@@ -98,6 +98,12 @@ models.blogCategory = new BlogCategoryManager();
 models.blogCategory.setDatabase(pool);
 
 
+const UserRoleManager = require("./UserRoleManager");
+
+models.userRole = new UserRoleManager();
+models.userRole.setDatabase(pool);
+
+
 // bonus: use a proxy to personalize error message,
 // when asking for a non existing model
 
