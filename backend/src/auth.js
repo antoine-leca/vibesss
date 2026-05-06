@@ -8,8 +8,21 @@
     parallelism: 1,
   };
 
-  const hashPassword = async (plainPassword) => {
-    return argon2.hash(plainPassword, hashingOptions);
+  const hashPassword = async (req, res, next) => {
+    try {
+
+    const hash = await argon2.hash(req.body.password, hashingOptions);
+
+    req.body.hashedPassword = hash;
+    delete req.body.password;
+
+    next();
+    
+    } catch (err) {
+    console.error(err);
+    res.sendStatus(500);
+    }
+
   };
 
 
