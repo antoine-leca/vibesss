@@ -32,7 +32,7 @@ const read = async (req, res) => {
 
 const add = async (req, res) => {
 
-  const blog = {...req.body, creation_date: new Date()};
+  const blog = {...req.body};
 
   if (!blog.title) {
     return res.status(400).json({ message: "Le titre est requis." });
