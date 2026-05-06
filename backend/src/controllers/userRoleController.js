@@ -16,7 +16,7 @@ const add = async (req, res) => {
 };
 
 const destroy = async (req, res) => {
-    const { userId, roleId } = req.body;
+    const { userId, roleId } = req.params;
     try {
         const [result] = await models.userRole.delete(userId, roleId);
         if (result.affectedRows === 0) {

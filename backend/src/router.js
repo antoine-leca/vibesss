@@ -107,5 +107,10 @@ router.post("/roles", roleController.add);
 router.put("/roles/:id", roleController.edit);
 router.delete("/roles/:id", roleController.destroy);
 
+const userRoleController = require("./controllers/userRoleController");
+
+router.post("/users_roles", userRoleController.add);
+router.delete("/users_roles/:userId/:roleId", userRoleController.destroy);
+
 
 module.exports = router;
