@@ -2,6 +2,27 @@ const express = require("express");
 
 const router = express.Router();
 
+// ------------ ROUTES USERS
+const userController = require("./controllers/userController");
+
+const {
+    hashPassword,
+    verifyPassword,
+} = require("./auth");
+
+// ------------- Auth 
+router.post("/users", hashPassword, userController.add);
+router.post("/users/login", userController.getUserByEmail, verifyPassword)
+router.put("/users/:id", userController.edit);
+
+// ------------- Routes users basiques 
+router.get("/users", userController.browse);
+router.get("/users/:id", userController.read);
+router.post("/users/email", userController.getUserByEmail);
+router.post("/users/pseudo", userController.getUserByPseudo);
+router.delete("/users/:id", userController.destroy);
+
+
 const itemControllers = require("./controllers/itemController");
 
 router.get("/items", itemControllers.browse);
@@ -20,15 +41,6 @@ router.put("/notifications/:id", notifController.markAsRead);
 router.delete("/notifications/:id", notifController.destroy);
 
 
-const userController = require("./controllers/userController");
-
-router.get("/users", userController.browse);
-router.get("/users/:id", userController.read);
-router.post("/users/email", userController.getUserByEmail);
-router.post("/users/pseudo", userController.getUserByPseudo);
-router.post("/users", userController.add);
-router.put("/users/:id", userController.edit);
-router.delete("/users/:id", userController.destroy);
 
 
 const articleController = require("./controllers/articleController")
