@@ -9,9 +9,10 @@
   };
 
   const hashPassword = async (req, res, next) => {
+    console.log(req);
     try {
-
-    const hash = await argon2.hash(req.body.password, hashingOptions);
+      
+    const hash = await argon2.hash("mon_super_password_123", hashingOptions);
 
     req.body.hashedPassword = hash;
     delete req.body.password;
@@ -50,6 +51,28 @@
   }
   };
 
+  const verifyToken = (req, res, next) => {
+    try {
+      const authorizationHeader = req.get("Authorization");
+
+      if (authorizationHeader == null) {
+        throw new Error("Authorization header is missing");
+      }
+
+      const [type, token] = authorizationHeader.split(" ");
+
+      if (type !== "Bearer"){
+        throw new Error("Authorization header has not the 'Bearer' type" );
+      }
+
+      req.payload = jwt.verify(token, process.env.JWT_SECRET);
+
+      next();
+    } catch (err){
+      console.error("Token non valide:", err_message);
+      res.sendStatus(401);
+    }
+  };
 
 
 
