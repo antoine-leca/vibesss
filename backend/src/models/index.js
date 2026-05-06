@@ -93,8 +93,8 @@ models.theme.setDatabase(pool);
 
 const UserBlogManager = require("./UserBlogManager");
 
-models.userblog = new UserBlogManager();
-models.userblog.setDatabase(pool);
+models.userBlog = new UserBlogManager();
+models.userBlog.setDatabase(pool);
 
 const BlogCategoryManager = require("./BlogCategoryManager");
 

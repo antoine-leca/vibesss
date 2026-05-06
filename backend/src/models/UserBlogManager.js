@@ -5,16 +5,25 @@ class UserBlogManager extends AbstractManager {
         super({ table: "users_blogs" });
     }
 
-    insert(userblog) {
+    insert(userId, blogId) {
         return this.database.query(
             `INSERT INTO ${this.table} (user_id, blog_id) VALUES (?,?)`,
             [
-                userblog.user_id,
-                userblog.blog_id
+                userId,
+                blogId
             ]
         );
     }
 
+    delete(userId, blogId) {
+        return this.database.query(
+            `DELETE FROM ${this.table} WHERE user_id = ? AND blog_id = ?`,
+            [
+                userId,
+                blogId
+            ]
+        );
+    }
 }
 
 

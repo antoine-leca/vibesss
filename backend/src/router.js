@@ -107,5 +107,9 @@ router.post("/roles", roleController.add);
 router.put("/roles/:id", roleController.edit);
 router.delete("/roles/:id", roleController.destroy);
 
+const userBlogController = require("./controllers/userBlogController");
+
+router.post("/users_blogs", userBlogController.add);
+router.delete("/users_blogs/:userId/:blogId", userBlogController.destroy);
 
 module.exports = router;
