@@ -8,16 +8,16 @@ const hashingOptions = {
   parallelism: 1,
 };
 
-const hashPlainPassword = async (password) => {
-  return argon2.hash(password, hashingOptions);
-};
 
 const hashPassword = async (req, res, next) => {
+
+  const hashedPassword = await argon2.hash(req.body.password, hashingOptions);
   try {
     if (!req.body.password) {
       return res.status(400).send("Le mot de passe est obligatoire");
     }
-    req.body.password = await hashPlainPassword(req.body.password);
+    req.body.hashedPassword = hashedPassword;
+    delete req.body.password;
     next();
   } catch (err) {
     console.error(err);
@@ -73,7 +73,6 @@ const verifyToken = (req, res, next) => {
 
 module.exports = {
   hashPassword,
-  hashPlainPassword,
   verifyPassword,
   verifyToken
 };

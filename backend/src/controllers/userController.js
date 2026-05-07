@@ -72,11 +72,6 @@ const edit = async (req, res) => {
   try {
     const user = req.body;
     user.id = parseInt(req.params.id, 10);
-    
-    if (user.password) {
-      
-      user.password = await auth.hashPlainPassword(user.password);
-    }
 
     const [result] = await models.user.update(user);
     if (result.affectedRows === 0) {
