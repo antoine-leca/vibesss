@@ -18,8 +18,8 @@ router.put("/users/:id", userController.edit);
 // ------------- Routes users basiques 
 router.get("/users", userController.browse);
 router.get("/users/:id", userController.read);
-router.post("/users/email", userController.getUserByEmail);
-router.post("/users/pseudo", userController.getUserByPseudo);
+router.post("/users/", userController.getUserByEmail);
+router.post("/users/", userController.getUserByPseudo);
 router.delete("/users/:id", userController.destroy);
 
 
