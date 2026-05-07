@@ -17,7 +17,6 @@ const hashPassword = async (req, res, next) => {
     if (!req.body.password) {
       return res.status(400).send("Le mot de passe est obligatoire");
     }
-    // Utilisation de la nouvelle fonction
     req.body.password = await hashPlainPassword(req.body.password);
     next();
   } catch (err) {
