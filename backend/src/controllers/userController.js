@@ -59,9 +59,7 @@ const getUserByPseudo = async (req, res, next) => {
 
 const add = async (req, res) => {
     try {
-        const user = req.body;
-        user.password = await auth.hashPassword(user.password);
-        const [result] = await models.user.insert(user);
+        const [result] = await models.user.insert(req.body);
         res.location(`/users/${result.insertId}`).sendStatus(201);
     } catch (err) {
         console.error(err);
@@ -69,13 +67,15 @@ const add = async (req, res) => {
     }
 };
 
+
 const edit = async (req, res) => {
   try {
     const user = req.body;
     user.id = parseInt(req.params.id, 10);
     
     if (user.password) {
-      user.password = await auth.hashPassword(user.password);
+      
+      user.password = await auth.hashPlainPassword(user.password);
     }
 
     const [result] = await models.user.update(user);
