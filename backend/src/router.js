@@ -8,6 +8,7 @@ const userController = require("./controllers/userController");
 const {
     hashPassword,
     verifyPassword,
+    verifyToken,
 } = require("./auth");
 
 // ------------- Auth 
@@ -15,6 +16,7 @@ router.post("/auth/register", hashPassword, userController.add);
 router.post("/auth/login", userController.getUserByEmail, verifyPassword)
 router.put("/users/:id", hashPassword, userController.edit);
 
+// router.use(verifyToken);
 // ------------- Routes users basiques 
 router.get("/users", userController.browse);
 router.get("/users/:id", userController.read);
@@ -22,14 +24,6 @@ router.post("/users/", userController.getUserByEmail);
 router.post("/users/", userController.getUserByPseudo);
 router.delete("/users/:id", userController.destroy);
 
-
-const itemControllers = require("./controllers/itemController");
-
-router.get("/items", itemControllers.browse);
-router.get("/items/:id", itemControllers.read);
-router.put("/items/:id", itemControllers.edit);
-router.post("/items", itemControllers.add);
-router.delete("/items/:id", itemControllers.destroy);
 
 
 const notifController = require("./controllers/notifController");

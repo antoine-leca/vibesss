@@ -31,9 +31,9 @@ const getUserByEmail = async (req, res, next) => {
     const [users] = await models.user.findUserByEmail(email);
     if (users[0] != null) {
       req.user = users[0];
-      return res.status(409).json({ message: "Cet email est déjà utilisé" });
+      next();
     } else {
-      return next();
+      return res.status(409).json({ message: "Les identifiants sont incorrects " });
     }
   } catch (err) {
     console.error(err);

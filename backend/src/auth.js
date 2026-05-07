@@ -28,7 +28,8 @@ const hashPassword = async (req, res, next) => {
 const verifyPassword = async (req, res) => {
 
   try {
-    const isVerified = await argon2.verify(req.user.hashedPassword, req.body.plainPassword);
+    const isVerified = await argon2.verify(req.user.password, req.body.password);
+
 
     if (isVerified) {
       const payload = { sub: req.user.id };
@@ -63,10 +64,11 @@ const verifyToken = (req, res, next) => {
     }
 
     req.payload = jwt.verify(token, process.env.JWT_SECRET);
+    console.log("token valide");
 
     next();
   } catch (err) {
-    console.error("Token non valide:", err_message);
+    console.error("Token non valide:", err);
     res.sendStatus(401);
   }
 };
