@@ -11,8 +11,8 @@ const {
 } = require("./auth");
 
 // ------------- Auth 
-router.post("/users", hashPassword, userController.add);
-router.post("/users/login", userController.getUserByEmail, verifyPassword)
+router.post("/auth/register", hashPassword, userController.add);
+router.post("/auth/login", userController.getUserByEmail, verifyPassword)
 router.put("/users/:id", userController.edit);
 
 // ------------- Routes users basiques 
