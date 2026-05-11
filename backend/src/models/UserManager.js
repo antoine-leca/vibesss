@@ -13,7 +13,7 @@ class UserManager extends AbstractManager {
                 user.firstname,
                 user.pseudo,
                 user.email,
-                user.password
+                user.hashedPassword
             ]
         );
     }
@@ -34,15 +34,16 @@ class UserManager extends AbstractManager {
             ]
         );
     }
-
-    // 
-    //  ----------------------------------- FIND AVEC RETRAIT DU CHAMPS PASSWORD -------------------------------
+    // find avec mdp de passe pour la comparaison hash/front
     findUserByEmail(email) {
         return this.database.query(
-            `SELECT id, firstname, lastname, pseudo, email, bio, profile_picture, status, created_at FROM users WHERE email = ?`, 
+            `SELECT * FROM users WHERE email = ?`, 
             [email]
         );
     }
+
+    // 
+    //  ----------------------------------- FIND AVEC RETRAIT DU CHAMPS PASSWORD -------------------------------
 
     findUserByPseudo(pseudo) {
         return this.database.query(

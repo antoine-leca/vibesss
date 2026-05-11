@@ -31,9 +31,9 @@ const getUserByEmail = async (req, res, next) => {
     const [users] = await models.user.findUserByEmail(email);
     if (users[0] != null) {
       req.user = users[0];
-      return res.status(409).json({ message: "Cet email est déjà utilisé" });
+      next();
     } else {
-      return next();
+      return res.status(409).json({ message: "Les identifiants sont incorrects " });
     }
   } catch (err) {
     console.error(err);
@@ -59,9 +59,7 @@ const getUserByPseudo = async (req, res, next) => {
 
 const add = async (req, res) => {
     try {
-        const user = req.body;
-        user.password = await auth.hashPassword(user.password);
-        const [result] = await models.user.insert(user);
+        const [result] = await models.user.insert(req.body);
         res.location(`/users/${result.insertId}`).sendStatus(201);
     } catch (err) {
         console.error(err);
@@ -69,14 +67,11 @@ const add = async (req, res) => {
     }
 };
 
+
 const edit = async (req, res) => {
   try {
     const user = req.body;
     user.id = parseInt(req.params.id, 10);
-    
-    if (user.password) {
-      user.password = await auth.hashPassword(user.password);
-    }
 
     const [result] = await models.user.update(user);
     if (result.affectedRows === 0) {
