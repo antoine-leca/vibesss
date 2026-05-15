@@ -99,11 +99,32 @@ const destroy = async (req, res) => {
   }
 };
 
+const getStats = async (req, res) => {
+  try {
+    const [[users]] = await models.user.getCounter();
+    const [[blogs]] = await models.blog.getCounter();
+    const [[articles]] = await models.article.getCounter();
+    const [[reports]] = await models.report.getCounter();
+
+    res.json({
+      users: users.total,
+      blogs: blogs.total,
+      articles: articles.total,
+      reports: reports.total   
+    });
+  } catch (err){
+    console.error(err);
+    res.status(500).send("Erreur lors de la récuperation des statistiques");
+  }
+
+}
+
 module.exports = {
   browse,
   read,
   getUserByEmail,
   getUserByPseudo,
+  getStats,
   add,
   edit,
   destroy,
