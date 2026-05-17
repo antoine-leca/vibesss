@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-// Correction de l'import pour react-router-dom
-import { Navigate, Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import { Navigate, Route, BrowserRouter as Router, Routes } from "react-router";
 
 import Home from './pages/Home';
 import Header from './components/layout/Header'; // 1. On importe ton Header 
