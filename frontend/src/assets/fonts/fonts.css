@@ -1,14 +1,14 @@
 @font-face {
   font-family: 'Bentham';
-  src: url('./assets/fonts/Bentham-Regular.ttf') format('truetype');
+  src: url('./Bentham-Regular.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'Libre Franklin Italic';
-  src: url('./assets/fonts/LibreFranklin-Italic-VariableFont_wght.ttf') format('truetype');
+  src: url('./LibreFranklin-Italic-VariableFont_wght.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'Libre Franklin';
-  src: url('./assets/fonts/LibreFranklin-VariableFont_wght.ttf') format('truetype');
+  src: url('./LibreFranklin-VariableFont_wght.ttf') format('truetype');
 }
