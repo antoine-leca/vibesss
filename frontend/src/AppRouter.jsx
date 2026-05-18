@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Navigate, Route, BrowserRouter as Router, Routes } from "react-router";
 
+
 import Home from './pages/Home';
+import Dashboard from './pages/admin/Dashboard';
+import AdminLayout from './components/admin/AdminLayout';
 import Header from './components/layout/Header'; // 1. On importe ton Header 
 
 function AppRouter() {
@@ -11,8 +14,12 @@ function AppRouter() {
       <Header />
       
       <Routes>
-        <Route path="/" element={<Home />} />
-        {/* Tu pourras ajouter tes autres routes ici (ex: /explore, /login...) */}
+          <Route path="/" element={<Home/>}/>
+
+          <Route path='/admin'element={<AdminLayout/>}>
+            <Route index element={<Dashboard/>}/>
+            <Route path='dashboard' element={<Dashboard />}/>
+          </Route>
       </Routes>
     </Router>
   );

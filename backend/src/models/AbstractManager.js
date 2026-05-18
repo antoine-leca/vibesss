@@ -20,6 +20,9 @@ class AbstractManager {
   setDatabase(database) {
     this.database = database;
   }
+  getCounter() {
+    return this.database.query(`select count(*) as total from ${this.table}`)
+  }
 }
 
 module.exports = AbstractManager;

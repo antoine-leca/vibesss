@@ -15,7 +15,7 @@ const {
 router.post("/auth/register", hashPassword, userController.add);
 router.post("/auth/login", userController.getUserByEmail, verifyPassword)
 router.put("/users/:id", hashPassword, userController.edit);
-
+router.get("/admin/stats", userController.getStats);
 router.use(verifyToken);
 // ------------- Routes users basiques 
 router.get("/users", userController.browse);
