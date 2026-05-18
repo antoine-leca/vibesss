@@ -7,11 +7,14 @@ import Header from './components/layout/Header';
 import Footer from './components/layout/Footer'; 
 import Dashboard from './pages/admin/Dashboard';
 import AdminLayout from './components/admin/AdminLayout';
+import CategoryBar from './components/CategoryBar';
 
 function AppRouter() {
   return (
     <Router>
         <Header />
+        <CategoryBar onCategorySelect={(id) => console.log('Catégorie sélectionnée:', id)} />
+
         <div className="flex-grow w-full">
           <Routes>
             <Route path="/" element={<Home />} />
