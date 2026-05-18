@@ -7,6 +7,7 @@ import Header from './components/layout/Header';
 import Footer from './components/layout/Footer'; 
 import Dashboard from './pages/admin/Dashboard';
 import AdminLayout from './components/admin/AdminLayout';
+import AuthForm from './pages/auth/AuthForm';
 
 function AppRouter() {
   return (
@@ -15,6 +16,8 @@ function AppRouter() {
         <div className="flex-grow w-full">
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/auth/register" element={<AuthForm />} />
+            <Route path="/auth/login" element={<AuthForm />} />
             <Route path="*" element={<Navigate to="/" replace />} />
             <Route path='/admin'element={<AdminLayout/>}>
               <Route index element={<Dashboard/>}/>
