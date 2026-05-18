@@ -117,7 +117,17 @@ const getStats = async (req, res) => {
     res.status(500).send("Erreur lors de la récuperation des statistiques");
   }
 
-}
+};
+
+const getActivities = async (req, res) => {
+  try {
+    const [activities] = await models.user.getLatestActivities();
+    res.json(activities);
+  } catch (err) {
+    console.error(err);
+    res.sendStatus(500);
+  }
+};
 
 module.exports = {
   browse,
@@ -128,4 +138,5 @@ module.exports = {
   add,
   edit,
   destroy,
+  getActivities,
 };
