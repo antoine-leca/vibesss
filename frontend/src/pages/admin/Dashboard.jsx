@@ -19,10 +19,10 @@ export default function Dashboard() {
   const [stats, setStats] = useState({ users: 0, blogs: 0, articles: 0, reports: 0 });
   const [activities, setActivities] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [isRefreshing, setIsRefreshing] = useState(false); // Pour l'effet visuel du bouton
+  const [isRefreshing, setIsRefreshing] = useState(false); 
   const itemsPerPage = 10;
 
-  // 1. On isole la fonction de chargement pour pouvoir l'appeler partout
+  //  J'isole la fonction de chargement pour pouvoir l'appeler partout
   const fetchData = useCallback(async () => {
     setIsRefreshing(true);
     try {
@@ -45,15 +45,15 @@ export default function Dashboard() {
   }, []);
 
   useEffect(() => {
-    fetchData(); // Premier chargement
+    fetchData(); // 1er chargement
 
-    // 2. Timer automatique (1 heure = 3600000 ms)
+    //  Timer auto(1 heure = 3600000 ms)
     const interval = setInterval(() => {
       console.log("Actualisation automatique...");
       fetchData();
     }, 3600000);
 
-    return () => clearInterval(interval); // Nettoyage du timer si on quitte la page
+    return () => clearInterval(interval); 
   }, [fetchData]);
 
   // Logique de pagination
@@ -78,7 +78,7 @@ export default function Dashboard() {
             Dernières utilisations
           </h2>
           
-          {/* 3. Bouton d'actualisation manuelle */}
+          {/* Bouton d'actualisation manuelle */}
           <button 
             onClick={fetchData}
             disabled={isRefreshing}
