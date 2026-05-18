@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 const StatCard = ({ value, label }) => (
   // Padding réduit (p-3) et texte miniaturisé
   <div className="bg-[#EBC3CF] p-3 rounded-xl flex flex-col items-center justify-center text-center shadow-sm border border-black/5">
@@ -9,13 +11,40 @@ const StatCard = ({ value, label }) => (
 );
 
 export default function Dashboard() {
-  const activities = [
-    { id: 1, type: "Honore elegit", time: "17:00" },
-    { id: 2, type: "Honore elegit", time: "17:00" },
-    { id: 3, type: "Honore elegit", time: "17:00" },
-    { id: 4, type: "Honore elegit", time: "17:00" },
-    { id: 5, type: "Honore elegit", time: "17:00" },
+ const [stats, setStats] = useState ({ users : 0, blogs: 0,articles: 0, reports: 0 });
+
+ const activities = [
+    { id: 1, type: "Utilisation Dashboard", time: "17:00" },
+    { id: 2, type: "Nouvel article", time: "16:45" },
+    { id: 3, type: "Commentaire reçu", time: "16:30" },
+    { id: 4, type: "Blog créé", time: "16:15" },
+    { id: 5, type: "Report envoyé", time: "16:00" },
   ];
+
+
+ useEffect(() => {
+    // 1. On crée une fonction interne asynchrone
+    const fetchStats = async () => {
+      const url = "http://localhost:5000/admin/stats"; 
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`Response status: ${response.status}`);
+        }
+        
+        // 2. On transforme la réponse en objet JS
+        const data = await response.json();
+        
+        // 3. On enregistre les données dans l'état
+        setStats(data);
+      } catch (error) {
+        console.error("Erreur de récupération :", error.message);
+      }
+    };
+
+    // 4. On appelle la fonction qu'on vient de créer
+    fetchStats();
+  }, []); //  On garde le tableau vide pour qu'il ne se lance qu'une fois
 
   return (
     // On force une largeur maximale contenue (max-w-3xl)
@@ -23,10 +52,10 @@ export default function Dashboard() {
       
       {/* Grille de stats très compacte (gap-2) */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5">
-        <StatCard value="50" label="utilisateurs" />
-        <StatCard value="50" label="blogs" />
-        <StatCard value="83" label="articles" />
-        <StatCard value="10" label="reports" />
+        <StatCard value={stats.users} label="utilisateurs" />
+        <StatCard value={stats.blogs} label="blogs" />
+        <StatCard value={stats.articles} label="articles" />
+        <StatCard value={stats.reports} label="reports" />
       </div>
 
       {/* Tableau Glassmorphism désaturé et plus fin */}
