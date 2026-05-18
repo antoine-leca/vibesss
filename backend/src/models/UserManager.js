@@ -64,6 +64,19 @@ class UserManager extends AbstractManager {
             [id]
         );
     }
+
+    getLatestActivities(){
+        return this.database.query(
+            `(SELECT id, 'Nouvel article' as type, creation_date as time FROM articles)
+            UNION
+            (SELECT id, 'Blog créé' as type, creation_date as time FROM blogs)
+            UNION
+            (SELECT id, 'Signalement' as type, report_date as time FROM reports)
+            UNION
+            (SELECT id, 'Nouvel utilisateur' as type, created_at as time FROM users)
+            ORDER BY time DESC LIMIT 50`
+        );
+    }
 }
 
 

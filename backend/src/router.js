@@ -17,6 +17,8 @@ router.post("/auth/login", userController.getUserByEmail, verifyPassword)
 router.put("/users/:id", hashPassword, userController.edit);
 router.get("/admin/stats", userController.getStats);
 // router.use(verifyToken);
+router.get("/admin/activities", userController.getActivities);
+router.use(verifyToken);
 // ------------- Routes users basiques 
 router.get("/users", userController.browse);
 router.get("/users/:id", userController.read);
