@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 
-// ActionButton plus petit et compact
+
 const ActionButton = ({ onClick, label, color }) => (
   <button
     onClick={onClick}
@@ -14,7 +14,7 @@ export default function UserList() {
   const [users, setUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const itemsPerPage = 10; // Augmenté à 10 comme les éléments sont plus petits
+  const itemsPerPage = 10; 
 
   const fetchUsers = useCallback(async () => {
     setIsRefreshing(true);
@@ -49,7 +49,6 @@ export default function UserList() {
   const totalPages = Math.ceil(users.length / itemsPerPage);
 
   return (
-    // max-w-xl au lieu de 2xl pour resserrer la liste
     <div className="max-w-xl mx-auto space-y-4">
       
       <div className="flex justify-between items-center px-1">
@@ -65,14 +64,14 @@ export default function UserList() {
       </div>
 
       <div className="bg-white/20 backdrop-blur-md rounded-xl border border-white/30 overflow-hidden shadow-md">
-        <div className="p-2 space-y-1"> {/* Padding réduit */}
+        <div className="p-2 space-y-1"> 
           {currentItems.map((user) => (
             <div 
               key={user.id} 
               className="flex items-center justify-between p-2 rounded-lg hover:bg-white/10 transition-colors border-b border-white/5 last:border-none"
             >
               <div className="flex items-center gap-3">
-                {/* Avatar réduit (w-9 h-9) */}
+                
                 <div className="w-9 h-9 rounded-full border border-[#EBC3CF]/50 overflow-hidden bg-white/50 flex-shrink-0">
                   <img 
                     src={user.profile_picture || "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"} 
@@ -90,7 +89,6 @@ export default function UserList() {
                 </div>
               </div>
 
-              {/* Barre d'actions plus discrète */}
               <div className="flex items-center gap-1.5 bg-black/5 p-1 rounded-lg px-2">
                 <ActionButton 
                   label="Delete" 
@@ -108,7 +106,6 @@ export default function UserList() {
         </div>
       </div>
 
-      {/* Pagination ultra-compacte */}
       {totalPages > 1 && (
         <div className="flex justify-center items-center gap-6 pt-1">
           <button 
