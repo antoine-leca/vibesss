@@ -7,6 +7,7 @@ import Header from './components/layout/Header';
 import Footer from './components/layout/Footer'; 
 import Dashboard from './pages/admin/Dashboard';
 import AdminLayout from './components/admin/AdminLayout';
+import CommentSection from './components/comments/CommentSection'; 
 
 function AppRouter() {
   return (
@@ -15,6 +16,7 @@ function AppRouter() {
         <div className="flex-grow w-full">
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/comments" element={<CommentSection />} /> {/* Route principale en dehors de l'admin */}
             <Route path="*" element={<Navigate to="/" replace />} />
             <Route path='/admin'element={<AdminLayout/>}>
               <Route index element={<Dashboard/>}/>
