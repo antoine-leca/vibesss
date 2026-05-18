@@ -13,7 +13,7 @@ function AppRouter() {
   return (
     <Router>
         <Header />
-        <CategoryBar onCategorySelect={(id) => console.log('Catégorie sélectionnée:', id)} />
+        {/* <CategoryBar onCategorySelect={(id) => console.log('Catégorie sélectionnée:', id)} /> */}
 
         <div className="flex-grow w-full">
           <Routes>
@@ -22,6 +22,8 @@ function AppRouter() {
             <Route path='/admin'element={<AdminLayout/>}>
               <Route index element={<Dashboard/>}/>
               <Route path='dashboard' element={<Dashboard />}/>
+              <Route path='/admin/categories' element={<CategoryBar />}/>
+
             </Route>
            </Routes>
         </div>

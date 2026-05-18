@@ -16,7 +16,7 @@ router.post("/auth/register", hashPassword, userController.add);
 router.post("/auth/login", userController.getUserByEmail, verifyPassword)
 router.put("/users/:id", hashPassword, userController.edit);
 router.get("/admin/stats", userController.getStats);
-router.use(verifyToken);
+// router.use(verifyToken);
 // ------------- Routes users basiques 
 router.get("/users", userController.browse);
 router.get("/users/:id", userController.read);
@@ -117,6 +117,10 @@ const userRoleController = require("./controllers/userRoleController");
 
 router.post("/users_roles", userRoleController.add);
 router.delete("/users_roles/:userId/:roleId", userRoleController.destroy);
+
+const categoryController = require("./controllers/categoryController");
+
+router.get("/categories", categoryController.getAllCategories);
 
 
 module.exports = router;

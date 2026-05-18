@@ -16,7 +16,7 @@ export default function CategoryBar({ onCategorySelect }) {
   // Fonction asynchrone pour récupérer les catégories depuis le backend
   const fetchCategories = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/categories');
+      const response = await fetch("http://localhost:5000/categories"); // Envoie une requête GET à l'API pour obtenir les catégories.
       const data = await response.json(); //Transforme la réponse HTTP en objet JavaScript.
       setCategories(data);
     } catch (error) { // En cas d'erreur, affiche un message dans la console
