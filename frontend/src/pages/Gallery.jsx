@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { MOCK_BLOGS } from "../data/mockBlogs";
 import BlogCard from "../components/gallery/BlogCard";
+import CategoryBar from "../components/gallery/CategoryBar";
 
 export default function Gallery() {
   const [blogs] = useState(MOCK_BLOGS); /* <-- Remplacer par fetch plus tard */
@@ -32,6 +33,8 @@ export default function Gallery() {
         </p>
 
       </div>
+
+      <CategoryBar />
 
       {/* Masonry */}
       <div className="max-w-7xl mx-auto px-6">

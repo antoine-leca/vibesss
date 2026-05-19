@@ -44,7 +44,7 @@ export default function AdminLayout() {
               <Home size={16} /> <span>Dashboard</span>
             </Link>
             <Link 
-              to="/admin/users" 
+              to="/admin/users-list" 
               onClick={() => setIsMenuOpen(false)}
               className="flex items-center gap-2.5 font-medium hover:bg-black/5 p-1.5 px-3 rounded-lg transition-colors"
             >

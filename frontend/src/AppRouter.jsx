@@ -3,7 +3,8 @@
 
   import Home from './pages/Home';
   import Header from './components/layout/Header'; 
-  import Footer from './components/layout/Footer'; 
+  import Footer from './components/layout/Footer';
+  import UserList from './pages/admin/UsersList'; 
   import CreateArticle from './pages/CreateArticle';
   import Dashboard from './pages/admin/Dashboard';
   import AdminLayout from './components/admin/AdminLayout';
@@ -43,6 +44,7 @@
           <Route path='/admin' element={<AdminLayout />}>
             <Route index element={<Dashboard />} />
             <Route path='dashboard' element={<Dashboard />} />
+            <Route path='users-list' element={<UserList />} />
           </Route>
 
           {/* Route de secours (404) toujours tout en bas */}
