@@ -3,7 +3,7 @@ const models = require("../models");
 // Récupérer tous les rapports
 const browse = async (req, res) => {
   try {
-    const [reports] = await models.report.findAll();
+    const [reports] = await models.report.findAllWithDetails();
     res.send(reports);
   } catch (err) {
     console.error(err);

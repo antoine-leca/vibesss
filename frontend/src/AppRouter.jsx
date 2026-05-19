@@ -7,6 +7,7 @@ import Header from './components/layout/Header';
 import Footer from './components/layout/Footer'; 
 import Dashboard from './pages/admin/Dashboard';
 import UserList from './pages/admin/UsersList'; 
+import ReportsList from './pages/admin/ReportsList';
 import AdminLayout from './components/admin/AdminLayout';
 import Gallery from "./pages/Gallery";
 import CommentSection from './components/comments/CommentSection'; 
@@ -31,6 +32,8 @@ function AppRouter() {
              <Route index element={<Dashboard />} />
              <Route path='dashboard' element={<Dashboard />} />
              <Route path='users-list' element={<UserList />} />
+             <Route path='reports' element={<ReportsList />} />
+
           </Route>
         </Routes>
       </div>
