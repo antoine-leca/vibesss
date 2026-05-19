@@ -1,42 +1,58 @@
-import { useState, useEffect } from 'react';
-import { Navigate, Route, BrowserRouter as Router, Routes } from "react-router";
+  import { useState, useEffect } from 'react';
+  import { Navigate, Route, BrowserRouter as Router, Routes, Outlet } from "react-router";
 
+  import Home from './pages/Home';
+  import Header from './components/layout/Header'; 
+  import Footer from './components/layout/Footer';
+  import UserList from './pages/admin/UsersList'; 
+  import CreateArticle from './pages/CreateArticle';
+  import Dashboard from './pages/admin/Dashboard';
+  import AdminLayout from './components/admin/AdminLayout';
+  import Gallery from "./pages/Gallery";
+  import CommentSection from './components/comments/CommentSection'; 
 
-import Home from './pages/Home';
-import Header from './components/layout/Header'; 
-import Footer from './components/layout/Footer'; 
-import Dashboard from './pages/admin/Dashboard';
-import UserList from './pages/admin/UsersList'; 
-import AdminLayout from './components/admin/AdminLayout';
-import Gallery from "./pages/Gallery";
-import CommentSection from './components/comments/CommentSection'; 
+  // 1. On crée un "Layout" uniquement pour les pages publiques qui ont besoin du Header/Footer
+  function PublicLayout() {
+    return (
+      <>
+        <Header />
+        <div className="flex-grow w-full">
+          <Outlet /> {/* C'est ici que s'afficheront Home, Gallery, etc. */}
+        </div>
+        <Footer />
+      </>
+    );
+  }
 
-function AppRouter() {
-  return (
-    <Router>
-      <Header />
-      <div className="flex-grow w-full">
+  function AppRouter() {
+    return (
+      <Router>
         <Routes>
-          {/* Routes principales */}
-          <Route path="/" element={<Home />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-          <Route path="/explorer" element={<Gallery />} />
           
-             
-          {/* Routes temporaires */}
-          <Route path="/comments" element={<CommentSection />} /> {/* Route principale en dehors de l'admin */}
-
-          {/* Routes admin */}
-          <Route path='/admin' element={<AdminLayout />}>
-             <Route index element={<Dashboard />} />
-             <Route path='dashboard' element={<Dashboard />} />
-             <Route path='users-list' element={<UserList />} />
+          {/* Pages publiques AVEC Header et Footer */}
+          <Route element={<PublicLayout />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/explorer" element={<Gallery />} />
+            <Route path="/comments" element={<CommentSection />} />
           </Route>
-        </Routes>
-      </div>
-      <Footer />
-    </Router>
-  );
-}
 
-export default AppRouter;
+          {/* Page de création d'article SANS Header ni Footer */}
+          <Route path="/creer" element={<CreateArticle />} />
+
+          {/* Pages Admin SANS Header ni Footer généraux */}
+          {/* (L'AdminLayout gère sa propre barre latérale d'administration) */}
+          <Route path='/admin' element={<AdminLayout />}>
+            <Route index element={<Dashboard />} />
+            <Route path='dashboard' element={<Dashboard />} />
+            <Route path='users-list' element={<UserList />} />
+          </Route>
+
+          {/* Route de secours (404) toujours tout en bas */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+          
+        </Routes>
+      </Router>
+    );
+  }
+
+  export default AppRouter;
