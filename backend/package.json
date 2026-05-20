@@ -12,6 +12,9 @@
     "dev": "nodemon index.js"
   },
   "dependencies": {
+    "@tiptap/react": "^2.x",
+  "@tiptap/starter-kit": "^2.x",
+  "@tiptap/extension-image": "^2.x",
     "argon2": "^0.44.0",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
