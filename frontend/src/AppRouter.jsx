@@ -9,7 +9,8 @@
   import Dashboard from './pages/admin/Dashboard';
   import AdminLayout from './components/admin/AdminLayout';
   import Gallery from "./pages/Gallery";
-  import CommentSection from './components/comments/CommentSection'; 
+  import CommentSection from './components/comments/CommentSection';
+  import AuthForm from './pages/auth/AuthForm';
 
   // 1. On crée un "Layout" uniquement pour les pages publiques qui ont besoin du Header/Footer
   function PublicLayout() {
@@ -34,6 +35,8 @@
             <Route path="/" element={<Home />} />
             <Route path="/explorer" element={<Gallery />} />
             <Route path="/comments" element={<CommentSection />} />
+            <Route path="/auth/register" element={<AuthForm />} />
+            <Route path="/auth/login" element={<AuthForm />} />
           </Route>
 
           {/* Page de création d'article SANS Header ni Footer */}

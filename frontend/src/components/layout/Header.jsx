@@ -5,7 +5,7 @@
     const [isOpen, setIsOpen] = useState(false);
 
     return (
-        <header className="w-full bg-[#FCEB92] text-black font-sans fixed top-0 left-0 z-50 shadow-xs">
+        <header className="w-full bg-[var(--bg-quatro)] text-black font-sans fixed top-0 left-0 z-50 shadow-xs">
         
         <div className="w-full h-[61px] flex items-center justify-between px-6 box-border">
             
