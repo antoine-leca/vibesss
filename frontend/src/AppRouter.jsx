@@ -11,6 +11,7 @@
   import Gallery from "./pages/Gallery";
   import CommentSection from './components/comments/CommentSection';
   import AuthForm from './pages/auth/AuthForm';
+  import ReportsList from './pages/admin/ReportsList';
 
   // 1. On crée un "Layout" uniquement pour les pages publiques qui ont besoin du Header/Footer
   function PublicLayout() {
@@ -45,9 +46,10 @@
           {/* Pages Admin SANS Header ni Footer généraux */}
           {/* (L'AdminLayout gère sa propre barre latérale d'administration) */}
           <Route path='/admin' element={<AdminLayout />}>
-            <Route index element={<Dashboard />} />
-            <Route path='dashboard' element={<Dashboard />} />
-            <Route path='users-list' element={<UserList />} />
+             <Route index element={<Dashboard />} />
+             <Route path='dashboard' element={<Dashboard />} />
+             <Route path='users-list' element={<UserList />} />
+             <Route path='reports' element={<ReportsList />} />
           </Route>
 
           {/* Route de secours (404) toujours tout en bas */}

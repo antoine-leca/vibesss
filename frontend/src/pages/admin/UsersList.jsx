@@ -1,128 +1,55 @@
-import { useEffect, useState, useCallback } from "react";
+import React from "react";
+import useUsers from "../../hooks/admin/useUsers";
+import { usePagination } from "../../hooks/usePagination"; // <-- L'outil magique
+import UserTable from "../../components/admin/Users/UserTable";
 
+const UsersList = () => {
+    const { users, isLoading, isRefreshing, deleteUser, refresh } = useUsers();
+    
+    // On branche la pagination sur les données reçues
+    const { currentItems, ...pagination } = usePagination(users, 10);
 
-const ActionButton = ({ onClick, label, color }) => (
-  <button
-    onClick={onClick}
-    className={`p-1.5 px-2.5 rounded-lg transition-all hover:brightness-90 ${color} shadow-sm border border-black/5 text-[9px] font-bold uppercase tracking-tighter`}
-  >
-    {label}
-  </button>
-);
-
-export default function UserList() {
-  const [users, setUsers] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [isRefreshing, setIsRefreshing] = useState(false);
-  const itemsPerPage = 10; 
-
-  const fetchUsers = useCallback(async () => {
-    setIsRefreshing(true);
-    try {
-      const response = await fetch("http://localhost:5000/users");
-      const data = await response.json();
-      setUsers(data);
-    } catch (error) {
-      console.error("Erreur :", error.message);
-    } finally {
-      setTimeout(() => setIsRefreshing(false), 400);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchUsers();
-  }, [fetchUsers]);
-
-  const handleDelete = async (id) => {
-    if (window.confirm("Supprimer ce compte ?")) {
-      try {
-        const response = await fetch(`http://localhost:5000/users/${id}`, { method: "DELETE" });
-        if (response.ok) setUsers(users.filter((u) => u.id !== id));
-      } catch (err) { console.error(err); }
-    }
-  };
-
-  const handleEdit = (id) => console.log("Modif :", id);
-
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const currentItems = users.slice(indexOfLastItem - itemsPerPage, indexOfLastItem);
-  const totalPages = Math.ceil(users.length / itemsPerPage);
-
-  return (
-    <div className="max-w-xl mx-auto space-y-4">
-      
-      <div className="flex justify-between items-center px-1">
-        <h2 className="text-[10px] font-bold text-gray-800 uppercase tracking-[0.2em] opacity-40">
-          Base Utilisateurs
-        </h2>
-        <button 
-          onClick={fetchUsers}
-          className={`text-[9px] font-bold uppercase tracking-widest transition-opacity ${isRefreshing ? 'opacity-20' : 'hover:opacity-60'}`}
-        >
-          {isRefreshing ? '...' : 'Refresh'}
-        </button>
-      </div>
-
-      <div className="bg-white/20 backdrop-blur-md rounded-xl border border-white/30 overflow-hidden shadow-md">
-        <div className="p-2 space-y-1"> 
-          {currentItems.map((user) => (
-            <div 
-              key={user.id} 
-              className="flex items-center justify-between p-2 rounded-lg hover:bg-white/10 transition-colors border-b border-white/5 last:border-none"
-            >
-              <div className="flex items-center gap-3">
-                
-                <div className="w-9 h-9 rounded-full border border-[#EBC3CF]/50 overflow-hidden bg-white/50 flex-shrink-0">
-                  <img 
-                    src={user.profile_picture || "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"} 
-                    alt=""
-                    className="w-full h-full object-cover grayscale-[0.2]"
-                  />
+    return (
+        <div className="max-w-xl mx-auto space-y-6">
+            {/* Header de la page */}
+            <div className="flex justify-between items-end px-1">
+                <div>
+                    <h2 
+                        className="text-[10px] font-black text-white/40 uppercase tracking-[0.3em]"
+                        style={{ fontFamily: "var(--main-font)" }}
+                    >
+                        Administration
+                    </h2>
+                    <h1 
+                        className="text-2xl font-black text-white uppercase tracking-tighter shadow-sm"
+                        style={{ fontFamily: "var(--main-font)" }}
+                    >
+                        Membres
+                    </h1>
                 </div>
-                <div className="truncate">
-                  <h3 className="text-[12px] font-bold text-gray-800 uppercase tracking-tight truncate leading-none">
-                    {user.pseudo}
-                  </h3>
-                  <p className="text-[8px] text-gray-500 font-medium truncate mt-0.5 opacity-70">
-                    {user.email}
-                  </p>
-                </div>
-              </div>
 
-              <div className="flex items-center gap-1.5 bg-black/5 p-1 rounded-lg px-2">
-                <ActionButton 
-                  label="Delete" 
-                  color="text-red-900/40" 
-                  onClick={() => handleDelete(user.id)} 
-                />
-                <ActionButton 
-                  label="Edit" 
-                  color="text-gray-600" 
-                  onClick={() => handleEdit(user.id)} 
-                />
-              </div>
+                <button 
+                    onClick={refresh}
+                    disabled={isRefreshing}
+                    className="text-[10px] font-black uppercase text-white/30 hover:text-white transition-colors tracking-widest"
+                    style={{ fontFamily: "var(--main-font)" }}
+                >
+                    {isRefreshing ? "Rafraîchissement..." : "Actualiser"}
+                </button>
             </div>
-          ))}
-        </div>
-      </div>
 
-      {totalPages > 1 && (
-        <div className="flex justify-center items-center gap-6 pt-1">
-          <button 
-            onClick={() => setCurrentPage(p => Math.max(p - 1, 1))}
-            disabled={currentPage === 1}
-            className="text-[9px] font-black disabled:opacity-10 hover:opacity-50 tracking-tighter"
-          >PREV</button>
-          <span className="text-[8px] font-bold text-gray-400 uppercase tracking-[0.3em]">
-            {currentPage} / {totalPages}
-          </span>
-          <button 
-            onClick={() => setCurrentPage(p => Math.min(p + 1, totalPages))}
-            disabled={currentPage === totalPages}
-            className="text-[9px] font-black disabled:opacity-10 hover:opacity-50 tracking-tighter"
-          >NEXT</button>
+            {/* Conteneur Glassmorphism */}
+            <div className="bg-white/10 backdrop-blur-xl rounded-[2rem] border border-white/10 shadow-2xl overflow-hidden p-2">
+                <UserTable 
+                    users={currentItems} // On donne uniquement la page en cours
+                    isLoading={isLoading}
+                    isRefreshing={isRefreshing}
+                    onDelete={deleteUser}
+                    pagination={pagination} // On passe l'objet pagination tel quel
+                />
+            </div>
         </div>
-      )}
-    </div>
-  );
-}
+    );
+};
+
+export default UsersList;
