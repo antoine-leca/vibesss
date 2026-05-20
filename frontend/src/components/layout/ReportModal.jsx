@@ -6,11 +6,10 @@ const ReportModal = ({ isOpen, onClose, targetType, targetId, userId }) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const reasons = [
-        "Spam",
-        "Harcèlement",
-        "Contenu inapproprié",
-        "Droits d'auteur",
-        "Autre"
+        { label: "Spam", value: "spam" },
+        { label: "Harcèlement", value: "bully" },
+        { label: "Contenu inapproprié", value: "inappropriate" },
+        { label: "Droits d'auteur", value: "copyright" }
     ];
 
     if (!isOpen) return null;
@@ -81,9 +80,7 @@ const ReportModal = ({ isOpen, onClose, targetType, targetId, userId }) => {
                         >
                             <option value="" className="bg-slate-800 text-white">Sélectionnez une raison...</option>
                             {reasons.map((r) => (
-                                <option key={r} value={r} className="bg-slate-800 text-white">
-                                    {r}
-                                </option>
+                                <option key={r.value} value={r.value}>{r.label}</option>
                             ))}
                         </select>
                     </div>
