@@ -1,16 +1,40 @@
 @import url('./assets/fonts/fonts.css');
 
 :root {
-  --primary-color: #e99fb4;
+  --primary-color: #E99FB4;
   --secondary-color: #B5A2D7;
   --accent-color: #EFC3A7;
   --success-color: #A7C49F;
   --category-color: #A7CBE0;
   --bg-color: #FCF8F5;
+  --bg-secondary: #D4D6FD;
+  --bg-tertiary: #FBF7D2;
+  --bg-quatro: #FCEB92;
+  --bg-cinquo: #FF649E;
   --card-color: #FFFFFF;
   --hover-color: #F5F0E7;
+  --input-bg-color: #F5F6F8;
+  --custom-btn-color: #FE639E;
 
   --title-font: 'Bentham';
   --main-font: 'Libre Franklin';
   --main-font-italic: 'Libre Franklin Italic';
+}
+
+main {
+  min-height: 100vh;
+}
+
+.font-custom-title {
+  font-family: var(--title-font);
+}
+.font-custom-main {
+  font-family: var(--main-font);
+}
+.font-custom-main-italic {
+  font-family: var(--main-font-italic);
+}
+
+.input-bg-color {
+  background-color: var(--input-bg-color);
 }
