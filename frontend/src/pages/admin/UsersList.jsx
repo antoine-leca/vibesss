@@ -1,20 +1,13 @@
 import React from "react";
 import useUsers from "../../hooks/admin/useUsers";
-import UserTable from "../../components/admin/Users/UserToken"; // Le fichier que tu as créé
+import { usePagination } from "../../hooks/usePagination"; // <-- L'outil magique
+import UserTable from "../../components/admin/Users/UserTable";
 
 const UsersList = () => {
-    // On récupère tout ce dont on a besoin depuis ton hook personnalisé
-    const { 
-        users, 
-        isLoading, 
-        isRefreshing, 
-        deleteUser, 
-        refresh,
-        currentPage,
-        totalPages,
-        nextPage,
-        prevPage 
-    } = useUsers(10); // 10 membres par page
+    const { users, isLoading, isRefreshing, deleteUser, refresh } = useUsers();
+    
+    // On branche la pagination sur les données reçues
+    const { currentItems, ...pagination } = usePagination(users, 10);
 
     return (
         <div className="max-w-xl mx-auto space-y-6">
@@ -48,16 +41,11 @@ const UsersList = () => {
             {/* Conteneur Glassmorphism */}
             <div className="bg-white/10 backdrop-blur-xl rounded-[2rem] border border-white/10 shadow-2xl overflow-hidden p-2">
                 <UserTable 
-                    users={users}
+                    users={currentItems} // On donne uniquement la page en cours
                     isLoading={isLoading}
                     isRefreshing={isRefreshing}
                     onDelete={deleteUser}
-                    pagination={{
-                        currentPage,
-                        totalPages,
-                        nextPage,
-                        prevPage
-                    }}
+                    pagination={pagination} // On passe l'objet pagination tel quel
                 />
             </div>
         </div>

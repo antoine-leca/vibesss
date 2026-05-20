@@ -1,35 +1,36 @@
 import React from "react";
 import useDashboard from "../../hooks/admin/useDashboard";
 import StatCard from "../../components/admin/Dashboard/StatCard";
+import ActivityTable from "../../components/admin/Dashboard/ActivityTable";
+import { usePagination } from "../../hooks/usePagination";
 
 export default function Dashboard() {
-  const { stats, activities, isLoading, isRefreshing, refresh } = useDashboard();
+  const { stats, activities, isRefreshing, refresh } = useDashboard();
+  
+  // On découpe la grosse liste reçue ici
+  const { currentItems, ...pagination } = usePagination(activities, 10);
 
   return (
-    <div className="max-w-2xl mx-auto space-y-8">
-      {/* 1. Les Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard value={stats.users} label="membres" />
+    <div className="max-w-2xl mx-auto space-y-6">
+      <div className="grid grid-cols-2 gap-3 max-w-sm mx-auto">
+        <StatCard value={stats.users} label="utilisateurs" />
         <StatCard value={stats.blogs} label="blogs" />
         <StatCard value={stats.articles} label="articles" />
-        <StatCard value={stats.reports} label="reports" />
+        <StatCard value={stats.reports} label="signalements" />
       </div>
 
-      {/* 2. Les Activités */}
       <div className="space-y-4">
-        <div className="flex justify-between items-end px-1">
-            <h2 className="text-[10px] font-black text-white/40 uppercase tracking-[0.3em]" style={{ fontFamily: "var(--main-font)" }}>
-              Dernières Activités
-            </h2>
-            <button 
-                onClick={refresh}
-                className="text-[9px] font-black uppercase text-white/20 hover:text-white transition-all tracking-widest"
-            >
-                {isRefreshing ? '...' : 'Actualiser'}
-            </button>
+        <div className="flex justify-between items-center px-1">
+          <h2 className="text-[11px] font-bold text-gray-800 uppercase tracking-tight opacity-70">
+            Dernières utilisations
+          </h2>
+          <button onClick={refresh} className="text-[10px] font-bold uppercase text-gray-400 hover:text-gray-800 transition-colors">
+            {isRefreshing ? '...' : 'Refresh'}
+          </button>
         </div>
         
-        {/* Ici on pourra insérer un <ActivityTable /> comme on a fait pour les Users */}
+        {/* On appelle juste le composant maintenant */}
+        <ActivityTable activities={currentItems} pagination={pagination} />
       </div>
     </div>
   );
