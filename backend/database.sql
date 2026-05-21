@@ -141,3 +141,7 @@ CREATE TABLE users_reports (
   FOREIGN KEY (comment_id) REFERENCES comments(id) ON DELETE CASCADE,
   FOREIGN KEY (report_id) REFERENCES reports(id) ON DELETE CASCADE
 );
+
+-- Seed initial data
+INSERT INTO roles (id, label) VALUES (1, 'user'), (2, 'admin');
+INSERT INTO themes (id, label, color_name, font_name, bg_image) VALUES (1, 'Default Theme', 'pink', 'sans-serif', 'default.jpg');

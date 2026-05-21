@@ -1,4 +1,4 @@
-require("dotenv").config();
+require("dotenv").config(); // reload to pick up env change
 
 const app = require("./src/app");
 
