@@ -9,11 +9,13 @@ const {
     hashPassword,
     verifyPassword,
     verifyToken,
+    logout
 } = require("./auth");
 
 // ------------- Auth 
 router.post("/auth/register", hashPassword, userController.add);
-router.post("/auth/login", userController.getUserByEmail, verifyPassword)
+router.post("/auth/login", userController.getUserByEmail, verifyPassword);
+router.get("/auth/logout", logout);
 router.put("/users/:id", hashPassword, userController.edit);
 router.get("/admin/stats", userController.getStats);
 router.get("/admin/activities", userController.getActivities);

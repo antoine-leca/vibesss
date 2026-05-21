@@ -32,7 +32,11 @@ const AuthService = {
             console.error("Erreur login:", error);
             throw error;
         }
-    }
+    },
+
+    logout: async () => {
+        return await fetch(`${API_URL}/auth/logout`, { credentials: "include" });
+}
 };
 
 export default AuthService;

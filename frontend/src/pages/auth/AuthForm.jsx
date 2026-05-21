@@ -1,10 +1,11 @@
 import { Eye, EyeClosed } from 'lucide-react';
 import { useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { useAuth } from "../../services/AuthContext";
 import AuthService from "../../services/AuthService";
 
 const AuthForm = () => {
-    const location = useLocation();
+    const { login } = useAuth(); // <--- Ajoutez ceci
     const navigate = useNavigate();
     const isRegister = location.pathname === "/auth/register";
 
@@ -54,10 +55,8 @@ const AuthForm = () => {
 
                 if (response.ok) {
                     const data = await response.json();
-                    console.log("Utilisateur connecté :", data.user); // <--- DEPLACEZ LE LOG ICI
                     
-                    // Stocker pour l'UI
-                    localStorage.setItem("user", JSON.stringify(data.user));
+                    login(data.user); 
                     
                     navigate("/");
                 } else {
