@@ -29,10 +29,10 @@
             <div className="w-1/4 flex justify-end items-center">
             {/* BOUTONS PC : Passe sur 'lg' */}
             <div className="hidden lg:flex items-center gap-4">
-                <Link to="/connexion" className="px-5 py-2 text-xs font-medium bg-white rounded-full hover:bg-gray-50 transition-all border border-transparent">
+                <Link to="/auth/login" className="px-5 py-2 text-xs font-medium bg-white rounded-full hover:bg-gray-50 transition-all border border-transparent">
                 Se connecter
                 </Link>
-                <Link to="/inscription" className="px-5 py-2 text-xs font-bold uppercase tracking-wider bg-black text-white rounded-full hover:bg-gray-900 transition-all">
+                <Link to="/auth/register" className="px-5 py-2 text-xs font-bold uppercase tracking-wider bg-black text-white rounded-full hover:bg-gray-900 transition-all">
                 S'inscrire
                 </Link>
             </div>
@@ -70,10 +70,10 @@
                 
                 <div className="w-12 h-[1px] bg-gray-200 my-2"></div>
 
-                <Link onClick={() => setIsOpen(false)} to="/connexion" className="text-sm font-sans font-medium uppercase tracking-widest text-gray-700 hover:text-black transition-colors">
+                <Link onClick={() => setIsOpen(false)} to="/auth/login" className="text-sm font-sans font-medium uppercase tracking-widest text-gray-700 hover:text-black transition-colors">
                 Se connecter
                 </Link>
-                <Link onClick={() => setIsOpen(false)} to="/inscription" className="text-sm font-sans font-bold uppercase tracking-widest text-black hover:opacity-70 transition-opacity">
+                <Link onClick={() => setIsOpen(false)} to="/auth/register" className="text-sm font-sans font-bold uppercase tracking-widest text-black hover:opacity-70 transition-opacity">
                 S'inscrire
                 </Link>
             </nav>

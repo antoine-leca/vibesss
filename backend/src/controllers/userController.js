@@ -2,13 +2,13 @@ const models = require("../models");
 const auth = require("../auth");
 
 const browse = async (req, res) => {
-    try {
-        const [rows] = await models.user.findAllUsers();
-        res.send(rows);
-    } catch (err) {
-        console.error(err);
-        res.sendStatus(500);
-    }
+  try {
+    const [rows] = await models.user.findAllUsers();
+    res.send(rows);
+  } catch (err) {
+    console.error(err);
+    res.sendStatus(500);
+  }
 };
 
 const read = async (req, res) => {
@@ -58,15 +58,18 @@ const getUserByPseudo = async (req, res, next) => {
 };
 
 const add = async (req, res) => {
-    try {
-        const [result] = await models.user.insert(req.body);
-        res.location(`/users/${result.insertId}`).sendStatus(201);
-    } catch (err) {
-        console.error(err);
-        res.sendStatus(500);
-    }
-};
+  try {
+    const [result] = await models.user.insert(req.body);
+    const userId = result.insertId;
 
+    await models.userRole.insert(userId, 1);
+
+    res.location(`/users/${userId}`).sendStatus(201);
+  } catch (err) {
+    console.error("Erreur lors de la création user/role:", err);
+    res.sendStatus(500);
+  }
+};
 
 const edit = async (req, res) => {
   try {
@@ -110,9 +113,9 @@ const getStats = async (req, res) => {
       users: users.total,
       blogs: blogs.total,
       articles: articles.total,
-      reports: reports.total   
+      reports: reports.total
     });
-  } catch (err){
+  } catch (err) {
     console.error(err);
     res.status(500).send("Erreur lors de la récuperation des statistiques");
   }
