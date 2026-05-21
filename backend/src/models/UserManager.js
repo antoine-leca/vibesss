@@ -37,7 +37,11 @@ class UserManager extends AbstractManager {
     // find avec mdp de passe pour la comparaison hash/front
     findUserByEmail(email) {
         return this.database.query(
-            `SELECT * FROM users WHERE email = ?`, 
+            `SELECT u.*, r.label AS role 
+            FROM users u
+            JOIN users_roles ur ON u.id = ur.user_id
+            JOIN roles r ON ur.role_id = r.id
+            WHERE u.email = ?`,
             [email]
         );
     }

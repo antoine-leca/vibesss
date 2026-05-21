@@ -1,15 +1,73 @@
 import { Eye, EyeClosed } from 'lucide-react';
 import { useState } from "react";
-import { Link, useLocation } from "react-router"; // Importez Link pour la navigation
+import { Link, useNavigate } from "react-router";
+import { useAuth } from "../../services/AuthContext";
+import AuthService from "../../services/AuthService";
 
 const AuthForm = () => {
-    const location = useLocation();
+    const { login } = useAuth(); // <--- Ajoutez ceci
+    const navigate = useNavigate();
     const isRegister = location.pathname === "/auth/register";
 
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    
+    // États pour le formulaire
+    const [formData, setFormData] = useState({
+        pseudo: "",
+        email: "",
+        password: "",
+        confirmPassword: ""
+    });
+    const [error, setError] = useState("");
 
-    // Contenu dynamique selon le mode
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.id]: e.target.value });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError("");
+
+        try {
+            if (isRegister) {
+                if (formData.password !== formData.confirmPassword) {
+                    return setError("Les mots de passe ne correspondent pas");
+                }
+                const response = await AuthService.register({
+                    pseudo: formData.pseudo,
+                    email: formData.email,
+                    password: formData.password
+                });
+                
+                if (response.ok) {
+                    console.log("Inscription réussie !");
+                    navigate("/auth/login");
+                } else {
+                    const data = await response.json();
+                    setError(data.message || "Erreur lors de l'inscription");
+                }
+            } else {
+                const response = await AuthService.login({
+                    email: formData.email,
+                    password: formData.password
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    login(data.user); 
+                    
+                    navigate("/");
+                } else {
+                    setError("Identifiants incorrects");
+                }
+            }
+        } catch (err) {
+            setError("Impossible de contacter le serveur.");
+        }
+    };
+
     const config = {
         title: isRegister ? "Inscription" : "Connexion",
         subtitle: isRegister ? "Ravi de pouvoir vous compter parmi nous" : "Bon retour parmi nous !",
@@ -41,8 +99,9 @@ const AuthForm = () => {
                         <h2 align="center" className="font-custom-title font-black text-2xl uppercase">{config.title}</h2>
                         <p align="center" className="font-medium text-l pb-6">{config.subtitle}</p>
                         
-                        <form method="POST" className="flex flex-col gap-4 px-6">
-                            {/* Champ Pseudo - Affiché uniquement en Inscription */}
+                        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+
+                        <form onSubmit={handleSubmit} className="flex flex-col gap-4 px-6">
                             {isRegister && (
                                 <div className="flex flex-col">
                                     <label className="font-medium" htmlFor="pseudo">Pseudo</label>
@@ -50,7 +109,10 @@ const AuthForm = () => {
                                         className="px-4 py-3 rounded-full input-bg-color border-neutral-400 focus:outline-brand-primary" 
                                         type="text" 
                                         id="pseudo"
+                                        value={formData.pseudo}
+                                        onChange={handleChange}
                                         placeholder="Votre-pseudo"
+                                        required
                                     />
                                 </div>
                             )}
@@ -61,7 +123,10 @@ const AuthForm = () => {
                                     className="px-4 py-3 rounded-full input-bg-color border-neutral-400 focus:outline-brand-primary" 
                                     type="email" 
                                     id="email"
+                                    value={formData.email}
+                                    onChange={handleChange}
                                     placeholder="votreadresse@email.com"
+                                    required
                                 />
                             </div>
 
@@ -72,7 +137,10 @@ const AuthForm = () => {
                                         className="w-full px-4 py-3 rounded-full input-bg-color border-neutral-400 pr-12 focus:outline-brand-primary" 
                                         type={showPassword ? "text" : "password"} 
                                         id="password"
+                                        value={formData.password}
+                                        onChange={handleChange}
                                         placeholder="●●●●●●●●●●●●●"
+                                        required
                                     />
                                     <button
                                         type="button"
@@ -84,7 +152,6 @@ const AuthForm = () => {
                                 </div>
                             </div>
 
-                            {/* Champ Confirmation - Affiché uniquement en Inscription */}
                             {isRegister && (
                                 <div className="flex flex-col">
                                     <label className="font-medium" htmlFor="confirmPassword">Confirmation du mot de passe</label>
@@ -93,7 +160,10 @@ const AuthForm = () => {
                                             className="w-full px-4 py-3 rounded-full input-bg-color border-neutral-400 pr-12 focus:outline-brand-primary" 
                                             type={showConfirmPassword ? "text" : "password"} 
                                             id="confirmPassword"
+                                            value={formData.confirmPassword}
+                                            onChange={handleChange}
                                             placeholder="●●●●●●●●●●●●●"
+                                            required
                                         />
                                         <button
                                             type="button"
@@ -106,7 +176,6 @@ const AuthForm = () => {
                                 </div>
                             )}
 
-                            {/* Bouton de soumission stylisé */}
                             <button 
                                 type="submit"
                                 className="mt-4 bg-[var(--bg-cinquo)] text-white py-3 rounded-full font-bold uppercase hover:bg-[var(--bg-quatro)] hover:text-black transition-colors cursor-pointer"
@@ -114,7 +183,6 @@ const AuthForm = () => {
                                 {config.buttonText}
                             </button>
 
-                            {/* Lien pour basculer entre Login et Register */}
                             <p className="text-center mt-4 text-sm pb-6">
                                 {config.switchText}{" "}
                                 <Link to={config.switchLink} className="font-bold underline">

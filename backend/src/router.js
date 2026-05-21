@@ -20,12 +20,15 @@ const {
     hashPassword,
     verifyPassword,
     verifyToken,
+    logout
 } = require("./auth");
 
 // ------------- ROUTES PUBLIQUES (SANS TOKEN)
 // Auth
 router.post("/auth/register", hashPassword, userController.add);
 router.post("/auth/login", userController.getUserByEmail, verifyPassword);
+router.get("/auth/logout", logout);
+router.put("/users/:id", hashPassword, userController.edit);
 
 // Reports (Déplacé ici pour les tests)
 router.get("/reports", reportController.browse);

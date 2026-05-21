@@ -1,63 +1,86 @@
-  import { useState, useEffect } from 'react';
-  import { Navigate, Route, BrowserRouter as Router, Routes, Outlet } from "react-router";
+import { Navigate, Outlet, Route, BrowserRouter as Router, Routes } from "react-router";
+import { useAuth } from './services/AuthContext';
 
-  import Home from './pages/Home';
-  import Header from './components/layout/Header'; 
-  import Footer from './components/layout/Footer';
-  import UserList from './pages/admin/UsersList'; 
-  import CreateArticle from './pages/CreateArticle';
-  import Dashboard from './pages/admin/Dashboard';
-  import AdminLayout from './components/admin/AdminLayout';
-  import Gallery from "./pages/Gallery";
-  import CommentSection from './components/comments/CommentSection';
-  import AuthForm from './pages/auth/AuthForm';
-  import ReportsList from './pages/admin/ReportsList';
+import AdminLayout from './components/admin/AdminLayout';
+import CommentSection from './components/comments/CommentSection';
+import Footer from './components/layout/Footer';
+import Header from './components/layout/Header';
+import Dashboard from './pages/admin/Dashboard';
+import UserList from './pages/admin/UsersList';
+import AuthForm from './pages/auth/AuthForm';
+import CreateArticle from './pages/CreateArticle';
+import Gallery from "./pages/Gallery";
+import Home from './pages/Home';
+import ReportsList from './pages/admin/ReportsList';
 
-  // 1. On crée un "Layout" uniquement pour les pages publiques qui ont besoin du Header/Footer
-  function PublicLayout() {
-    return (
-      <>
-        <Header />
-        <div className="flex-grow w-full">
-          <Outlet /> {/* C'est ici que s'afficheront Home, Gallery, etc. */}
-        </div>
-        <Footer />
-      </>
-    );
+// Layout pour les pages publiques avec Header/Footer
+function PublicLayout() {
+  return (
+    <>
+      <Header />
+      <div className="flex-grow w-full">
+        <Outlet />
+      </div>
+      <Footer />
+    </>
+  );
+}
+
+// Composant de protection
+function ProtectedRoute({ children, allowedRoles }) {
+  const { user } = useAuth();
+
+  // Si pas connecté -> login
+  if (!user) {
+    return <Navigate to="/auth/login" replace />;
   }
 
-  function AppRouter() {
-    return (
-      <Router>
-        <Routes>
-          
-          {/* Pages publiques AVEC Header et Footer */}
-          <Route element={<PublicLayout />}>
-            <Route path="/" element={<Home />} />
-            <Route path="/explorer" element={<Gallery />} />
-            <Route path="/comments" element={<CommentSection />} />
-            <Route path="/auth/register" element={<AuthForm />} />
-            <Route path="/auth/login" element={<AuthForm />} />
-          </Route>
-
-          {/* Page de création d'article SANS Header ni Footer */}
-          <Route path="/creer" element={<CreateArticle />} />
-
-          {/* Pages Admin SANS Header ni Footer généraux */}
-          {/* (L'AdminLayout gère sa propre barre latérale d'administration) */}
-          <Route path='/admin' element={<AdminLayout />}>
-             <Route index element={<Dashboard />} />
-             <Route path='dashboard' element={<Dashboard />} />
-             <Route path='users-list' element={<UserList />} />
-             <Route path='reports' element={<ReportsList />} />
-          </Route>
-
-          {/* Route de secours (404) toujours tout en bas */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-          
-        </Routes>
-      </Router>
-    );
+  // Si rôle spécifique requis et non possédé -> home
+  if (allowedRoles && !allowedRoles.includes(user.role)) {
+    return <Navigate to="/" replace />;
   }
 
-  export default AppRouter;
+  return children || <Outlet />;
+}
+
+function AppRouter() {
+  return (
+    <Router>
+      <Routes>
+        
+        {/* ROUTES PUBLIQUES */}
+        <Route element={<PublicLayout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/explorer" element={<Gallery />} />
+          <Route path="/comments" element={<CommentSection />} />
+          <Route path="/auth/register" element={<AuthForm />} />
+          <Route path="/auth/login" element={<AuthForm />} />
+        </Route>
+
+        {/* ROUTES UTILISATEURS CONNECTÉS (User et Admin) */}
+        <Route path="/creer" element={
+          <ProtectedRoute allowedRoles={['user', 'admin']}>
+            <CreateArticle />
+          </ProtectedRoute>
+        } />
+
+        {/* ROUTES ADMIN (Protège le layout et tous ses enfants) */}
+        <Route path='/admin' element={
+          <ProtectedRoute allowedRoles={['admin']}>
+            <AdminLayout />
+          </ProtectedRoute>
+        }>
+          <Route index element={<Dashboard />} />
+          <Route path='dashboard' element={<Dashboard />} />
+          <Route path='users-list' element={<UserList />} />
+          <Route path='reports' element={<ReportsList />} />
+        </Route>
+
+        <Route path="*" element={<Navigate to="/" replace />} />
+        
+      </Routes>
+    </Router>
+  );
+}
+
+export default AppRouter;

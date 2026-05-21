@@ -38,7 +38,14 @@ const verifyPassword = async (req, res) => {
         expiresIn: "4h",
       });
       delete req.user.hashedPassword;
-      res.send({ token, user: req.user });
+
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: 4 * 60 * 60 * 1000
+      })
+      res.json({ user: req.user });
 
     } else {
       res.sendStatus(401);
@@ -72,8 +79,17 @@ const verifyToken = (req, res, next) => {
   }
 };
 
+const logout = (req, res) => {
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+  }).sendStatus(200);
+};
+
 module.exports = {
   hashPassword,
   verifyPassword,
-  verifyToken
+  verifyToken,
+  logout
 };
