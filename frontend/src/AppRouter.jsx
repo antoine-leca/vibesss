@@ -12,6 +12,7 @@
   import CommentSection from './components/comments/CommentSection';
   import AuthForm from './pages/auth/AuthForm';
   import ReportsList from './pages/admin/ReportsList';
+  import CreateBlog from './pages/CreateBlog';
 
   // 1. On crée un "Layout" uniquement pour les pages publiques qui ont besoin du Header/Footer
   function PublicLayout() {
@@ -42,6 +43,7 @@
 
           {/* Page de création d'article SANS Header ni Footer */}
           <Route path="/creer" element={<CreateArticle />} />
+          <Route path="/creer-blog" element={<CreateBlog />} />
 
           {/* Pages Admin SANS Header ni Footer généraux */}
           {/* (L'AdminLayout gère sa propre barre latérale d'administration) */}
