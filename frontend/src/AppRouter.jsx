@@ -11,6 +11,7 @@ import AuthForm from './pages/auth/AuthForm';
 import CreateArticle from './pages/CreateArticle';
 import Gallery from "./pages/Gallery";
 import Home from './pages/Home';
+import ReportsList from './pages/admin/ReportsList';
 
 // Layout pour les pages publiques avec Header/Footer
 function PublicLayout() {
@@ -72,6 +73,7 @@ function AppRouter() {
           <Route index element={<Dashboard />} />
           <Route path='dashboard' element={<Dashboard />} />
           <Route path='users-list' element={<UserList />} />
+          <Route path='reports' element={<ReportsList />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/" replace />} />
