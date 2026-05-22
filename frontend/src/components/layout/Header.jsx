@@ -27,7 +27,8 @@ const Header = () => {
                 <nav className="hidden lg:flex items-center justify-center gap-10 flex-1">
                     <Link to="/explorer" className="text-xs font-semibold uppercase tracking-[0.15em] hover:opacity-70 transition-opacity">Explorer</Link>
                     <Link to="/a-propos" className="text-xs font-semibold uppercase tracking-[0.15em] hover:opacity-70 transition-opacity">À propos</Link>
-                    <Link to="/creer" className="text-xs font-semibold uppercase tracking-[0.15em] hover:opacity-70 transition-opacity">Créer</Link>
+                    <Link to="/create/blog" className="text-xs font-semibold uppercase tracking-[0.15em] hover:opacity-70 transition-opacity">Créer</Link>
+                    <Link to="/create/article" className="text-xs font-semibold uppercase tracking-[0.15em] hover:opacity-70 transition-opacity">Créer un Article</Link>
                 </nav>
 
                 <div className="w-1/4 flex justify-end items-center">
@@ -67,7 +68,8 @@ const Header = () => {
                     <nav className="flex flex-col items-center gap-6 w-full">
                         <Link onClick={() => setIsOpen(false)} to="/explorer" className="text-lg font-serif tracking-wide text-gray-950 hover:opacity-60 transition-opacity">Explorer</Link>
                         <Link onClick={() => setIsOpen(false)} to="/a-propos" className="text-lg font-serif tracking-wide text-gray-950 hover:opacity-60 transition-opacity">À propos</Link>
-                        <Link onClick={() => setIsOpen(false)} to="/creer" className="text-lg font-serif tracking-wide text-gray-950 hover:opacity-60 transition-opacity">Créer un blog</Link>
+                        <Link to="/create/blog" className="text-xs font-semibold uppercase tracking-[0.15em] hover:opacity-70 transition-opacity">Créer</Link>
+                        <Link to="/create/article" className="text-xs font-semibold uppercase tracking-[0.15em] hover:opacity-70 transition-opacity">Créer un Article</Link>
                         
                         <div className="w-12 h-[1px] bg-gray-200 my-2"></div>
 

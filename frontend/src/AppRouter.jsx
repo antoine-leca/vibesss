@@ -12,6 +12,7 @@ import CreateArticle from './pages/CreateArticle';
 import Gallery from "./pages/Gallery";
 import Home from './pages/Home';
 import ReportsList from './pages/admin/ReportsList';
+import CreateBlog from './pages/CreateBlog';
 
 // Layout pour les pages publiques avec Header/Footer
 function PublicLayout() {
@@ -55,14 +56,19 @@ function AppRouter() {
           <Route path="/comments" element={<CommentSection />} />
           <Route path="/auth/register" element={<AuthForm />} />
           <Route path="/auth/login" element={<AuthForm />} />
+          {/* Celles ci */}
+          <Route path='/create/blog' element={<CreateBlog />} />
+          <Route path='/create/article' element={<CreateArticle />} />
         </Route>
 
-        {/* ROUTES UTILISATEURS CONNECTÉS (User et Admin) */}
-        <Route path="/creer" element={
+        {/* ROUTES UTILISATEURS CONNECTÉS (User et Admin) bloquées temporairement le temps du fix des restrictions par rôle, utiliser les routes classiques au dessus 
+        <Route path="/create" element={
           <ProtectedRoute allowedRoles={['user', 'admin']}>
-            <CreateArticle />
+            <Route path='blog' element={<CreateBlog />} />
+            <Route path='article' element={<CreateArticle />} />
           </ProtectedRoute>
-        } />
+        }/> */}
+
 
         {/* ROUTES ADMIN (Protège le layout et tous ses enfants) */}
         <Route path='/admin' element={
@@ -76,7 +82,7 @@ function AppRouter() {
           <Route path='reports' element={<ReportsList />} />
         </Route>
 
-        <Route path="*" element={<Navigate to="/" replace />} />
+        {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
         
       </Routes>
     </Router>
