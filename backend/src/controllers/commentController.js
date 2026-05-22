@@ -25,68 +25,28 @@ const read = async (req, res) => {
 };
 
 const add = async (req, res) => {
-  const { content, moderation_status } = req.body;
-  let { article_id } = req.body;
-  const user_id = req.payload.sub;
+  const { content, article_id, user_id } = req.body;
 
   try {
-    if (!article_id) {
-      const [articles] = await models.article.findAll();
-      if (articles.length > 0) {
-        article_id = articles[0].id;
-      } else {
-        // Create default theme, blog, and article so comments can be inserted
-        const [themes] = await models.theme.findAll();
-        let themeId;
-        if (themes.length > 0) {
-          themeId = themes[0].id;
-        } else {
-          const [newTheme] = await models.theme.insert({
-            label: "Default Theme",
-            color_name: "pink",
-            font_name: "sans-serif",
-            bg_image: "default.jpg"
-          });
-          themeId = newTheme.insertId;
-        }
+    // 1. On crée le commentaire
+    const [result] = await models.comment.insert({ content, article_id, user_id });
+    const commentId = result.insertId;
 
-        const [blogs] = await models.blog.findAll();
-        let blogId;
-        if (blogs.length > 0) {
-          blogId = blogs[0].id;
-        } else {
-          const [newBlog] = await models.blog.insert({
-            title: "Mon premier blog",
-            description: "Bienvenue sur mon blog",
-            theme_id: themeId,
-            user_id: user_id
-          });
-          blogId = newBlog.insertId;
-        }
+    // 2. On récupère l'auteur de l'article pour savoir qui notifier
+    const [[article]] = await models.article.find(article_id);
+    const ownerId = article.user_id;
 
-        const [newArticle] = await models.article.insert({
-          user_id,
-          blog_id: blogId,
-          title: "Premier article de discussion",
-          content_text: "Cet article héberge les commentaires globaux.",
-          content_image: "",
-          release_date: new Date(),
-          creation_date: new Date(),
-          status: "published"
-        });
-        article_id = newArticle.insertId;
-      }
+    // 3. On crée la notification (seulement si ce n'est pas l'auteur qui commente son propre article)
+    if (ownerId !== user_id) {
+      await models.notif.insert({
+        notif_type: "comment",
+        comment_id: commentId,
+        article_id: article_id,
+        user_id: ownerId // C'est le propriétaire du blog/article qui reçoit
+      });
     }
 
-    const [result] = await models.comment.insert({
-      content,
-      article_id,
-      user_id,
-      moderation_status: moderation_status || "pending",
-    });
-
-    const [newCommentRows] = await models.comment.find(result.insertId);
-    res.status(201).json(newCommentRows[0]);
+    res.status(201).json({ id: commentId });
   } catch (err) {
     console.error(err);
     res.sendStatus(500);
@@ -137,4 +97,3 @@ module.exports = {
   edit,
   destroy,
 };
-;

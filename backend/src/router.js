@@ -49,7 +49,6 @@ router.get("/comments", commentController.browse);
 router.get("/comments/:id", commentController.read);
 
 // ------------- MIDDLEWARE D'AUTHENTIFICATION
-router.use(verifyToken);
 
 // ------------- ROUTES PROTÉGÉES (AVEC TOKEN)
 
@@ -104,4 +103,5 @@ router.post("/themes", themeController.add);
 router.get("/roles", roleController.browse);
 router.post("/users_roles", userRoleController.add);
 
+// router.use(verifyToken);
 module.exports = router;
