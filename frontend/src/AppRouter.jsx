@@ -1,5 +1,6 @@
 import { Navigate, Outlet, Route, BrowserRouter as Router, Routes } from "react-router";
 import { useAuth } from './services/AuthContext';
+
 import AdminLayout from './components/admin/AdminLayout';
 import CommentSection from './components/comments/CommentSection';
 import Footer from './components/layout/Footer';
@@ -12,8 +13,6 @@ import Gallery from "./pages/Gallery";
 import Home from './pages/Home';
 import ReportsList from './pages/admin/ReportsList';
 import CreateBlog from './pages/CreateBlog';
-import MyBlogs from './pages/profile/MyBlogs'; 
-import BlogSpace from './pages/blog/BlogSpace';
 
 // Layout pour les pages publiques avec Header/Footer
 function PublicLayout() {
@@ -32,10 +31,12 @@ function PublicLayout() {
 function ProtectedRoute({ children, allowedRoles }) {
   const { user } = useAuth();
 
+  // Si pas connecté -> login
   if (!user) {
     return <Navigate to="/auth/login" replace />;
   }
 
+  // Si rôle spécifique requis et non possédé -> home
   if (allowedRoles && !allowedRoles.includes(user.role)) {
     return <Navigate to="/" replace />;
   }
@@ -57,13 +58,12 @@ function AppRouter() {
           <Route path="/auth/login" element={<AuthForm />} />
         </Route>
 
-        {/* ROUTES UTILISATEURS CONNECTÉS (User et Admin) bloquées temporairement le temps du fix des restrictions par rôle, utiliser les routes classiques au dessus 
-        <Route path="/create" element={
-          <ProtectedRoute allowedRoles={['user', 'admin']}>
-            <Route path='blog' element={<CreateBlog />} />
-            <Route path='article' element={<CreateArticle />} />
-          </ProtectedRoute>
-        } />
+        {/* ROUTES UTILISATEURS CONNECTÉS (User connecté ou admin)*/}
+        <Route path="/create" element={<ProtectedRoute allowedRoles={['user', 'admin']}/>}>
+          <Route path='blog' element={<CreateBlog />} />
+          <Route path='article' element={<CreateArticle />} />
+        </Route>
+
 
         {/* ROUTES ADMIN (Protège le layout et tous ses enfants) */}
         <Route path='/admin' element={
