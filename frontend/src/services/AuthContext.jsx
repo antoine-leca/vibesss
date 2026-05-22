@@ -11,8 +11,14 @@ export function AuthProvider({ children }) {
     });
 
     const login = (userData) => {
-        setUser(userData);
-        localStorage.setItem("user", JSON.stringify(userData));
+        const minimalUser = {
+            id: userData.id,
+            pseudo: userData.pseudo,
+            role: userData.role
+        };
+
+        setUser(minimalUser);
+        localStorage.setItem("user", JSON.stringify(minimalUser));
     };
 
     const logout = async () => {
