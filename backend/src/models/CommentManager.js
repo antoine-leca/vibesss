@@ -5,6 +5,25 @@ class CommentManager extends AbstractManager {
     super({ table: "comments" });
   }
 
+  findAll() {
+    return this.database.query(
+      `select c.*, u.pseudo, u.profile_picture 
+       from ${this.table} c 
+       join users u on c.user_id = u.id 
+       order by c.comment_date desc`
+    );
+  }
+
+  find(id) {
+    return this.database.query(
+      `select c.*, u.pseudo, u.profile_picture 
+       from ${this.table} c 
+       join users u on c.user_id = u.id 
+       where c.id = ?`,
+      [id]
+    );
+  }
+
   //Create
   insert(comment) {
     return this.database.query(

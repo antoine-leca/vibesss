@@ -11,6 +11,7 @@ import CreateArticle from './pages/CreateArticle';
 import Gallery from "./pages/Gallery";
 import Home from './pages/Home';
 import ReportsList from './pages/admin/ReportsList';
+import CreateBlog from './pages/CreateBlog';
 import MyBlogs from './pages/profile/MyBlogs'; 
 import BlogSpace from './pages/blog/BlogSpace';
 
@@ -54,24 +55,17 @@ function AppRouter() {
           <Route path="/comments" element={<CommentSection />} />
           <Route path="/auth/register" element={<AuthForm />} />
           <Route path="/auth/login" element={<AuthForm />} />
-          <Route path="/blog/:id" element={<BlogSpace isOwner={false} />} />
         </Route>
 
-        {/* ROUTES UTILISATEURS CONNECTÉS (User et Admin) */}
-        <Route path="/creer" element={
+        {/* ROUTES UTILISATEURS CONNECTÉS (User et Admin) bloquées temporairement le temps du fix des restrictions par rôle, utiliser les routes classiques au dessus 
+        <Route path="/create" element={
           <ProtectedRoute allowedRoles={['user', 'admin']}>
-            <CreateArticle />
+            <Route path='blog' element={<CreateBlog />} />
+            <Route path='article' element={<CreateArticle />} />
           </ProtectedRoute>
         } />
-        
-        {/* ROUTES EN DÉVELOPPEMENT (Forcées en public pour l'instant) */}
-        <Route element={<PublicLayout />}>
-          <Route path="/mon-blog" element={<BlogSpace isOwner={true} />} />
-          {/* Voici ta route ajoutée : */}
-          <Route path="/mes-blogs" element={<MyBlogs />} /> 
-        </Route>
-        
-        {/* ROUTES ADMIN */}
+
+        {/* ROUTES ADMIN (Protège le layout et tous ses enfants) */}
         <Route path='/admin' element={
           <ProtectedRoute allowedRoles={['admin']}>
             <AdminLayout />
@@ -83,7 +77,7 @@ function AppRouter() {
           <Route path='reports' element={<ReportsList />} />
         </Route>
 
-        <Route path="*" element={<Navigate to="/" replace />} />
+        {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
         
       </Routes>
     </Router>

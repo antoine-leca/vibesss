@@ -44,6 +44,10 @@ router.get("/admin/activities", userController.getActivities);
 router.get("/users", userController.browse);
 router.get("/users/:id", userController.read);
 
+// Comments (Lecture publique)
+router.get("/comments", commentController.browse);
+router.get("/comments/:id", commentController.read);
+
 // ------------- MIDDLEWARE D'AUTHENTIFICATION
 router.use(verifyToken);
 
@@ -71,8 +75,6 @@ router.post("/articles", articleController.add);
 router.delete("/articles/user/:userId", articleController.destroyAllbyUser);
 
 // Comments
-router.get("/comments", commentController.browse);
-router.get("/comments/:id", commentController.read);
 router.post("/comments", commentController.add);
 router.put("/comments/:id", commentController.edit);
 router.delete("/comments/:id", commentController.destroy);

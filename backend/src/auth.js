@@ -58,16 +58,21 @@ const verifyPassword = async (req, res) => {
 
 const verifyToken = (req, res, next) => {
   try {
-    const authorizationHeader = req.get("Authorization");
+    let token = req.cookies ? req.cookies.token : null;
 
-    if (authorizationHeader == null) {
-      throw new Error("Authorization header is missing");
-    }
+    if (!token) {
+      const authorizationHeader = req.get("Authorization");
 
-    const [type, token] = authorizationHeader.split(" ");
+      if (authorizationHeader == null) {
+        throw new Error("Authorization header or cookie token is missing");
+      }
 
-    if (type !== "Bearer") {
-      throw new Error("Authorization header has not the 'Bearer' type");
+      const [type, tokenFromHeader] = authorizationHeader.split(" ");
+
+      if (type !== "Bearer") {
+        throw new Error("Authorization header has not the 'Bearer' type");
+      }
+      token = tokenFromHeader;
     }
 
     req.payload = jwt.verify(token, process.env.JWT_SECRET);
