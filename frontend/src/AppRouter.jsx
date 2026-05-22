@@ -56,18 +56,13 @@ function AppRouter() {
           <Route path="/comments" element={<CommentSection />} />
           <Route path="/auth/register" element={<AuthForm />} />
           <Route path="/auth/login" element={<AuthForm />} />
-          {/* Celles ci */}
-          <Route path='/create/blog' element={<CreateBlog />} />
-          <Route path='/create/article' element={<CreateArticle />} />
         </Route>
 
-        {/* ROUTES UTILISATEURS CONNECTÉS (User et Admin) bloquées temporairement le temps du fix des restrictions par rôle, utiliser les routes classiques au dessus 
-        <Route path="/create" element={
-          <ProtectedRoute allowedRoles={['user', 'admin']}>
-            <Route path='blog' element={<CreateBlog />} />
-            <Route path='article' element={<CreateArticle />} />
-          </ProtectedRoute>
-        }/> */}
+        {/* ROUTES UTILISATEURS CONNECTÉS (User connecté ou admin)*/}
+        <Route path="/create" element={<ProtectedRoute allowedRoles={['user', 'admin']}/>}>
+          <Route path='blog' element={<CreateBlog />} />
+          <Route path='article' element={<CreateArticle />} />
+        </Route>
 
 
         {/* ROUTES ADMIN (Protège le layout et tous ses enfants) */}
