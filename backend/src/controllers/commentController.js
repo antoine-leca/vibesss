@@ -42,7 +42,8 @@ const add = async (req, res) => {
         notif_type: "comment",
         comment_id: commentId,
         article_id: article_id,
-        user_id: ownerId // C'est le propriétaire du blog/article qui reçoit
+        user_id: ownerId, // C'est le propriétaire du blog/article qui reçoit
+        sender_id: user_id      
       });
     }
 

@@ -12,11 +12,15 @@ const add = async (req, res) => {
         const ownerId = article.user_id;
 
         // 3. On crée la notification de type 'like'
+        console.log("Tentative de notification :", { ownerId, userId });
+
         if (ownerId !== userId) {
+            console.log("On insère la notif !");
             await models.notif.insert({
                 notif_type: "like",
                 article_id: articleId,
-                user_id: ownerId // Le propriétaire reçoit la notif
+                user_id: ownerId,
+                sender_id: userId
             });
         }
 

@@ -61,6 +61,7 @@ router.delete("/users/:id", userController.destroy);
 // Notifications
 router.get("/notifications", notifController.browse);
 router.get("/notifications/unread/:userId", notifController.getUnread);
+router.get("/notifications/user/:userId", notifController.getByUser);
 router.post("/notifications", notifController.add);
 router.put("/notifications/:id", notifController.markAsRead);
 router.delete("/notifications/:id", notifController.destroy);
