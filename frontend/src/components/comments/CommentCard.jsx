@@ -4,7 +4,7 @@ import React from 'react';
 export default function CommentCard({ comment, isReply = false }) {
   return (
     <div className={`flex flex-col ${isReply ? 'ml-12 relative' : ''}`}>
-      {/* Ligne verticale pour les réponses imbriquées */}
+      
       {isReply && (
         <div className="absolute left-[-24px] top-0 bottom-6 w-[2px] bg-gray-100" />
       )}

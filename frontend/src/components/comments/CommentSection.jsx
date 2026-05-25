@@ -96,7 +96,7 @@ export default function CommentSection() {
         </div>
       )}
 
-      {/* Liste des commentaires */}
+      
       {!loading && !error && (
         <div className="space-y-5">
           {comments.length === 0 ? (

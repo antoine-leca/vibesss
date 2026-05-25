@@ -58,7 +58,7 @@ export default function CommentForm({ onCommentAdded }) {
 
   return (
     <form onSubmit={handleSubmit} className="flex items-center gap-3 mb-8">
-      {/* Avatar de l'utilisateur connecté */}
+     
       {user.profile_picture ? (
         <img 
           src={user.profile_picture} 

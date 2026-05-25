@@ -20,6 +20,16 @@ const getUnread = async (req, res) => {
     }
 };
 
+const getByUser = async (req, res) => {
+    try {
+        const [rows] = await models.notif.findByUserWithDetails(req.params.userId);
+        res.send(rows);
+    } catch (err) {
+        console.error(err);
+        res.sendStatus(500);
+    }
+};
+
 const add = async (req, res) => {
     try {
         const notif = req.body;
@@ -65,6 +75,7 @@ const destroy = async (req, res) => {
 module.exports = {
     browse,
     getUnread,
+    getByUser,
     add,
     markAsRead,
     destroy,
