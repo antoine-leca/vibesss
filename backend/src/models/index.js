@@ -41,8 +41,8 @@ models.report.setDatabase(pool);
 
 const NotifManager = require("./NotifManager");
 
-models.notifs = new NotifManager();
-models.notifs.setDatabase(pool);
+models.notif = new NotifManager();
+models.notif.setDatabase(pool);
 
 const CategoryManager = require("./CategoryManager");
 

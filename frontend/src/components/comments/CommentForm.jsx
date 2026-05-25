@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router';
 import { useAuth } from '../../services/AuthContext';
 
+
 export default function CommentForm({ onCommentAdded }) {
   const { user } = useAuth();
   const [text, setText] = useState('');
@@ -57,7 +58,7 @@ export default function CommentForm({ onCommentAdded }) {
 
   return (
     <form onSubmit={handleSubmit} className="flex items-center gap-3 mb-8">
-      {/* Avatar de l'utilisateur connecté */}
+     
       {user.profile_picture ? (
         <img 
           src={user.profile_picture} 

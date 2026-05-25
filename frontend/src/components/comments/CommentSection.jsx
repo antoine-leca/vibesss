@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import CommentCard from './CommentCard';
 import CommentForm from './CommentForm';
 
+
 const formatTime = (dateStr) => {
   const date = new Date(dateStr);
   const now = new Date();
@@ -95,7 +96,7 @@ export default function CommentSection() {
         </div>
       )}
 
-      {/* Liste des commentaires */}
+      
       {!loading && !error && (
         <div className="space-y-5">
           {comments.length === 0 ? (

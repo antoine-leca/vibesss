@@ -49,7 +49,6 @@ router.get("/comments", commentController.browse);
 router.get("/comments/:id", commentController.read);
 
 // ------------- MIDDLEWARE D'AUTHENTIFICATION
-router.use(verifyToken);
 
 // ------------- ROUTES PROTÉGÉES (AVEC TOKEN)
 
@@ -62,6 +61,7 @@ router.delete("/users/:id", userController.destroy);
 // Notifications
 router.get("/notifications", notifController.browse);
 router.get("/notifications/unread/:userId", notifController.getUnread);
+router.get("/notifications/user/:userId", notifController.getByUser);
 router.post("/notifications", notifController.add);
 router.put("/notifications/:id", notifController.markAsRead);
 router.delete("/notifications/:id", notifController.destroy);
@@ -104,4 +104,5 @@ router.post("/themes", themeController.add);
 router.get("/roles", roleController.browse);
 router.post("/users_roles", userRoleController.add);
 
+// router.use(verifyToken);
 module.exports = router;
