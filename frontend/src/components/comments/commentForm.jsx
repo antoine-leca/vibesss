@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router';
 import { useAuth } from '../../services/AuthContext';
 
+
 export default function CommentForm({ onCommentAdded }) {
   const { user } = useAuth();
   const [text, setText] = useState('');
