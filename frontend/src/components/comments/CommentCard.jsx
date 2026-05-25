@@ -1,5 +1,6 @@
 import React from 'react';
 
+
 export default function CommentCard({ comment, isReply = false }) {
   return (
     <div className={`flex flex-col ${isReply ? 'ml-12 relative' : ''}`}>
