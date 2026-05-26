@@ -41,7 +41,7 @@ const migrate = async () => {
 
   await connection.query(`USE ${DB_NAME}`)
 
-  const sql = fs.readFileSync('./database/schema.sql', 'utf8')
+  const sql = fs.readFileSync('./database.sql', 'utf8')
   await connection.query(sql)
 
   await connection.end()
