@@ -64,15 +64,11 @@ const Profile = () => {
           <div className="flex justify-between border-y border-gray-100 py-6 mb-8">
             <div className="text-center flex-1">
               <span className="block text-xl font-bold">{user.posts_count}</span>
-              <span className="text-gray-500 text-sm">Posts</span>
+              <span className="text-gray-500 text-sm">Publications</span>
             </div>
             <div className="text-center flex-1 border-x border-gray-100">
               <span className="block text-xl font-bold">{user.followers_count}</span>
-              <span className="text-gray-500 text-sm">Followers</span>
-            </div>
-            <div className="text-center flex-1">
-              <span className="block text-xl font-bold">{user.following_count}</span>
-              <span className="text-gray-500 text-sm">Following</span>
+              <span className="text-gray-500 text-sm">Abonnés</span>
             </div>
           </div>
 
@@ -80,7 +76,7 @@ const Profile = () => {
             {isOwner ? (
               <>
                 <button className="flex-1 bg-[#FF649E] text-white py-3 rounded-2xl font-semibold hover:opacity-90 transition-opacity">
-                  Edit Profile
+                  Modifier le profil
                 </button>
                 <button className="p-3 bg-gray-50 rounded-2xl border border-gray-200">
                    <Settings size={20} />
@@ -89,7 +85,7 @@ const Profile = () => {
             ) : (
               <>
                 <button className="flex-1 bg-[#FF649E] text-white py-3 rounded-2xl font-semibold hover:opacity-90 transition-opacity">
-                  Follow
+                  Suivre
                 </button>
               </>
             )}
@@ -98,13 +94,13 @@ const Profile = () => {
 
         {/* Featured Collections / Highlights Section */}
         <div className="bg-white p-6 rounded-3xl mb-6 border border-gray-100 shadow-sm">
-          <h4 className="font-bold mb-4 font-custom-main text-lg">Featured Collections</h4>
+          <h4 className="font-bold mb-4 font-custom-main text-lg">Collections à la une</h4>
           <div className="flex gap-4 overflow-x-auto pb-2">
             {[
-              { label: "Travel", icon: <MapPin size={22} />, color: "bg-[#EFC3A7]/20", count: "12 blogs" },
-              { label: "Cafe", icon: <LinkIcon size={22} />, color: "bg-[#B5A2D7]/20", count: "8 blogs" },
+              { label: "Voyages", icon: <MapPin size={22} />, color: "bg-[#EFC3A7]/20", count: "12 blogs" },
+              { label: "Café", icon: <LinkIcon size={22} />, color: "bg-[#B5A2D7]/20", count: "8 blogs" },
               { label: "Art", icon: <Calendar size={22} />, color: "bg-[#A7C49F]/20", count: "15 blogs" },
-              { label: "Life", icon: <User size={22} />, color: "bg-[#FCEB92]/20", count: "24 blogs" },
+              { label: "Vie", icon: <User size={22} />, color: "bg-[#FCEB92]/20", count: "24 blogs" },
             ].map((item, i) => (
               <div 
                 key={i} 
@@ -125,7 +121,7 @@ const Profile = () => {
         {/* Blogs Feed - Card Style */}
         <div className="flex flex-col gap-6 mt-8 pb-20">
           <div className="flex items-center justify-between px-2">
-            <h4 className="font-bold font-custom-main text-lg text-gray-800">Recent Blogs</h4>
+            <h4 className="font-bold font-custom-main text-lg text-gray-800">Blogs récents</h4>
           </div>
 
           <div className="grid grid-cols-1 gap-8">
@@ -159,7 +155,7 @@ const Profile = () => {
                         <span>{new Date(blog.creation_date).toLocaleDateString('fr-FR', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
                       </div>
                       <span className="text-[#FF649E] group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
-                        Read Collection →
+                        Lire la collection →
                       </span>
                     </div>
                   </div>
