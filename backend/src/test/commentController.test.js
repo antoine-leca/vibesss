@@ -1,4 +1,4 @@
-const commentController = require("./commentController");
+const commentController = require("../controllers/commentController");
 const models = require("../models");
 
 jest.mock("../models", () => ({
