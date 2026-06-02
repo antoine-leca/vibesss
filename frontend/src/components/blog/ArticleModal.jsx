@@ -1,8 +1,8 @@
-    import React, { useState } from 'react';
-    import { X, MessageSquare, ChevronDown, ChevronUp } from 'lucide-react';
-    import CommentSection from '../comments/CommentSection'; // Chemin d'accès vers Pharell
+import React, { useState } from 'react';
+import { X, MessageSquare, ChevronDown, ChevronUp } from 'lucide-react';
+import CommentSection from '../comments/CommentSection'; // Chemin d'accès vers Pharell
 
-    export default function ArticleModal({ article, onClose }) {
+export default function ArticleModal({ article, onClose }) {
     const [showComments, setShowComments] = useState(false);
 
     if (!article) return null;
@@ -54,9 +54,10 @@
             </button>
 
             {/* Zone des Commentaires */}
-            {showComments && <CommentSection comments={article.comments} />}
+            {/* On transmet le bon ID pour que le fetch et l'envoi de commentaire fonctionnent */}
+            {showComments && <CommentSection articleId={article.id} />}
 
         </div>
         </div>
     );
-    }
+}

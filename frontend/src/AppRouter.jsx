@@ -13,6 +13,7 @@ import Gallery from "./pages/Gallery";
 import Home from './pages/Home';
 import ReportsList from './pages/admin/ReportsList';
 import CreateBlog from './pages/CreateBlog';
+import BlogSpace from './pages/blog/BlogSpace';
 
 // Layout pour les pages publiques avec Header/Footer
 function PublicLayout() {
@@ -62,6 +63,7 @@ function AppRouter() {
         <Route path="/create" element={<ProtectedRoute allowedRoles={['user', 'admin']}/>}>
           <Route path='blog' element={<CreateBlog />} />
           <Route path='article' element={<CreateArticle />} />
+          <Route path='mon-blog' element={<BlogSpace isOwner={true} />} />
         </Route>
 
 
