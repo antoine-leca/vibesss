@@ -1,13 +1,14 @@
-    import React from 'react';
-    import { EditorContent } from '@tiptap/react';
-    import { useArticleForm } from '../../hooks/article/useArticleForm';
-    import EditorHeader from './EditorHeader';
-    import EditorToolbar from './EditorToolbar';
+import React from 'react';
+import { EditorContent } from '@tiptap/react';
+import { useArticleForm } from '../../hooks/article/useArticleForm';
+import EditorHeader from './EditorHeader';
+import EditorToolbar from './EditorToolbar';
 
-    export default function EditorContainer({ onContentChange }) {
+export default function EditorContainer({ onContentChange }) {
     const {
         editor,
         fileInputRef,
+        toast,
         handleImageButtonClick,
         handleFileChange,
         handlePublish,
@@ -20,6 +21,7 @@
     return (
         <div className="w-full bg-[#FBF7EE] sm:rounded-3xl overflow-hidden flex flex-col sm:border sm:border-black/5 min-h-[calc(100vh-20px)] sm:min-h-0 relative">
         
+
         {/* Input de fichier caché */}
         <input 
             type="file" 
@@ -46,6 +48,22 @@
             </div>
         </div>
 
+
+     {/* TOAST MAISON ADAPTÉ POUR MOBILE & DESKTOP */}
+        {toast.show && (
+            <div className={`fixed top-4 left-4 right-4 sm:left-auto sm:right-6 sm:top-6 sm:max-w-md z-[100] flex items-center gap-3 px-5 py-3.5 rounded-xl border shadow-xl font-medium animate-in fade-in slide-in-from-top-4 duration-300 ${
+                toast.type === 'error' 
+                    ? 'bg-[#FFF5F5] border-[#E76F85]/30 text-[#E76F85]' 
+                    : 'bg-[#F2F9F3] border-emerald-500/20 text-emerald-700'
+            }`}>
+                {/* Petit point de couleur */}
+                <span className={`w-2 h-2 rounded-full shrink-0 ${toast.type === 'error' ? 'bg-[#E76F85]' : 'bg-emerald-500'}`} />
+                
+                {/* Texte du message */}
+                <span className="text-sm leading-tight">{toast.message}</span>
+            </div>
+        )}
+
         {/* Footer Statistiques */}
         <div className="bg-[#FBF7EE] px-4 sm:px-12 py-3 flex justify-between items-center text-[10px] text-black/40 font-medium border-t border-black/5 select-none sm:mb-0 mb-16">
             <div className="flex gap-4">
@@ -56,4 +74,4 @@
         </div>
         </div>
     );
-    }
+}

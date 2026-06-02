@@ -1,6 +1,6 @@
 
 const models = require("../models");
-
+const sanitizeContent = require('../utils/sanitizeContent')
 
     const browse = async (req, res) => {
         try {
@@ -34,6 +34,16 @@ const models = require("../models");
     
     const article = req.body;
     article.id = parseInt(req.params.id, 10);
+
+
+    if (article.title) {
+        article.title = sanitizeContent(article.title);
+    } 
+
+    if (article.content_text) {
+        article.content_text = sanitizeContent(article.content_text);
+    }
+
     try {
         
         const [result] = await models.article.update(article);
@@ -48,10 +58,17 @@ const models = require("../models");
     }
     };
 
-
     const add = async (req, res) => {
     const article = req.body;
     
+    if (article.title) {
+        article.title = sanitizeContent(article.title); 
+    }
+
+    if (article.content_text) {
+        article.content_text = sanitizeContent(article.content_text);
+    }
+
     try {
         const [result] = await models.article.insert(article);
         res.location(`/articles/${result.insertId}`).sendStatus(201);

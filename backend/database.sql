@@ -96,13 +96,15 @@ CREATE TABLE comments (
 CREATE TABLE notifs (
   id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   read_date DATETIME NULL,
-  notif_type ENUM('comment','new_post') NOT NULL,
+  notif_type ENUM('comment','like') NOT NULL,
   comment_id INT(11) UNSIGNED NULL,
   article_id INT(11) UNSIGNED NULL,
   user_id INT(11) UNSIGNED NOT NULL,
+  sender_id INT(11) UNSIGNED NOT NULL,
   FOREIGN KEY (comment_id) REFERENCES comments(id) ON DELETE CASCADE,
   FOREIGN KEY (article_id) REFERENCES articles(id) ON DELETE CASCADE,
-  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (sender_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE blogs_categories (
