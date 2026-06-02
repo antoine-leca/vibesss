@@ -9,7 +9,8 @@
   "scripts": {
     "test": "jest",
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "migrate": "node migrate.js"
   },
   "dependencies": {
     "argon2": "^0.44.0",
