@@ -12,47 +12,47 @@ const testConnection = async () => {
       database: process.env.DB_NAME,
     });
 
-    console.log("✅ Connecté à la base de données");
+    console.log(" Connecté à la base de données");
 
     // Vérifier les utilisateurs
     const [users] = await connection.execute("SELECT id, pseudo, email FROM users LIMIT 5");
-    console.log("\n📋 Utilisateurs:");
+    console.log(" Utilisateurs:");
     if (users.length === 0) {
-      console.log("❌ Aucun utilisateur trouvé!");
+      console.log(" Aucun utilisateur trouvé!");
     } else {
       console.table(users);
     }
 
     // Vérifier les articles
     const [articles] = await connection.execute("SELECT id, title, user_id, blog_id FROM articles LIMIT 5");
-    console.log("\n📰 Articles:");
+    console.log(" Articles:");
     if (articles.length === 0) {
-      console.log("❌ Aucun article trouvé!");
+      console.log(" Aucun article trouvé!");
     } else {
       console.table(articles);
     }
 
     // Vérifier les blogs
     const [blogs] = await connection.execute("SELECT id, title, user_id FROM blogs LIMIT 5");
-    console.log("\n🎨 Blogs:");
+    console.log("Blogs:");
     if (blogs.length === 0) {
-      console.log("❌ Aucun blog trouvé!");
+      console.log(" Aucun blog trouvé!");
     } else {
       console.table(blogs);
     }
 
     // Vérifier les commentaires
     const [comments] = await connection.execute("SELECT id, content, article_id, user_id FROM comments LIMIT 5");
-    console.log("\n💬 Commentaires:");
+    console.log(" Commentaires:");
     if (comments.length === 0) {
-      console.log("❌ Aucun commentaire trouvé!");
+      console.log(" Aucun commentaire trouvé!");
     } else {
       console.table(comments);
     }
 
     await connection.end();
   } catch (error) {
-    console.error("❌ Erreur:", error.message);
+    console.error(" Erreur:", error.message);
     process.exit(1);
   }
 };
