@@ -8,10 +8,8 @@ const MOCK_ARTICLES = [
   { id: 3, title: "Troisième publication", date: "Il y a 1 semaine", excerpt: "Du contenu de qualité arrive bientôt..." },
 ];
 
-const ArticlesSection = ({ backgroundColor, onColorChange, blogTitle }) => {
-  const onPublish = () => {
-    console.log('Blog published');
-  };
+const ArticlesSection = ({ backgroundColor, onColorChange, blogTitle, onPublish }) => {
+
 
   return (
     <div className="relative min-h-[500px] overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">

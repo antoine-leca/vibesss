@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router';
+import { useAuth } from '../../services/AuthContext'; // Import du contexte Auth
+import BlogService from '../../services/BlogService';  // Import du service Blog
 import EditorHeader from './EditorHeader';
 import EditorMenu from './EditorMenu';
 import ThemeSelector from './ThemeSelector';
@@ -7,6 +9,7 @@ import BlogPreview from './BlogPreview';
 
 const BlogEditorContainer = () => {
   const navigate = useNavigate();
+  const { user } = useAuth(); // Récupération de l'utilisateur connecté
   const menuRef = useRef(null);
   
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -49,13 +52,38 @@ const BlogEditorContainer = () => {
     setIsMenuOpen(false);
   };
 
-  const handlePublish = () => {
+  const handlePublish = async () => {
     if (!blogData.title.trim() || !blogData.description.trim()) {
       return alert("Titre et description obligatoires !");
     }
-    alert("Blog publié !");
-    navigate('/');
+
+    try {
+      // Préparation des données pour le backend
+      const dataToSend = {
+        title: blogData.title,
+        description: blogData.description,
+        user_id: user?.id, // ID de l'utilisateur stocké dans le context
+        theme_id: blogData.themeId || 1,
+        banniere: blogData.bannerImage,
+        couleurs: blogData.backgroundcolor
+      };
+
+      const response = await BlogService.create(dataToSend);
+
+      if (response.ok) {
+        alert("Félicitations ! Votre blog vient d'être créé.");
+        navigate('/'); // Redirection vers l'accueil ou le tableau de bord
+      } else {
+        const error = await response.json();
+        alert(`Erreur : ${error.message || "Impossible de créer le blog"}`);
+      }
+    } catch (err) {
+      alert("Une erreur réseau est survenue.");
+    }
   };
+
+  console.log("Utilisateur connecté :", user);
+  console.log("ID envoyé au backend :", user?.id);
 
   return (
     <div className="w-full h-full bg-white overflow-hidden flex flex-col">
@@ -85,6 +113,7 @@ const BlogEditorContainer = () => {
           onBlogChange={handleBlogChange}
           isThemeSelectorOpen={isThemeSelectorOpen}
           onThemeSelectorToggle={() => setIsThemeSelectorOpen(!isThemeSelectorOpen)}
+          onPublish={handlePublish}
         />
       </div>
 
