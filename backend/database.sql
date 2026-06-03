@@ -146,4 +146,3 @@ CREATE TABLE users_reports (
 
 -- Seed initial data
 INSERT INTO roles (id, label) VALUES (1, 'user'), (2, 'admin');
-INSERT INTO themes (id, label, color_name, font_name, bg_image) VALUES (1, 'Default Theme', 'pink', 'sans-serif', 'default.jpg');
