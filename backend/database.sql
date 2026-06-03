@@ -144,6 +144,22 @@ CREATE TABLE users_reports (
   FOREIGN KEY (report_id) REFERENCES reports(id) ON DELETE CASCADE
 );
 
+
+ALTER TABLE blogs 
+ADD COLUMN banniere VARCHAR(255) NULL AFTER theme_id,
+ADD COLUMN couleurs VARCHAR(50) NULL AFTER banniere;
+
+
+INSERT INTO themes (label, color_name, font_name, bg_image) VALUES 
+('Cuisine', 'orange', 'Playfair Display', 'cuisine_bg.jpg'),
+('Animaux', 'brown', 'Arial', 'animaux_bg.jpg'),
+('Lifestyle', 'pastel-pink', 'Montserrat', 'lifestyle_bg.jpg'),
+('Sport', 'red', 'Impact', 'sport_bg.jpg'),
+('Nature', 'green', 'Helvetica', 'nature_bg.jpg'),
+('Voyage', 'blue', 'Roboto', 'voyage_bg.jpg');
+
+
+
 -- Seed initial data
 INSERT INTO roles (id, label) VALUES (1, 'user'), (2, 'admin');
 INSERT INTO themes (id, label, color_name, font_name, bg_image) VALUES (1, 'Default Theme', 'pink', 'sans-serif', 'default.jpg');
@@ -257,6 +273,8 @@ INSERT INTO reports (id, report_reason, description, status) VALUES
 (3, 'copyright', 'Cet article est un copier-coller intégral d un papier universitaire protégé.', 'active'),
 (4, 'bully', 'Propos injurieux proférés à l encontre de l auteur dans l espace commentaire.', 'active'),
 (5, 'spam', 'Publicité intempestive glissée au milieu du message.', 'active');
+
+
 
 -- Étape B : On fait les liaisons dans la table Pivot "users_reports"
 -- (Chaque report est lié à l utilisateur qui signale, et à l entité ciblée)
