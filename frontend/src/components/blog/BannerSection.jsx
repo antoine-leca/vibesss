@@ -42,10 +42,10 @@ const BannerSection = ({ bannerImage, onBannerChange, onThemeSelectorToggle }) =
       {/* Bouton thème - top right */}
       <ThemeSelectorButton onClick={onThemeSelectorToggle} />
 
-      {/* Bouton changement bannière - bottom right */}
+      {/* Bouton changement bannière - bottom left */}
       <button
         onClick={() => bannerInputRef.current?.click()}
-        className="bottom-10 relative"
+        className="absolute bottom-6 left-6 z-30"
         title="Changer la bannière"
       >
         
