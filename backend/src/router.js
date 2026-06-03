@@ -47,6 +47,7 @@ router.get("/users/:id", userController.read);
 // Comments (Lecture publique)
 router.get("/comments", commentController.browse);
 router.get("/comments/:id", commentController.read);
+router.get("/articles/:articleId/comments", commentController.readByArticle);
 
 // ------------- MIDDLEWARE D'AUTHENTIFICATION
 

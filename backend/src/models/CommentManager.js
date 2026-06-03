@@ -24,11 +24,23 @@ class CommentManager extends AbstractManager {
     );
   }
 
+  // Find comments by article
+  findByArticleId(articleId) {
+    return this.database.query(
+      `select c.*, u.pseudo, u.profile_picture 
+       from ${this.table} c 
+       join users u on c.user_id = u.id 
+       where c.article_id = ? 
+       order by c.comment_date desc`,
+      [articleId]
+    );
+  }
+
   //Create
   insert(comment) {
     return this.database.query(
       `insert into ${this.table} (content, moderation_status, article_id, user_id) values (?, ?, ?, ?)`,
-      [comment.content, comment.moderation_status, comment.article_id, comment.user_id]
+      [comment.content, comment.moderation_status || null, comment.article_id, comment.user_id]
     );
   }
 

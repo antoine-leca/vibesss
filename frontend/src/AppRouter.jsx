@@ -13,6 +13,7 @@ import Gallery from "./pages/Gallery";
 import Home from './pages/Home';
 import ReportsList from './pages/admin/ReportsList';
 import CreateBlog from './pages/CreateBlog';
+import TestComments from './pages/TestComments';
 
 // Layout pour les pages publiques avec Header/Footer
 function PublicLayout() {
@@ -54,6 +55,8 @@ function AppRouter() {
           <Route path="/" element={<Home />} />
           <Route path="/explorer" element={<Gallery />} />
           <Route path="/comments" element={<CommentSection />} />
+          <Route path="/test/comments" element={<TestComments />} />
+          <Route path="/test/comments/:articleId" element={<TestComments />} />
           <Route path="/auth/register" element={<AuthForm />} />
           <Route path="/auth/login" element={<AuthForm />} />
         </Route>

@@ -18,7 +18,7 @@ const formatTime = (dateStr) => {
   return date.toLocaleDateString("fr-FR", { day: "numeric", month: "short", year: "numeric" });
 };
 
-export default function CommentSection() {
+export default function CommentSection({ articleId }) {
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -26,7 +26,11 @@ export default function CommentSection() {
   const fetchComments = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/comments`);
+      const url = articleId 
+        ? `${import.meta.env.VITE_BACKEND_URL}/articles/${articleId}/comments`
+        : `${import.meta.env.VITE_BACKEND_URL}/comments`;
+      
+      const response = await fetch(url);
       if (!response.ok) {
         throw new Error("Failed to fetch comments");
       }
@@ -56,7 +60,7 @@ export default function CommentSection() {
 
   useEffect(() => {
     fetchComments();
-  }, []);
+  }, [articleId]);
 
   const handleCommentAdded = (newComment) => {
     const mapped = {
@@ -80,7 +84,7 @@ export default function CommentSection() {
       </h2>
 
       {/* Appel du composant Formulaire */}
-      <CommentForm onCommentAdded={handleCommentAdded} />
+      <CommentForm onCommentAdded={handleCommentAdded} articleId={articleId} />
 
       {/* Chargement */}
       {loading && (
