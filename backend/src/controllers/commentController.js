@@ -40,7 +40,7 @@ const add = async (req, res) => {
   try {
     // Validation basique
     if (!content || !article_id || !user_id) {
-      console.error("❌ Données manquantes:", { content, article_id, user_id });
+      console.error("Données manquantes:", { content, article_id, user_id });
       return res.status(400).json({ error: "content, article_id et user_id sont requis" });
     }
 
@@ -49,25 +49,25 @@ const add = async (req, res) => {
     // 1. Vérifier que l'article existe
     const [articleRows] = await models.article.find(article_id);
     if (!articleRows || articleRows.length === 0) {
-      console.warn("⚠️ Article introuvable:", article_id);
+      console.warn("Article introuvable:", article_id);
       return res.status(404).json({ error: "Article introuvable" });
     }
 
     // 2. On crée le commentaire
     const [result] = await models.comment.insert({ content, article_id, user_id });
     const commentId = result.insertId;
-    console.log("✅ Commentaire créé avec ID:", commentId);
+    console.log("Commentaire créé avec ID:", commentId);
 
     // 3. On récupère le commentaire créé avec les infos de l'utilisateur
     const [commentRows] = await models.comment.find(commentId);
     
     if (!commentRows || commentRows.length === 0) {
-      console.error("❌ Commentaire non trouvé après insertion");
+      console.error("Commentaire non trouvé après insertion");
       return res.status(500).json({ error: "Commentaire créé mais non trouvable" });
     }
     
     const newComment = commentRows[0];
-    console.log("✅ Commentaire récupéré:", newComment.id);
+    console.log("Commentaire récupéré:", newComment.id);
 
     // 4. Notification en arrière-plan (ne bloque pas la réponse)
     (async () => {
@@ -82,17 +82,17 @@ const add = async (req, res) => {
             user_id: ownerId,
             sender_id: user_id      
           });
-          console.log("✅ Notification créée pour l'utilisateur:", ownerId);
+          console.log("Notification créée pour l'utilisateur:", ownerId);
         }
       } catch (notifErr) {
-        console.error("⚠️ Erreur lors de la création de la notification:", notifErr.message);
+        console.error("Erreur lors de la création de la notification:", notifErr.message);
       }
     })();
 
     // On retourne le commentaire au client immédiatement
     res.status(201).json(newComment);
   } catch (err) {
-    console.error("🚨 Erreur lors de l'insertion du commentaire:", err.message);
+    console.error("Erreur lors de l'insertion du commentaire:", err.message);
     console.error("Stack:", err.stack);
     res.status(500).json({ error: err.message });
   }
