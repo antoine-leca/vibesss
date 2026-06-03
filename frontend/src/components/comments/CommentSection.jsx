@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import CommentCard from './CommentCard';
 import CommentForm from './CommentForm';
 
-
 const formatTime = (dateStr) => {
   const date = new Date(dateStr);
   const now = new Date();
@@ -18,6 +17,7 @@ const formatTime = (dateStr) => {
   return date.toLocaleDateString("fr-FR", { day: "numeric", month: "short", year: "numeric" });
 };
 
+// 💡 1. MODIFICATION : On récupère l'articleId en prop ici
 export default function CommentSection({ articleId }) {
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -36,7 +36,6 @@ export default function CommentSection({ articleId }) {
       }
       const data = await response.json();
       
-      // Map database comments to UI structure
       const mappedComments = data.map((c) => ({
         id: c.id,
         author: c.pseudo || "Anonyme",
@@ -83,6 +82,7 @@ export default function CommentSection({ articleId }) {
         Comments ({loading ? "..." : comments.length})
       </h2>
 
+      {/* 💡 2. MODIFICATION : On passe l'articleId reçu au formulaire */}
       {/* Appel du composant Formulaire */}
       <CommentForm onCommentAdded={handleCommentAdded} articleId={articleId} />
 
@@ -100,7 +100,6 @@ export default function CommentSection({ articleId }) {
         </div>
       )}
 
-      
       {!loading && !error && (
         <div className="space-y-5">
           {comments.length === 0 ? (
