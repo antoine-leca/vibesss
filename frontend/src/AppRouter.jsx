@@ -14,8 +14,8 @@ import CreateBlog from './pages/CreateBlog';
 import Gallery from "./pages/Gallery";
 import Home from './pages/Home';
 import BlogSpace from './pages/blog/BlogSpace';
-import MyBlogs from './pages/blog/MyBlogs';
-import Profile from './pages/Profile';
+import Profile from './pages/Profile;'
+import MyBlogs from './pages/profile/MyBlogs';
 
 // Layout pour les pages publiques avec Header/Footer
 function PublicLayout() {
