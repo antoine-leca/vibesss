@@ -1,7 +1,8 @@
 import React, { useRef } from 'react';
-import { Camera } from 'lucide-react';
+import { ImageIcon } from 'lucide-react';
+import ThemeSelectorButton from './ThemeSelectorButton';
 
-const BannerSection = ({ bannerImage, onBannerChange }) => {
+const BannerSection = ({ bannerImage, onBannerChange, onThemeSelectorToggle }) => {
   const bannerInputRef = useRef(null);
 
   const handleFileChange = (event) => {
@@ -38,12 +39,21 @@ const BannerSection = ({ bannerImage, onBannerChange }) => {
         </div>
       )}
 
+      {/* Bouton thème - top right */}
+      <ThemeSelectorButton onClick={onThemeSelectorToggle} />
+
+      {/* Bouton changement bannière - bottom right */}
       <button
         onClick={() => bannerInputRef.current?.click()}
-        className="btn btn-sm absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm hover:bg-white text-black border-0 shadow-lg hover:shadow-xl hover:scale-105 transition-all gap-2 font-custom-main"
+        className="bottom-10 relative"
+        title="Changer la bannière"
       >
-        <Camera size={16} />
-        Changer la bannière
+        
+        {/* Button */}
+        <div className="px-5 py-3 rounded-2xl font-bold text-white hover:shadow-3xl transition-all duration-300 hover:scale-110 flex items-center gap-3 border border-white/30 backdrop-blur-md bg-white/20 hover:bg-white/30">
+          <ImageIcon size={24} strokeWidth={2.5} />
+          <span className="text-sm tracking-wide">Modifier</span>
+        </div>
       </button>
     </div>
   );

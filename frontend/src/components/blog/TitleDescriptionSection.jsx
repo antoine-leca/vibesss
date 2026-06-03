@@ -9,11 +9,39 @@ const TitleDescriptionSection = ({ title, description, onTitleChange, onDescript
     e.target.style.height = e.target.scrollHeight + 'px';
   };
 
+  const getProgressPercentage = (current, max) => (current / max) * 100;
+
+  const renderBadge = (current, max) => {
+    const percentage = getProgressPercentage(current, max);
+    const isWarning = percentage > 80;
+    
+    return (
+      <div className="absolute -right-2 top-2 flex flex-col items-center gap-1">
+        <div className="px-3 py-1.5 rounded-lg text-white text-xs font-bold font-custom-main shadow-lg transition-all"
+          style={{ 
+            backgroundColor: isWarning ? '#FF6B6B' : 'var(--primary-color)'
+          }}>
+          {current}/{max}
+        </div>
+        {/* Mini progress bar */}
+        <div className="w-16 h-1 bg-black/10 rounded-full overflow-hidden">
+          <div 
+            className="h-full rounded-full transition-all"
+            style={{ 
+              width: `${percentage}%`,
+              backgroundColor: isWarning ? '#FF6B6B' : 'var(--primary-color)'
+            }}
+          />
+        </div>
+      </div>
+    );
+  };
+
   return (
-    <div className="relative bg-[var(--card-color)] px-6 sm:px-12 py-8">
+    <div className="relative bg-white px-6 sm:px-12 py-8">
       
       {/* TITRE */}
-      <div className="relative group mb-4">
+      <div className="relative group mb-6">
         <textarea
           value={title}
           onChange={(e) => onTitleChange(e.target.value)}
@@ -32,21 +60,8 @@ const TitleDescriptionSection = ({ title, description, onTitleChange, onDescript
           rows={2}
         />
         
-        {focusedField === 'title' && (
-          <div 
-            className="badge absolute -right-2 top-2 text-white shadow-lg font-custom-main"
-            style={{ backgroundColor: 'var(--primary-color)' }}
-          >
-            {title.length}/60
-          </div>
-        )}
+        {focusedField === 'title' && renderBadge(title.length, 60)}
         
-        {!focusedField && (
-          <div className="badge badge-ghost absolute -right-2 top-2 opacity-0 group-hover:opacity-100 transition-opacity font-custom-main">
-            <Edit3 size={10} className="inline mr-1" />
-            Éditer
-          </div>
-        )}
       </div>
 
       {/* DESCRIPTION */}
@@ -69,21 +84,8 @@ const TitleDescriptionSection = ({ title, description, onTitleChange, onDescript
           rows={2}
         />
         
-        {focusedField === 'description' && (
-          <div 
-            className="badge absolute -right-2 top-2 text-white shadow-lg font-custom-main"
-            style={{ backgroundColor: 'var(--primary-color)' }}
-          >
-            {description.length}/200
-          </div>
-        )}
+        {focusedField === 'description' && renderBadge(description.length, 200)}
         
-        {!focusedField && (
-          <div className="badge badge-ghost absolute -right-2 top-2 opacity-0 group-hover:opacity-100 transition-opacity font-custom-main">
-            <Edit3 size={10} className="inline mr-1" />
-            Éditer
-          </div>
-        )}
       </div>
 
     </div>
