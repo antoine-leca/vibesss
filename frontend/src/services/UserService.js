@@ -1,9 +1,9 @@
-const API_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3310";
+const API_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 
 const UserService = {
     getById: async (id) => {
         try {
-            const response = await fetch(`${API_URL}/api/users/${id}`);
+            const response = await fetch(`${API_URL}/users/${id}`);
             if (!response.ok) throw new Error("User not found");
             return await response.json();
         } catch (error) {
@@ -14,7 +14,7 @@ const UserService = {
 
     getBlogsByUserId: async (id) => {
         try {
-            const response = await fetch(`${API_URL}/api/blogs/user/${id}`);
+            const response = await fetch(`${API_URL}/blogs/user/${id}`);
             if (!response.ok) throw new Error("Blogs not found");
             return await response.json();
         } catch (error) {

@@ -19,13 +19,20 @@ class BlogManager extends AbstractManager {
 
     update(blog) {
         return this.database.query(
-            `UPDATE ${this.table} SET title = ?, description = ?, theme_id = ? WHERE id = ?`, 
+            `UPDATE ${this.table} SET title = ?, description = ?, theme_id = ? WHERE id = ?`,
             [
                 blog.title,
                 blog.description,
                 blog.theme_id,
                 blog.id
             ]
+        );
+    }
+
+    findByUserId(userId) {
+        return this.database.query(
+            `SELECT * FROM ${this.table} WHERE user_id = ?`,
+            [userId]
         );
     }
 }

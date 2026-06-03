@@ -1,42 +1,44 @@
 import { useEffect, useState } from "react";
-import { MOCK_BLOGS } from "../data/mockBlogs";
-import { MOCK_USERS } from "../data/mockUsers";
-// import { useAuth } from "../services/AuthContext"; // Je vais supposer qu'on utilisera ça plus tard
+import UserService from "../services/UserService";
 
 export const useProfile = (userId, currentUserId) => {
     const [user, setUser] = useState(null);
     const [blogs, setBlogs] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const [isOwner, setIsOwner] = useState(false);
 
     useEffect(() => {
-        // Simulation de récupération de données
         const fetchProfileData = async () => {
             setLoading(true);
+            setError(null);
 
             try {
-                // En mode réel, on ferait ça :
-                // const userData = await UserService.getById(userId);
-                // const userBlogs = await UserService.getBlogsByUserId(userId);
+                // Récupération des données réelles depuis l'API
+                const userData = await UserService.getById(userId);
+                const userBlogs = await UserService.getBlogsByUserId(userId);
 
-                // Pour l'instant, données simulées :
-                const targetUser = MOCK_USERS.find((u) => u.id === parseInt(userId)) || MOCK_USERS[0];
-                const filteredBlogs = MOCK_BLOGS.filter((b) => b.user_id === targetUser.id);
+                if (userData) {
+                    setUser(userData);
+                    setBlogs(userBlogs || []);
 
-                setUser(targetUser);
-                setBlogs(filteredBlogs);
-
-                // Vérifier si c'est le propriétaire
-                setIsOwner(String(targetUser.id) === String(currentUserId));
+                    // Vérifier si c'est le propriétaire
+                    setIsOwner(String(userData.id) === String(currentUserId));
+                } else {
+                    setError("Utilisateur non trouvé");
+                }
             } catch (error) {
                 console.error("Erreur lors du chargement du profil:", error);
+                setError("Une erreur est survenue lors du chargement du profil");
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchProfileData();
+        if (userId) {
+            fetchProfileData();
+        }
     }, [userId, currentUserId]);
 
-    return { user, blogs, loading, isOwner };
+    return { user, blogs, loading, error, isOwner };
 };
