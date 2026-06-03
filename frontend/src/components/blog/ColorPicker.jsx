@@ -15,7 +15,7 @@ const ColorPicker = ({ backgroundColor, onColorChange }) => {
       {/* Bouton couleur flottant */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="top-6 right-6 group px-5 py-3 rounded-2xl font-bold text-white shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-110 flex items-center gap-3 border border-white/30 backdrop-blur-md bg-white/20 hover:bg-white/30"
+        className="group px-5 py-3 rounded-2xl font-bold text-white shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-110 flex items-center gap-3 border border-white/30 backdrop-blur-md bg-white/20 hover:bg-white/30"
         style={{ 
           backgroundColor: backgroundColor || '#ffffff',
           width: '3.5rem',
@@ -28,7 +28,7 @@ const ColorPicker = ({ backgroundColor, onColorChange }) => {
 
       {/* Palette de couleurs */}
       {isOpen && (
-        <div className="absolute top-16 left-0 bg-white rounded-2xl shadow-2xl p-4 w-64 z-30 border border-black/5">
+        <div className="absolute top-16 right-0 bg-white rounded-2xl shadow-2xl p-4 w-64 z-30 border border-black/5">
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-custom-title font-semibold text-black">Couleur du fond</h3>
             <button 
