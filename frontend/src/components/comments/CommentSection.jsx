@@ -26,8 +26,11 @@ export default function CommentSection({ articleId }) {
   const fetchComments = async () => {
     try {
       setLoading(true);
-      // Plus tard, tu pourras filtrer l'URL avec l'id (ex: /comments?article_id=${articleId})
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/comments`);
+      const url = articleId 
+        ? `${import.meta.env.VITE_BACKEND_URL}/articles/${articleId}/comments`
+        : `${import.meta.env.VITE_BACKEND_URL}/comments`;
+      
+      const response = await fetch(url);
       if (!response.ok) {
         throw new Error("Failed to fetch comments");
       }
@@ -56,7 +59,7 @@ export default function CommentSection({ articleId }) {
 
   useEffect(() => {
     fetchComments();
-  }, []);
+  }, [articleId]);
 
   const handleCommentAdded = (newComment) => {
     const mapped = {
@@ -80,6 +83,7 @@ export default function CommentSection({ articleId }) {
       </h2>
 
       {/* 💡 2. MODIFICATION : On passe l'articleId reçu au formulaire */}
+      {/* Appel du composant Formulaire */}
       <CommentForm onCommentAdded={handleCommentAdded} articleId={articleId} />
 
       {/* Chargement */}

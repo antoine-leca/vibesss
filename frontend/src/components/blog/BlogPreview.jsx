@@ -3,12 +3,13 @@ import BannerSection from './BannerSection';
 import TitleDescriptionSection from './TitleDescriptionSection';
 import ArticlesSection from './ArticlesSection';
 
-const BlogPreview = ({ blogData, onBlogChange }) => {
+const BlogPreview = ({ blogData, onBlogChange, onThemeSelectorToggle, onPublish }) => {
   return (
-    <div className="w-full h-full bg-[var(--card-color)]">
+    <div className="w-full h-full bg-white">
       <BannerSection 
         bannerImage={blogData.bannerImage}
         onBannerChange={(img) => onBlogChange('bannerImage', img)}
+        onThemeSelectorToggle={onThemeSelectorToggle}
       />
       
       <TitleDescriptionSection
@@ -19,9 +20,10 @@ const BlogPreview = ({ blogData, onBlogChange }) => {
       />
       
       <ArticlesSection
-        backgroundImage={blogData.backgroundImage}
-        onBackgroundChange={(img) => onBlogChange('backgroundImage', img)}
+        backgroundColor={blogData.backgroundcolor}
+        onColorChange={(color) => onBlogChange('backgroundcolor', color)}
         blogTitle={blogData.title}
+        onPublish={onPublish}
       />
     </div>
   );
