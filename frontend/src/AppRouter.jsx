@@ -13,9 +13,6 @@ import CreateArticle from './pages/CreateArticle';
 import CreateBlog from './pages/CreateBlog';
 import Gallery from "./pages/Gallery";
 import Home from './pages/Home';
-import ReportsList from './pages/admin/ReportsList';
-import CreateBlog from './pages/CreateBlog';
-import TestComments from './pages/TestComments';
 import Profile from './pages/Profile';
 
 // Layout pour les pages publiques avec Header/Footer
@@ -58,8 +55,6 @@ function AppRouter() {
           <Route path="/" element={<Home />} />
           <Route path="/explorer" element={<Gallery />} />
           <Route path="/comments" element={<CommentSection />} />
-          <Route path="/test/comments" element={<TestComments />} />
-          <Route path="/test/comments/:articleId" element={<TestComments />} />
           <Route path="/auth/register" element={<AuthForm />} />
           <Route path="/auth/login" element={<AuthForm />} />
           <Route path="/profile/:id" element={<Profile />} />
