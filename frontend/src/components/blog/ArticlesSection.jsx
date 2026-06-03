@@ -1,4 +1,5 @@
 import React from 'react';
+import { Send } from 'lucide-react'; // <--- AJOUTEZ CETTE LIGNE
 import ColorPicker from './ColorPicker';
 
 const MOCK_ARTICLES = [
@@ -8,6 +9,10 @@ const MOCK_ARTICLES = [
 ];
 
 const ArticlesSection = ({ backgroundColor, onColorChange, blogTitle }) => {
+  const onPublish = () => {
+    console.log('Blog published');
+  };
+
   return (
     <div className="relative min-h-[500px] overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
       
@@ -27,7 +32,7 @@ const ArticlesSection = ({ backgroundColor, onColorChange, blogTitle }) => {
       </div>
 
       {/* Articles simulés */}
-      <div className="relative z-10 px-6 sm:px-12 py-12 mt-8">
+      <div className="relative z-10 px-6 sm:px-12 py-12 mt-20">
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {MOCK_ARTICLES.map((article) => (
@@ -62,6 +67,22 @@ const ArticlesSection = ({ backgroundColor, onColorChange, blogTitle }) => {
           ))}
         </div>
 
+      </div>
+
+      {/* Section d'appel à l'action final */}
+      <div className="relative z-10 flex flex-col items-center pb-20 px-6">
+        <div className="w-full max-w-md h-px bg-black/5 mb-12" /> {/* Séparateur discret */}
+        
+        <button
+          onClick={onPublish}
+          className="group relative px-12 py-5 bg-[var(--primary-color)] text-white font-bold rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95 flex items-center gap-4 overflow-hidden"
+        >
+          {/* Effet de brillance au hover */}
+          <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out" />
+          
+          <span className="text-lg">Créer mon blog maintenant</span>
+          <Send size={22} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+        </button>
       </div>
 
       {/* Footer */}
