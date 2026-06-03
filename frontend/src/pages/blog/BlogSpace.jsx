@@ -45,10 +45,10 @@
             {/* En-tête du blog */}
             <header className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center md:items-end gap-4 pb-6 mt-12 md:mt-16">
             
-            {/* BOUTON GAUCHE : Redirige maintenant vers /mes-blogs au clic */}
+            {/* BOUTON GAUCHE : Corrigé avec /create/mes-blogs */}
             <div className="w-full md:w-48 flex justify-center md:justify-start order-2 md:order-1 max-w-xs mx-auto md:max-w-none md:mb-1">
                 <button 
-                onClick={() => navigate('/mes-blogs')}
+                onClick={() => navigate('/create/mes-blogs')} // URL synchronisée avec AppRouter
                 className="flex items-center gap-2 bg-[var(--secondary-color)] hover:bg-black text-white text-xs sm:text-sm font-bold px-5 py-2.5 rounded-full shadow-sm transition-all duration-300 ease-in-out cursor-pointer w-full md:w-auto justify-center"
                 >
                 <ArrowLeft size={16} />
@@ -61,18 +61,18 @@
                 {blogInfos.title}
             </h1>
             
-        {/* BOUTON DROITE : Ajouter un article */}
-        <div className="w-full md:w-48 flex justify-center md:justify-end order-3 max-w-xs mx-auto md:max-w-none md:mb-1">
-            {isOwner && (
-            <button 
-            onClick={() => navigate('/create/article')}
-            className="flex items-center gap-2 bg-black hover:bg-[var(--custom-btn-color)] text-white text-xs sm:text-sm font-bold px-5 py-2.5 rounded-full shadow-sm transition-all duration-300 ease-in-out cursor-pointer w-full md:w-auto justify-center"
-            >
-                <span className="text-lg font-light leading-none">+</span>
-                <span>Ajouter un article</span>
-            </button>
-            )}
-        </div>
+            {/* BOUTON DROITE : Ajouter un article */}
+            <div className="w-full md:w-48 flex justify-center md:justify-end order-3 max-w-xs mx-auto md:max-w-none md:mb-1">
+                {isOwner && (
+                <button 
+                    onClick={() => navigate('/create/article')}
+                    className="flex items-center gap-2 bg-black hover:bg-[var(--custom-btn-color)] text-white text-xs sm:text-sm font-bold px-5 py-2.5 rounded-full shadow-sm transition-all duration-300 ease-in-out cursor-pointer w-full md:w-auto justify-center"
+                >
+                    <span className="text-lg font-light leading-none">+</span>
+                    <span>Ajouter un article</span>
+                </button>
+                )}
+            </div>
             </header>
 
             {/* Méta-données */}
