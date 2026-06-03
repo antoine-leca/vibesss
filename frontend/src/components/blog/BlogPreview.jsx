@@ -3,12 +3,13 @@ import BannerSection from './BannerSection';
 import TitleDescriptionSection from './TitleDescriptionSection';
 import ArticlesSection from './ArticlesSection';
 
-const BlogPreview = ({ blogData, onBlogChange }) => {
+const BlogPreview = ({ blogData, onBlogChange, onThemeSelectorToggle }) => {
   return (
-    <div className="w-full h-full bg-[var(--card-color)]">
+    <div className="w-full h-full bg-white">
       <BannerSection 
         bannerImage={blogData.bannerImage}
         onBannerChange={(img) => onBlogChange('bannerImage', img)}
+        onThemeSelectorToggle={onThemeSelectorToggle}
       />
       
       <TitleDescriptionSection
