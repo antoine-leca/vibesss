@@ -6,13 +6,14 @@ import CommentSection from './components/comments/CommentSection';
 import Footer from './components/layout/Footer';
 import Header from './components/layout/Header';
 import Dashboard from './pages/admin/Dashboard';
+import ReportsList from './pages/admin/ReportsList';
 import UserList from './pages/admin/UsersList';
 import AuthForm from './pages/auth/AuthForm';
 import CreateArticle from './pages/CreateArticle';
+import CreateBlog from './pages/CreateBlog';
 import Gallery from "./pages/Gallery";
 import Home from './pages/Home';
-import ReportsList from './pages/admin/ReportsList';
-import CreateBlog from './pages/CreateBlog';
+import Profile from './pages/Profile';
 
 // Layout pour les pages publiques avec Header/Footer
 function PublicLayout() {
@@ -56,6 +57,7 @@ function AppRouter() {
           <Route path="/comments" element={<CommentSection />} />
           <Route path="/auth/register" element={<AuthForm />} />
           <Route path="/auth/login" element={<AuthForm />} />
+          <Route path="/profile/:id" element={<Profile />} />
         </Route>
 
         {/* ROUTES UTILISATEURS CONNECTÉS (User connecté ou admin)*/}
