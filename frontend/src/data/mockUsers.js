@@ -1,0 +1,30 @@
+export const MOCK_USERS = [
+    {
+        id: 1,
+        lastname: "Chen",
+        firstname: "Clara",
+        pseudo: "clara_sunshine",
+        email: "clara@example.com",
+        bio: "Content Creator | Dreamer 🌙 | Coffee & Sunshine ☀️ | Based in Los Angeles | ✨ Capturing the aesthetic of daily life",
+        profile_picture: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=150&h=150&auto=format&fit=crop",
+        posts_count: 184,
+        followers_count: "12.8K",
+        following_count: 915,
+        status: "active",
+        created_at: "2023-01-01T10:00:00",
+    },
+    {
+        id: 2,
+        lastname: "Bernard",
+        firstname: "Sandrine",
+        pseudo: "sandrine_b",
+        email: "sandrine@example.com",
+        bio: "Explorer of worlds and words.",
+        profile_picture: "https://i.pravatar.cc/150?img=12",
+        posts_count: 42,
+        followers_count: "1.2K",
+        following_count: 450,
+        status: "active",
+        created_at: "2024-02-15T14:30:00",
+    }
+];

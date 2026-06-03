@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router';
 import { useAuth } from '../../services/AuthContext';
 
-// 💡 NOUVEAU : On récupère l'articleId depuis les props du composant parent
+
 export default function CommentForm({ onCommentAdded, articleId }) {
   const { user } = useAuth();
   const [text, setText] = useState('');
@@ -35,6 +35,15 @@ export default function CommentForm({ onCommentAdded, articleId }) {
     try {
       setSubmitting(true);
       setError(''); // Réinitialise l'erreur à chaque tentative
+      
+      const payload = { 
+        content: text,
+        article_id: articleId,
+        user_id: user.id
+      };
+
+      console.log("Envoi du commentaire:", payload);
+      console.log("URL backend:", import.meta.env.VITE_BACKEND_URL);
 
       const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/comments`, {
         method: "POST",
@@ -50,11 +59,17 @@ export default function CommentForm({ onCommentAdded, articleId }) {
         credentials: "include"
       });
 
+      console.log("📬 Status réponse:", response.status);
+      
       if (!response.ok) {
-        throw new Error("Failed to post comment");
+        const errorText = await response.text();
+        console.error("Erreur serveur:", errorText);
+        throw new Error(`Erreur ${response.status}: ${errorText}`);
       }
 
       const newComment = await response.json();
+      console.log("Commentaire créé:", newComment);
+      
       onCommentAdded(newComment);
       setText('');
     } catch (err) {

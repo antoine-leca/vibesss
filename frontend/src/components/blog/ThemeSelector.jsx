@@ -12,7 +12,7 @@ const ThemeSelector = ({ isOpen, onClose, onThemeSelect, currentThemeId }) => {
         onClick={onClose}
       />
 
-      <div className="fixed left-0 top-0 bottom-0 w-full sm:w-96 bg-[var(--card-color)] z-[91] shadow-2xl flex flex-col">
+      <div className="fixed left-0 top-10 bottom-0 w-full sm:w-96 bg-white z-[91] shadow-2xl flex flex-col overflow-hidden">
         
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-black/10">
@@ -47,7 +47,7 @@ const ThemeSelector = ({ isOpen, onClose, onThemeSelect, currentThemeId }) => {
                   <img src={theme.bannerImage} alt={theme.name} className="w-full h-full object-cover" />
                 </div>
                 <div className="absolute inset-0 top-1/2">
-                  <img src={theme.backgroundImage} alt={theme.name} className="w-full h-full object-cover opacity-60" />
+                  <div className="w-full h-full" style={{ backgroundColor: theme.backgroundcolor }} />
                 </div>
                 <div className={`absolute inset-0 bg-gradient-to-br ${theme.gradient} opacity-20`} />
                 
@@ -67,13 +67,6 @@ const ThemeSelector = ({ isOpen, onClose, onThemeSelect, currentThemeId }) => {
               </div>
             </button>
           ))}
-        </div>
-
-        {/* Footer */}
-        <div className="p-6 border-t border-black/10" style={{ backgroundColor: 'var(--bg-color)' }}>
-          <p className="text-xs text-black/60 text-center font-custom-main">
-            💡 Vous pourrez personnaliser chaque image individuellement après avoir choisi un thème
-          </p>
         </div>
       </div>
     </>
