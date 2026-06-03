@@ -3,7 +3,7 @@ import BannerSection from './BannerSection';
 import TitleDescriptionSection from './TitleDescriptionSection';
 import ArticlesSection from './ArticlesSection';
 
-const BlogPreview = ({ blogData, onBlogChange, onThemeSelectorToggle, onPublish }) => {
+const BlogPreview = ({ blogData, onBlogChange, onThemeSelectorToggle, onPublish, hasBlog }) => {
   return (
     <div className="w-full h-full bg-white">
       <BannerSection 
@@ -24,6 +24,7 @@ const BlogPreview = ({ blogData, onBlogChange, onThemeSelectorToggle, onPublish 
         onColorChange={(color) => onBlogChange('backgroundcolor', color)}
         blogTitle={blogData.title}
         onPublish={onPublish}
+        hasBlog={hasBlog}
       />
     </div>
   );

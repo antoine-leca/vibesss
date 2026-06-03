@@ -21,6 +21,7 @@ const BlogEditorContainer = () => {
     backgroundcolor: '#414141',
     themeId: null,
   });
+  const [existingBlogId, setExistingBlogId] = useState(null);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -31,6 +32,24 @@ const BlogEditorContainer = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  useEffect(() => {
+    if (user?.id) {
+      BlogService.getByUserId(user.id).then(blogs => {
+        if (blogs && blogs.length > 0) {
+          const b = blogs[0];
+          setExistingBlogId(b.id);
+          setBlogData({
+            title: b.title,
+            description: b.description,
+            bannerImage: b.banniere,
+            backgroundcolor: b.couleurs,
+            themeId: b.theme_id,
+          });
+        }
+      });
+    }
+  }, [user]);
 
   const handleBlogChange = (field, value) => {
     setBlogData(prev => ({ ...prev, [field]: value }));
@@ -53,40 +72,40 @@ const BlogEditorContainer = () => {
   };
 
   const handlePublish = async () => {
-    if (!blogData.title.trim() || !blogData.description.trim()) {
-      return alert("Titre et description obligatoires !");
-    }
+    if (!blogData.title.trim() || !blogData.description.trim()) return alert("Titre et description requis !");
+
+    const dataToSend = {
+      title: blogData.title,
+      description: blogData.description,
+      user_id: user?.id,
+      theme_id: blogData.themeId || 1,
+      banniere: blogData.bannerImage,
+      couleurs: blogData.backgroundcolor
+    };
 
     try {
-      // Préparation des données pour le backend
-      const dataToSend = {
-        title: blogData.title,
-        description: blogData.description,
-        user_id: user?.id, // ID de l'utilisateur stocké dans le context
-        theme_id: blogData.themeId || 1,
-        banniere: blogData.bannerImage,
-        couleurs: blogData.backgroundcolor
-      };
-
-      const response = await BlogService.create(dataToSend);
+      let response;
+      if (existingBlogId) {
+        response = await BlogService.update(existingBlogId, dataToSend);
+      } else {
+        response = await BlogService.create(dataToSend);
+      }
 
       if (response.ok) {
-        alert("Félicitations ! Votre blog vient d'être créé.");
-        navigate('/'); // Redirection vers l'accueil ou le tableau de bord
+        alert(existingBlogId ? "Blog mis à jour !" : "Blog créé !");
+        navigate('/');
       } else {
         const error = await response.json();
-        alert(`Erreur : ${error.message || "Impossible de créer le blog"}`);
+        alert(`Erreur : ${error.message}`);
       }
-    } catch (err) {
-      alert("Une erreur réseau est survenue.");
-    }
+    } catch (err) { alert("Erreur réseau"); }
   };
 
   console.log("Utilisateur connecté :", user);
   console.log("ID envoyé au backend :", user?.id);
 
   return (
-    <div className="w-full h-full bg-white overflow-hidden flex flex-col">
+    <div className="w-full h-full flex flex-col">
       <EditorHeader 
         isMenuOpen={isMenuOpen}
         onMenuToggle={() => setIsMenuOpen(!isMenuOpen)}
@@ -114,6 +133,7 @@ const BlogEditorContainer = () => {
           isThemeSelectorOpen={isThemeSelectorOpen}
           onThemeSelectorToggle={() => setIsThemeSelectorOpen(!isThemeSelectorOpen)}
           onPublish={handlePublish}
+          hasBlog={!!existingBlogId} // <-- ON PASSE L'INFO ICI
         />
       </div>
 
