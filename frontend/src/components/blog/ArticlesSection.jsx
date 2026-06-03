@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { Camera } from 'lucide-react';
+import { Palette } from 'lucide-react'; // On change l'icône Camera par Palette
 
 const MOCK_ARTICLES = [
   { id: 1, title: "Premier article de test", date: "Il y a 2 jours", excerpt: "Ceci est un extrait de l'article..." },
@@ -7,44 +7,37 @@ const MOCK_ARTICLES = [
   { id: 3, title: "Troisième publication", date: "Il y a 1 semaine", excerpt: "Du contenu de qualité arrive bientôt..." },
 ];
 
-const ArticlesSection = ({ backgroundImage, onBackgroundChange, blogTitle }) => {
-  const bgInputRef = useRef(null);
-
-  const handleFileChange = (event) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => onBackgroundChange(e.target.result);
-      reader.readAsDataURL(file);
-    }
-    event.target.value = '';
-  };
+// 1. On récupère "backgroundColor" et "onColorChange" depuis les props parentes
+const ArticlesSection = ({ backgroundColor, onColorChange, blogTitle }) => {
+  const colorInputRef = useRef(null);
 
   return (
     <div className="relative min-h-[500px] overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
+      
+      {/* 2. Nouveau sélecteur de couleur caché (Input Color) */}
       <input
-        type="file"
-        ref={bgInputRef}
-        onChange={handleFileChange}
-        accept="image/*"
+        type="color"
+        ref={colorInputRef}
+        onChange={(e) => onColorChange(e.target.value)}
+        value={backgroundColor || '#ffffff'}
         className="hidden"
       />
       
-      {/* Image de fond */}
-      {backgroundImage && (
-        <div className="absolute inset-0">
-          <img src={backgroundImage} alt="Fond" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-white/50 backdrop-blur-sm" />
-        </div>
+      {/* 3. Affichage propre de la couleur de fond du thème */}
+      {backgroundColor && (
+        <div 
+          className="absolute inset-0 transition-colors duration-300" 
+          style={{ backgroundColor: backgroundColor }}
+        />
       )}
 
-      {/* Bouton changement fond */}
+      {/* Bouton changement de couleur */}
       <button
-        onClick={() => bgInputRef.current?.click()}
+        onClick={() => colorInputRef.current?.click()}
         className="btn btn-sm absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm border:80 hover:bg-white text-black border-0 shadow-lg hover:shadow-xl hover:scale-105 transition-all z-20 gap-2 font-custom-main"
       >
-        <Camera size={16} />
-        Changer le fond
+        <Palette size={16} />
+        Changer la couleur du fond
       </button>
 
       {/* Articles simulés */}
@@ -95,7 +88,7 @@ const ArticlesSection = ({ backgroundImage, onBackgroundChange, blogTitle }) => 
       {/* Footer */}
       <div className="bg-[#0D0D0D] text-white px-6 sm:px-12 py-8 text-center">
         <p className="text-sm text-white/60 font-custom-main">
-          © 2024 {blogTitle} - Propulsé par Vibesss
+          © 2026 {blogTitle} - Propulsé par Vibesss
         </p>
       </div>
     </div>

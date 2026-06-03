@@ -47,7 +47,7 @@ const ThemeSelector = ({ isOpen, onClose, onThemeSelect, currentThemeId }) => {
                   <img src={theme.bannerImage} alt={theme.name} className="w-full h-full object-cover" />
                 </div>
                 <div className="absolute inset-0 top-1/2">
-                  <img src={theme.backgroundImage} alt={theme.name} className="w-full h-full object-cover opacity-60" />
+                  <div className="w-full h-full" style={{ backgroundColor: theme.backgroundcolor }} />
                 </div>
                 <div className={`absolute inset-0 bg-gradient-to-br ${theme.gradient} opacity-20`} />
                 

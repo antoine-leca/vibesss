@@ -19,8 +19,8 @@ const BlogPreview = ({ blogData, onBlogChange }) => {
       />
       
       <ArticlesSection
-        backgroundImage={blogData.backgroundImage}
-        onBackgroundChange={(img) => onBlogChange('backgroundImage', img)}
+        backgroundColor={blogData.backgroundcolor}
+        onColorChange={(color) => onBlogChange('backgroundcolor', color)}
         blogTitle={blogData.title}
       />
     </div>

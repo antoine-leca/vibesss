@@ -16,7 +16,7 @@ const BlogEditorContainer = () => {
     title: 'Mon Super Blog',
     description: 'Description de mon blog ici...',
     bannerImage: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=1200&q=80',
-    backgroundImage: 'https://images.unsplash.com/photo-1557683316-973673baf926?w=1200&q=80',
+    backgroundcolor: '#414141',
     themeId: null,
   });
 
@@ -38,7 +38,7 @@ const BlogEditorContainer = () => {
     setBlogData(prev => ({
       ...prev,
       bannerImage: theme.bannerImage,
-      backgroundImage: theme.backgroundImage,
+      backgroundcolor: theme.backgroundcolor,
       themeId: theme.id
     }));
     setIsThemeSelectorOpen(false);
