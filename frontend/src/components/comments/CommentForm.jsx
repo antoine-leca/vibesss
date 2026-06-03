@@ -39,8 +39,8 @@ export default function CommentForm({ onCommentAdded, articleId }) {
         user_id: user.id
       };
 
-      console.log("📤 Envoi du commentaire:", payload);
-      console.log("🔗 URL backend:", import.meta.env.VITE_BACKEND_URL);
+      console.log("Envoi du commentaire:", payload);
+      console.log("URL backend:", import.meta.env.VITE_BACKEND_URL);
 
       const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/comments`, {
         method: "POST",
@@ -55,17 +55,17 @@ export default function CommentForm({ onCommentAdded, articleId }) {
       
       if (!response.ok) {
         const errorText = await response.text();
-        console.error("❌ Erreur serveur:", errorText);
+        console.error("Erreur serveur:", errorText);
         throw new Error(`Erreur ${response.status}: ${errorText}`);
       }
 
       const newComment = await response.json();
-      console.log("✅ Commentaire créé:", newComment);
+      console.log("Commentaire créé:", newComment);
       
       onCommentAdded(newComment);
       setText('');
     } catch (err) {
-      console.error("🚨 Erreur complète:", err);
+      console.error("Erreur complète:", err);
       alert("Erreur lors de la publication du commentaire.\n\n" + err.message);
     } finally {
       setSubmitting(false);
