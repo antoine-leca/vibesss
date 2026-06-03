@@ -46,12 +46,19 @@ const add = async (req, res) => {
 
     console.log("📝 Création commentaire:", { content: content.substring(0, 50), article_id, user_id });
 
-    // 1. On crée le commentaire
+    // 1. Vérifier que l'article existe
+    const [articleRows] = await models.article.find(article_id);
+    if (!articleRows || articleRows.length === 0) {
+      console.warn("⚠️ Article introuvable:", article_id);
+      return res.status(404).json({ error: "Article introuvable" });
+    }
+
+    // 2. On crée le commentaire
     const [result] = await models.comment.insert({ content, article_id, user_id });
     const commentId = result.insertId;
     console.log("✅ Commentaire créé avec ID:", commentId);
 
-    // 2. On récupère le commentaire créé avec les infos de l'utilisateur
+    // 3. On récupère le commentaire créé avec les infos de l'utilisateur
     const [commentRows] = await models.comment.find(commentId);
     
     if (!commentRows || commentRows.length === 0) {
@@ -62,19 +69,11 @@ const add = async (req, res) => {
     const newComment = commentRows[0];
     console.log("✅ Commentaire récupéré:", newComment.id);
 
-    // 3. Notification en arrière-plan (ne bloque pas la réponse)
+    // 4. Notification en arrière-plan (ne bloque pas la réponse)
     (async () => {
       try {
-        const [[article]] = await models.article.find(article_id);
-        
-        if (!article) {
-          console.warn("⚠️ Article non trouvé:", article_id);
-          return;
-        }
+        const ownerId = articleRows[0].user_id;
 
-        const ownerId = article.user_id;
-
-        // Création de la notification (seulement si ce n'est pas l'auteur qui commente son propre article)
         if (ownerId !== user_id) {
           await models.notif.insert({
             notif_type: "comment",
@@ -87,7 +86,6 @@ const add = async (req, res) => {
         }
       } catch (notifErr) {
         console.error("⚠️ Erreur lors de la création de la notification:", notifErr.message);
-        // Ne pas bloquer la réponse si la notification échoue
       }
     })();
 
