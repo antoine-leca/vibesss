@@ -83,6 +83,7 @@ router.delete("/comments/:id", commentController.destroy);
 // Blogs
 router.get("/blogs", blogController.browse);
 router.get("/blogs/:id", blogController.read);
+router.get("/blogs/user/:id", blogController.getByUserId);
 router.post("/blogs", blogController.add);
 router.put("/blogs/:id", blogController.edit);
 router.delete("/blogs/:id", blogController.destroy);

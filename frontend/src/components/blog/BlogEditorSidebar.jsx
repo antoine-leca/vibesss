@@ -60,8 +60,8 @@ const BlogEditorSidebar = ({ blogData, onBlogChange }) => {
         </div>
         
         <ImageUploader
-          currentImage={blogData.backgroundImage}
-          onImageChange={(file) => handleImageUpload('backgroundImage', file)}
+          currentImage={blogData.backgroundcolor}
+          onImageChange={(file) => handleImageUpload('backgroundcolor', file)}
           label="Modifier le fond"
           previewClassName="aspect-video"
         />

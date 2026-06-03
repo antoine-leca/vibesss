@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import EditorHeader from './EditorHeader';
 import EditorMenu from './EditorMenu';
-import ThemeSelectorButton from './ThemeSelectorButton';
 import ThemeSelector from './ThemeSelector';
 import BlogPreview from './BlogPreview';
 
@@ -16,7 +15,7 @@ const BlogEditorContainer = () => {
     title: 'Mon Super Blog',
     description: 'Description de mon blog ici...',
     bannerImage: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=1200&q=80',
-    backgroundImage: 'https://images.unsplash.com/photo-1557683316-973673baf926?w=1200&q=80',
+    backgroundcolor: '#414141',
     themeId: null,
   });
 
@@ -38,7 +37,7 @@ const BlogEditorContainer = () => {
     setBlogData(prev => ({
       ...prev,
       bannerImage: theme.bannerImage,
-      backgroundImage: theme.backgroundImage,
+      backgroundcolor: theme.backgroundcolor,
       themeId: theme.id
     }));
     setIsThemeSelectorOpen(false);
@@ -59,7 +58,7 @@ const BlogEditorContainer = () => {
   };
 
   return (
-    <div className="w-full h-full bg-[var(--bg-color)] sm:rounded-3xl overflow-hidden flex flex-col sm:border sm:border-black/5 relative">
+    <div className="w-full h-full bg-white overflow-hidden flex flex-col">
       <EditorHeader 
         isMenuOpen={isMenuOpen}
         onMenuToggle={() => setIsMenuOpen(!isMenuOpen)}
@@ -73,8 +72,6 @@ const BlogEditorContainer = () => {
         onQuit={() => navigate('/')}
       />
 
-      <ThemeSelectorButton onClick={() => setIsThemeSelectorOpen(!isThemeSelectorOpen)} />
-
       <ThemeSelector 
         isOpen={isThemeSelectorOpen}
         onClose={() => setIsThemeSelectorOpen(false)}
@@ -83,10 +80,15 @@ const BlogEditorContainer = () => {
       />
 
       <div className="flex-1 overflow-y-auto">
-        <BlogPreview blogData={blogData} onBlogChange={handleBlogChange} />
+        <BlogPreview 
+          blogData={blogData} 
+          onBlogChange={handleBlogChange}
+          isThemeSelectorOpen={isThemeSelectorOpen}
+          onThemeSelectorToggle={() => setIsThemeSelectorOpen(!isThemeSelectorOpen)}
+        />
       </div>
 
-      <div className="bg-[var(--bg-color)] px-4 sm:px-6 py-3 flex justify-between items-center text-[10px] text-black/40 font-custom-main border-t border-black/5 select-none flex-shrink-0">
+      <div className="bg-white px-4 sm:px-6 py-3 flex justify-between items-center text-[10px] text-black/40 font-custom-main border-t border-black/5 select-none flex-shrink-0">
         <div className="flex gap-4">
           <span>Blog en édition</span>
           {blogData.themeId && <span style={{ color: 'var(--primary-color)' }}>• Thème appliqué</span>}
