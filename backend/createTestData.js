@@ -13,7 +13,7 @@ const createTestData = async () => {
       database: process.env.DB_NAME,
     });
 
-    console.log("✅ Connecté à la base de données\n");
+    console.log("Connecté à la base de données\n");
 
     // 1. Créer un utilisateur de test
     const passwordHash = await argon2.hash("password123");
@@ -23,7 +23,7 @@ const createTestData = async () => {
       ["testuser", "test@example.com", passwordHash, "Test", "User"]
     );
     const userId = userResult.insertId;
-    console.log(`✅ Utilisateur créé: ID ${userId}`);
+    console.log(`Utilisateur créé: ID ${userId}`);
 
     // 2. Créer un blog
     const [blogResult] = await connection.execute(
@@ -31,7 +31,7 @@ const createTestData = async () => {
       ["Test Blog", "A test blog for comments", userId, 1]
     );
     const blogId = blogResult.insertId;
-    console.log(`✅ Blog créé: ID ${blogId}`);
+    console.log(`Blog créé: ID ${blogId}`);
 
     // 3. Créer un article
     const [articleResult] = await connection.execute(
@@ -39,7 +39,7 @@ const createTestData = async () => {
       ["Test Article", "<p>This is a test article for comments</p>", userId, blogId, "published"]
     );
     const articleId = articleResult.insertId;
-    console.log(`✅ Article créé: ID ${articleId}`);
+    console.log(`Article créé: ID ${articleId}`);
 
     // 4. Créer un commentaire
     const [commentResult] = await connection.execute(
@@ -47,9 +47,9 @@ const createTestData = async () => {
       ["This is a test comment!", articleId, userId, "approved"]
     );
     const commentId = commentResult.insertId;
-    console.log(`✅ Commentaire créé: ID ${commentId}\n`);
+    console.log(`Commentaire créé: ID ${commentId}\n`);
 
-    console.log("📊 Données de test créées:");
+    console.log("Données de test créées:");
     console.log(`   - Utilisateur: testuser (ID ${userId})`);
     console.log(`   - Blog: Test Blog (ID ${blogId})`);
     console.log(`   - Article: Test Article (ID ${articleId})`);
@@ -59,9 +59,9 @@ const createTestData = async () => {
     await connection.end();
   } catch (error) {
     if (error.message.includes("Duplicate entry")) {
-      console.log("⚠️ Les données de test existent déjà");
+      console.log("Les données de test existent déjà");
     } else {
-      console.error("❌ Erreur:", error.message);
+      console.error("Erreur:", error.message);
     }
     process.exit(1);
   }
