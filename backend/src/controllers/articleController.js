@@ -1,7 +1,7 @@
 const models = require("../models");
 const sanitizeContent = require('../utils/sanitizeContent');
 
-// 🟢 NOUVEAU : Récupérer tous les articles d'un blog spécifique
+//  Récupérer tous les articles d'un blog spécifique
 const browseByBlog = async (req, res) => {
     const blogId = parseInt(req.params.blogId, 10);
 
@@ -116,7 +116,7 @@ const destroyAllbyUser = async (req, res) => {
 
 module.exports = {
     browse,
-    browseByBlog, // 🟢 Exporté !
+    browseByBlog,
     read,
     edit,
     add,
