@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import UserService from "../services/UserService";
 
-export const useProfile = (userId, currentUserId) => {
+export const useProfile = (pseudo, currentUserId) => {
     const [user, setUser] = useState(null);
     const [blogs, setBlogs] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -15,8 +15,8 @@ export const useProfile = (userId, currentUserId) => {
 
             try {
                 // Récupération des données réelles depuis l'API
-                const userData = await UserService.getById(userId);
-                const userBlogs = await UserService.getBlogsByUserId(userId);
+                const userData = await UserService.getByPseudo(pseudo);
+                const userBlogs = await UserService.getBlogsByUserId(userData.id);
 
                 if (userData) {
                     setUser(userData);
@@ -35,10 +35,10 @@ export const useProfile = (userId, currentUserId) => {
             }
         };
 
-        if (userId) {
+        if (pseudo) {
             fetchProfileData();
         }
-    }, [userId, currentUserId]);
+    }, [pseudo, currentUserId]);
 
     return { user, blogs, loading, error, isOwner };
 };

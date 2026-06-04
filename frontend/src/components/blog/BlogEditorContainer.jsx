@@ -93,12 +93,27 @@ const BlogEditorContainer = () => {
 
       if (response.ok) {
         alert(existingBlogId ? "Blog mis à jour !" : "Blog créé !");
-        navigate('/');
+        navigate(`/profile/${user?.id || ''}`);
       } else {
-        const error = await response.json();
-        alert(`Erreur : ${error.message}`);
+        let errorMessage = "Une erreur est survenue.";
+        try {
+          const error = await response.json();
+          if (error && error.message) {
+            errorMessage = error.message;
+          }
+        } catch (jsonErr) {
+          try {
+            const text = await response.text();
+            if (text) errorMessage = text;
+          } catch (textErr) {
+            // Keep default message
+          }
+        }
+        alert(`Erreur : ${errorMessage}`);
       }
-    } catch (err) { alert("Erreur réseau"); }
+    } catch (err) {
+      alert("Erreur réseau ou serveur inaccessible");
+    }
   };
 
   return (

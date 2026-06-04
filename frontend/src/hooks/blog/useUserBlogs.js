@@ -1,46 +1,65 @@
-    import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useAuth } from '../../services/AuthContext';
+import BlogService from '../../services/BlogService';
 
-    export const useUserBlogs = () => {
-    // Fausse base de données de tes blogs
-    const initialBlogs = [
-        {
-        id: 1,
-        title: "Décoration d'intérieur",
-        category: "LIFESTYLE",
-        creationDate: "21 Mai 2026",
-        articlesCount: 5,
-        cover: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?q=80&w=600&auto=format&fit=crop",
-        status: "Publié"
-        },
-        {
-        id: 2,
-        title: "Code.Aesthetics",
-        category: "DEV WEB",
-        creationDate: "15 Mai 2026",
-        articlesCount: 12,
-        cover: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=600&auto=format&fit=crop",
-        status: "Publié"
-        },
-        {
-        id: 3,
-        title: "WIT.Voices",
-        category: "TECH & DIVERSITÉ",
-        creationDate: "10 Mai 2026",
-        articlesCount: 3,
-        cover: "https://images.unsplash.com/photo-1573164713988-8665fc963095?q=80&w=600&auto=format&fit=crop",
-        status: "Brouillon"
+export const useUserBlogs = () => {
+    const { user } = useAuth();
+    const [myBlogs, setMyBlogs] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const loadUserBlogs = async () => {
+            if (user?.id) {
+                setLoading(true);
+                try {
+                    const blogs = await BlogService.getByUserId(user.id);
+                    
+                    // Fetch all articles to compute article counts
+                    const artResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL || "http://localhost:5001"}/articles`);
+                    let allArticles = [];
+                    if (artResponse.ok) {
+                        allArticles = await artResponse.json();
+                    }
+
+                    const blogsWithCounts = (blogs || []).map(blog => {
+                        const count = allArticles.filter(art => art.blog_id === blog.id).length;
+                        return {
+                            ...blog,
+                            articlesCount: count
+                        };
+                    });
+
+                    setMyBlogs(blogsWithCounts);
+                } catch (err) {
+                    console.error("Error loading user blogs:", err);
+                } finally {
+                    setLoading(false);
+                }
+            }
+        };
+        loadUserBlogs();
+    }, [user?.id]);
+
+    const deleteBlog = async (id) => {
+        if (!window.confirm("Voulez-vous vraiment supprimer ce blog ? Cette action est irréversible.")) return;
+        
+        try {
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL || "http://localhost:5001"}/blogs/${id}`, {
+                method: "DELETE"
+            });
+            if (response.ok) {
+                setMyBlogs(myBlogs.filter(blog => blog.id !== id));
+            } else {
+                console.error("Failed to delete blog:", response.statusText);
+            }
+        } catch (err) {
+            console.error("Error deleting blog:", err);
         }
-    ];
-
-    const [myBlogs, setMyBlogs] = useState(initialBlogs);
-
-    // Fonctions de base (à connecter à ton back-end plus tard)
-    const deleteBlog = (id) => {
-        setMyBlogs(myBlogs.filter(blog => blog.id !== id));
     };
 
     return {
         myBlogs,
+        loading,
         deleteBlog
     };
-    };
+};

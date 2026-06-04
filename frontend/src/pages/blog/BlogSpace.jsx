@@ -1,12 +1,16 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router'; 
-import { Heart, ArrowLeft, MessageCircle, ChevronLeft, ChevronRight } from 'lucide-react';
-import useBlogSpace from '../../hooks/blog/useBlogSpace';
+import { Heart, ArrowLeft, MessageCircle, ChevronLeft, ChevronRight, Flag } from 'lucide-react';
+import { useBlogSpace } from '../../hooks/blog/useBlogSpace';
 import { usePagination } from '../../hooks/usePagination';
 import ArticleModal from '../../components/blog/ArticleModal';
+import { useAuth } from '../../services/AuthContext';
+import ReportModal from '../../components/layout/ReportModal';
 
 const BlogSpace = ({ isOwner }) => {
     const navigate = useNavigate(); 
+    const [isBlogReportOpen, setIsBlogReportOpen] = useState(false);
+    const { user } = useAuth();
 
     const {
         blogInfos,
@@ -15,7 +19,8 @@ const BlogSpace = ({ isOwner }) => {
         selectedArticle,
         handleLike,
         openArticle,
-        closeArticle
+        closeArticle,
+        isLoading 
     } = useBlogSpace();
 
     const {
@@ -29,6 +34,20 @@ const BlogSpace = ({ isOwner }) => {
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }, [currentPage]);
+
+    useEffect(() => {
+        if (blogInfos?.title && blogInfos.title !== "Chargement...") {
+            document.title = `${blogInfos.title} - Vibesss`;
+        }
+    }, [blogInfos]);
+
+    if (isLoading) {
+        return (
+            <div className="flex justify-center items-center min-h-screen bg-[var(--bg-color)]">
+                <span className="loading loading-spinner loading-lg text-[#e99fb4]"></span>
+            </div>
+        );
+    }
 
     const borderColors = [
         "border-[var(--primary-color)]",
@@ -65,7 +84,6 @@ const BlogSpace = ({ isOwner }) => {
                     <div className="w-full md:w-48 flex justify-center md:justify-end order-3 max-w-xs mx-auto md:max-w-none md:mb-1">
                         {isOwner && (
                             <button 
-                                /* URL corrigée et synchronisée avec AppRouter.jsx */
                                 onClick={() => navigate(`/create/blogs/${blogInfos.id}/article`)}
                                 className="flex items-center gap-2 bg-black hover:bg-[var(--custom-btn-color)] text-white text-xs sm:text-sm font-bold px-5 py-2.5 rounded-full shadow-sm transition-all duration-300 ease-in-out cursor-pointer w-full md:w-auto justify-center"
                             >
@@ -88,6 +106,17 @@ const BlogSpace = ({ isOwner }) => {
                             <>
                                 <span className="text-neutral-300">•</span>
                                 <span className="italic font-custom-main-italic">Par {blogInfos.author}</span>
+                                {user && (
+                                    <>
+                                        <span className="text-neutral-300">•</span>
+                                        <button 
+                                            onClick={() => setIsBlogReportOpen(true)}
+                                            className="flex items-center gap-1 text-[10px] text-neutral-400 hover:text-red-500 transition-colors uppercase font-bold tracking-wider cursor-pointer bg-transparent border-none p-0 font-sans"
+                                        >
+                                            <Flag size={10} /> Signaler le blog
+                                        </button>
+                                    </>
+                                )}
                             </>
                         )}
                     </div>
@@ -121,7 +150,7 @@ const BlogSpace = ({ isOwner }) => {
                                     
                                     <div className="flex items-center gap-3">
                                         <div className="flex items-center gap-1">
-                                            <button onClick={(e) => handleLike(e, article.id)} className="cursor-pointer transition-transform active:scale-90 flex items-center">
+                                            <button onClick={(e) => handleLike(e, article.id)} className="cursor-pointer transition-transform active:scale-90 flex items-center bg-transparent border-none p-0">
                                                 <Heart size={15} className={isCurrentlyLiked ? 'fill-red-500 text-red-500' : 'text-neutral-400 hover:text-red-500'} />
                                             </button>
                                             <span className={isCurrentlyLiked ? 'text-black font-semibold' : ''}>{article.likes}</span>
@@ -164,7 +193,16 @@ const BlogSpace = ({ isOwner }) => {
                 </div>
             )}
 
+            {/* Modals */}
             <ArticleModal article={selectedArticle} onClose={closeArticle} />
+
+            <ReportModal 
+                isOpen={isBlogReportOpen}
+                onClose={() => setIsBlogReportOpen(false)}
+                targetType="blog"
+                targetId={blogInfos.id}
+                userId={user?.id}
+            />
 
         </div>
     );

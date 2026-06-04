@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useAuth } from "../../services/AuthContext";
 import BlogService from "../../services/BlogService"; 
@@ -97,7 +97,7 @@ const Header = () => {
     // Fonction d'interception pour le bouton "Créer un Blog"
     const handleCreateBlogClick = (e) => {
         e.preventDefault();
-        setIsOpen(false); // Ferme le menu mobile si ouvert
+        setIsOpen(false); 
         if (user) {
             navigate("/create/blog");
         } else {
@@ -120,7 +120,12 @@ const Header = () => {
                     <Link to="/explorer" className="text-xs font-semibold uppercase tracking-[0.15em] hover:opacity-70 transition-opacity">Explorer</Link>
                     <Link to="/a-propos" className="text-xs font-semibold uppercase tracking-[0.15em] hover:opacity-70 transition-opacity">À propos</Link>
                     
-                    {/* Visible tout le temps : redirige si déconnecté */}
+                    {/* Lien Profil si connecté */}
+                    {user && (
+                        <Link to={`/profile/${user.pseudo}`} className="text-xs font-semibold uppercase tracking-[0.15em] hover:opacity-70 transition-opacity text-[#E99FB4]">Mon Profil</Link>
+                    )}
+
+                    {/* Créer un Blog - Accessible tout le temps (intercepté) */}
                     <button 
                         onClick={handleCreateBlogClick} 
                         className="text-xs font-semibold uppercase tracking-[0.15em] hover:opacity-70 transition-opacity bg-transparent border-none cursor-pointer font-sans text-black p-0"
@@ -128,7 +133,7 @@ const Header = () => {
                         Créer un Blog
                     </button>
                     
-                    {/* Créer un Article : Reste protégé et dynamique */}
+                    {/* Créer un Article - Dynamique selon l'existence d'un blog */}
                     {user && userBlogId && (
                         <Link to={`/create/blogs/${userBlogId}/article`} className="text-xs font-semibold uppercase tracking-[0.15em] hover:opacity-70 transition-opacity text-blue-600">Créer un Article</Link>
                     )}
@@ -185,7 +190,9 @@ const Header = () => {
                     <div className="hidden lg:flex items-center gap-4">
                         {user ? (
                             <>
-                                <span className="text-xs font-bold uppercase">Hello, {user.pseudo}</span>
+                                <Link to={`/profile/${user.pseudo}`} className="text-xs font-bold uppercase hover:opacity-70 transition-opacity">
+                                    Hello, {user.pseudo}
+                                </Link>
                                 <button onClick={handleLogout} className="px-5 py-2 text-xs font-medium bg-red-100 text-red-600 rounded-full hover:bg-red-200 transition-all cursor-pointer">
                                     Déconnexion
                                 </button>
@@ -218,7 +225,12 @@ const Header = () => {
                         <Link onClick={() => setIsOpen(false)} to="/explorer" className="text-lg font-serif tracking-wide text-gray-950 hover:opacity-60 transition-opacity">Explorer</Link>
                         <Link onClick={() => setIsOpen(false)} to="/a-propos" className="text-lg font-serif tracking-wide text-gray-950 hover:opacity-60 transition-opacity">À propos</Link>
                         
-                        {/*Visible tout le temps sur mobile aussi */}
+                        {/* Mon Profil mobile */}
+                        {user && (
+                            <Link onClick={() => setIsOpen(false)} to={`/profile/${user.pseudo}`} className="text-lg font-serif tracking-wide text-[var(--primary-color)] hover:opacity-60 transition-opacity">Mon Profil</Link>
+                        )}
+
+                        {/* Créer un Blog mobile */}
                         <button 
                             onClick={handleCreateBlogClick} 
                             className="text-lg font-serif tracking-wide text-gray-950 hover:opacity-60 transition-opacity bg-transparent border-none cursor-pointer p-0"
@@ -226,6 +238,7 @@ const Header = () => {
                             Créer un Blog
                         </button>
                         
+                        {/* Créer un Article mobile */}
                         {user && userBlogId && (
                             <Link onClick={() => setIsOpen(false)} to={`/create/blogs/${userBlogId}/article`} className="text-xs font-semibold uppercase tracking-[0.15em] hover:opacity-70 transition-opacity text-blue-600">Créer un Article</Link>
                         )}
@@ -234,9 +247,13 @@ const Header = () => {
 
                         {user ? (
                             <>
-                                <span className="text-sm font-sans font-bold uppercase tracking-widest text-black">
+                                <Link 
+                                    onClick={() => setIsOpen(false)} 
+                                    to={`/profile/${user.pseudo}`} 
+                                    className="text-sm font-sans font-bold uppercase tracking-widest text-black hover:opacity-70 transition-opacity"
+                                >
                                     {user.pseudo}
-                                </span>
+                                </Link>
                                 <button onClick={handleLogout} className="text-sm font-sans font-medium uppercase tracking-widest text-red-500 hover:text-red-700 transition-colors cursor-pointer">
                                     Déconnexion
                                 </button>
