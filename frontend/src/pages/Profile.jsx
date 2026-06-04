@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Calendar, Settings, User } from "lucide-react";
 import { useParams, useNavigate } from "react-router";
 import { useProfile } from "../hooks/useProfile";
@@ -40,6 +41,12 @@ const Profile = () => {
   const navigate = useNavigate();
   const { user: authUser } = useAuth();
   const { user, blogs: apiBlogs, loading, error, isOwner } = useProfile(urlPseudo, authUser?.id);
+
+  useEffect(() => {
+    if (user?.pseudo) {
+      document.title = `Profil de ${user.pseudo} - Vibesss`;
+    }
+  }, [user]);
 
   // Simulation d'un blog pour le test
   const blogs = apiBlogs.length > 0 ? apiBlogs : [
