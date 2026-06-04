@@ -34,6 +34,12 @@ import React, { useEffect, useState } from 'react';
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }, [currentPage]);
 
+    useEffect(() => {
+        if (blogInfos?.title && blogInfos.title !== "Chargement...") {
+            document.title = `${blogInfos.title} - Vibesss`;
+        }
+    }, [blogInfos]);
+
     if (loading) {
         return (
             <div className="flex justify-center items-center min-h-screen bg-[var(--bg-color)]">
