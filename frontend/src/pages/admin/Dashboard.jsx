@@ -83,7 +83,7 @@ export default function Dashboard() {
   const { currentItems, ...pagination } = usePagination(activities, 10);
 
   return (
-    <div className="max-w-2xl mx-auto space-y-4">
+    <div className="max-w-3xl mx-auto space-y-4">
 
       {/* Stats grid */}
       <div className="grid grid-cols-4 gap-3 mx-auto">
@@ -109,7 +109,7 @@ export default function Dashboard() {
 
         <div className="bg-white/55 backdrop-blur-md rounded-2xl border-2 border-white/70 overflow-hidden max-h-96">
           {currentItems.length > 0 ? (
-            <div className="py-2 max-h-96 overflow-hidden">
+            <div className="py-2 max-h-90 overflow-hidden">
               {currentItems.map((item, index) => (
                 <ActivityItem
                   key={index}
