@@ -14,9 +14,9 @@ const CATEGORIES = [
 ];
 
 const Profile = () => {
-  const { id } = useParams();
+  const { pseudo: urlPseudo } = useParams();
   const { user: authUser } = useAuth();
-  const { user, blogs: apiBlogs, loading, error, isOwner } = useProfile(id, authUser?.id);
+  const { user, blogs: apiBlogs, loading, error, isOwner } = useProfile(urlPseudo, authUser?.id);
 
   // Simulation d'un blog pour le test
   const blogs = apiBlogs.length > 0 ? apiBlogs : [
@@ -25,6 +25,7 @@ const Profile = () => {
       title: "Mon super blog de test",
       description: "Ceci est un blog fictif pour tester l'affichage des badges et de la mise en page. Il n'est pas issu de la base de données.",
       bg_image: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800&q=80",
+      banniere: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1200&q=80",
       category_id: "chill",
       creation_date: new Date().toISOString(),
     }
@@ -62,8 +63,14 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen bg-[var(--bg-color)]">
-      {/* Top Banner with Background Color */}
-      <div className="bg-[#E99FB4] h-64 pt-8 flex flex-col items-center relative">
+      {/* Utilisation de la colonne 'couleurs' pour le fond et 'banniere' pour l'image */}
+      <div 
+        className="h-64 pt-8 flex flex-col items-center relative bg-center bg-cover bg-no-repeat"
+        style={{ 
+          backgroundColor: blogs[0]?.couleurs || '#E99FB4',
+          backgroundImage: blogs[0]?.banniere ? `url(${blogs[0].banniere})` : 'none'
+        }}
+      >
         
         {/* Profile Picture Overlay */}
         <div className="absolute -bottom-16">

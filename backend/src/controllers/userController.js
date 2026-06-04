@@ -13,7 +13,14 @@ const browse = async (req, res) => {
 
 const read = async (req, res) => {
   try {
-    const [rows] = await models.user.findUser(req.params.id);
+    // On tente d'abord de trouver l'utilisateur par ID
+    let [rows] = await models.user.findUser(req.params.id);
+    
+    // Si rien n'est trouvé (cas où le paramètre est un pseudo), on cherche par pseudo
+    if (rows[0] == null) {
+      [rows] = await models.user.findUserByPseudo(req.params.id);
+    }
+
     if (rows[0] == null) {
       res.sendStatus(404);
     } else {
