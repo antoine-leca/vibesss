@@ -98,14 +98,19 @@ function AppRouter() {
           <Route path="/comments" element={<CommentSection />} />
           <Route path="/auth/register" element={<AuthForm />} />
           <Route path="/auth/login" element={<AuthForm />} />
+          <Route path="/blogs/:blogId" element={<BlogSpace isOwner={false} />} />
           <Route path="/profile/:pseudo" element={<Profile />} />
         </Route>
 
         {/* ROUTES UTILISATEURS CONNECTÉS (User connecté ou admin)*/}
         <Route path="/create" element={<ProtectedRoute allowedRoles={['user', 'admin']}/>}>
           <Route path='blog' element={<CreateBlog />} />
-          <Route path='article' element={<CreateArticle />} />
-          <Route path='mon-blog' element={<BlogSpace  isOwner={true} />} />
+
+         {/* ROUTE PROTÉGÉE : On crée un article pour un blog précis via son :blogId */}
+          <Route path='blogs/:blogId/article' element={<CreateArticle />} />
+          
+        {/* ROUTE PROTÉGÉE : Voir l'espace de gestion de MON propre blog */}
+          <Route path='mon-blog/:blogId' element={<BlogSpace  isOwner={true} />} />
         </Route>
 
 

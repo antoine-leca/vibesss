@@ -3,7 +3,7 @@ const models = require("../models");
 const browse = async (req, res) => {
     try {
         const [rows] = await models.notif.findAll();
-        res.send(rows);
+        res.json(rows);
     } catch (err) {
         console.error(err);
         res.sendStatus(500);
@@ -13,7 +13,7 @@ const browse = async (req, res) => {
 const getUnread = async (req, res) => {
     try {
         const [rows] = await models.notif.findUnreadByUser(req.params.userId);
-        res.send(rows);
+        res.json(rows);
     } catch (err) {
         console.error(err);
         res.sendStatus(500);
@@ -23,7 +23,7 @@ const getUnread = async (req, res) => {
 const getByUser = async (req, res) => {
     try {
         const [rows] = await models.notif.findByUserWithDetails(req.params.userId);
-        res.send(rows);
+        res.json(rows);
     } catch (err) {
         console.error(err);
         res.sendStatus(500);

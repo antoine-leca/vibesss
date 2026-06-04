@@ -1,32 +1,49 @@
-import { Bell, Heart, MessageSquare } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useAuth } from "../../services/AuthContext";
+import BlogService from "../../services/BlogService"; 
+import { Bell, Heart, MessageSquare } from "lucide-react";
 
 const Header = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [showNotifs, setShowNotifs] = useState(false);
     const [unreadCount, setUnreadCount] = useState(0);
     const [notifications, setNotifications] = useState([]);
-    const [hasBlog, setHasBlog] = useState(false);
+    const [userBlogId, setUserBlogId] = useState(null); // Stocke l'ID du blog de l'utilisateur
     const { user, logout } = useAuth();
     const navigate = useNavigate();
     const dropdownRef = useRef(null);
 
-    // Récupérer le nombre de non lus et vérifier si l'utilisateur possède un blog
+    // 1. Récupérer le blog de l'utilisateur connecté pour dynamiser les liens
+    useEffect(() => {
+        if (user?.id) {
+            BlogService.getByUserId(user.id)
+                .then(blogs => {
+                    if (blogs && blogs.length > 0) {
+                        setUserBlogId(blogs[0].id); // On stocke l'ID de son blog
+                    }
+                })
+                .catch(err => console.error("Erreur récupération blog utilisateur:", err));
+        } else {
+            setUserBlogId(null);
+        }
+    }, [user]);
+
+    // 2. Récupérer le nombre de notifications non lues
     useEffect(() => {
         if (user) {
-            fetch(`${import.meta.env.VITE_BACKEND_URL}/notifications/unread/${user.id}`)
-                .then(res => res.json())
-                .then(data => setUnreadCount(data.length))
-                .catch(err => console.error(err));
-
-            fetch(`${import.meta.env.VITE_BACKEND_URL}/blogs/user/${user.id}`)
-                .then(res => res.json())
-                .then(data => setHasBlog(data && data.length > 0))
-                .catch(err => console.error(err));
-        } else {
-            setHasBlog(false);
+            fetch(`${import.meta.env.VITE_BACKEND_URL}/notifications/unread/${user.id}`, {
+                credentials: "include" // Transmet le cookie HTTP au backend
+            })
+                .then(res => {
+                    if (!res.ok) throw new Error(`Erreur serveur: ${res.status}`);
+                    return res.json();
+                })
+                .then(data => setUnreadCount(Array.isArray(data) ? data.length : 0))
+                .catch(err => {
+                    console.error("Erreur chargement compte notifications :", err.message);
+                    setUnreadCount(0);
+                });
         }
     }, [user]);
 
@@ -41,23 +58,34 @@ const Header = () => {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
+    // 3. Charger les détails de la liste des notifications au clic
     const toggleNotifs = () => {
         if (!showNotifs && user) {
-            // Charger les détails quand on ouvre
-            fetch(`${import.meta.env.VITE_BACKEND_URL}/notifications/user/${user.id}`)
-                .then(res => res.json())
+            fetch(`${import.meta.env.VITE_BACKEND_URL}/notifications/user/${user.id}`, {
+                credentials: "include"
+            })
+                .then(res => {
+                    if (!res.ok) throw new Error(`Erreur serveur: ${res.status}`);
+                    return res.json();
+                })
                 .then(data => setNotifications(data))
-                .catch(err => console.error(err));
+                .catch(err => console.error("Erreur chargement liste notifications :", err.message));
         }
         setShowNotifs(!showNotifs);
     };
 
+    // 4. Marquer une notification comme lue
     const handleMarkAsRead = (id) => {
-        fetch(`${import.meta.env.VITE_BACKEND_URL}/notifications/${id}`, { method: "PUT" })
-            .then(() => {
+        fetch(`${import.meta.env.VITE_BACKEND_URL}/notifications/${id}`, { 
+            method: "PUT",
+            credentials: "include"
+        })
+            .then(res => {
+                if (!res.ok) throw new Error(`Impossible de modifier la notification`);
                 setUnreadCount(prev => Math.max(0, prev - 1));
                 setNotifications(notifications.map(n => n.id === id ? { ...n, read_date: new Date() } : n));
-            });
+            })
+            .catch(err => console.error(err.message));
     };
 
     const handleLogout = async () => {
@@ -66,10 +94,21 @@ const Header = () => {
         navigate("/");
     };
 
+    // Fonction d'interception pour le bouton "Créer un Blog"
+    const handleCreateBlogClick = (e) => {
+        e.preventDefault();
+        setIsOpen(false); 
+        if (user) {
+            navigate("/create/blog");
+        } else {
+            navigate("/auth/login");
+        }
+    };
+
     return (
         <header className="w-full bg-[var(--bg-quatro)] text-black font-sans fixed top-0 left-0 z-50 shadow-xs">
             <div className="w-full h-[61px] flex items-center justify-between px-6 box-border">
-                {/* Logo... */}
+                {/* Logo */}
                 <div className="w-1/4 flex justify-start items-center">
                     <Link to="/" className="flex items-center h-[50px]"> 
                         <img src="/Vibesss_logo.png" alt="Vibesss Logo" className="h-full w-auto object-contain" />
@@ -80,21 +119,23 @@ const Header = () => {
                 <nav className="hidden lg:flex items-center justify-center gap-10 flex-1">
                     <Link to="/explorer" className="text-xs font-semibold uppercase tracking-[0.15em] hover:opacity-70 transition-opacity">Explorer</Link>
                     <Link to="/a-propos" className="text-xs font-semibold uppercase tracking-[0.15em] hover:opacity-70 transition-opacity">À propos</Link>
+                    
+                    {/* Lien Profil si connecté */}
                     {user && (
-                        <Link to={`/profile/${user.id}`} className="text-xs font-semibold uppercase tracking-[0.15em] hover:opacity-70 transition-opacity text-[#E99FB4]">Mon Profil</Link>
+                        <Link to={`/profile/${user.pseudo}`} className="text-xs font-semibold uppercase tracking-[0.15em] hover:opacity-70 transition-opacity text-[#E99FB4]">Mon Profil</Link>
                     )}
-                    {!user ? (
-                        <>
-                            <Link to="/create/blog" className="text-xs font-semibold uppercase tracking-[0.15em] hover:opacity-70 transition-opacity">Créer un Blog</Link>
-                            <Link to="/create/article" className="text-xs font-semibold uppercase tracking-[0.15em] hover:opacity-70 transition-opacity">Créer un Article</Link>
-                        </>
-                    ) : hasBlog ? (
-                        <>
-                            <Link to="/create/mes-blogs" className="text-xs font-semibold uppercase tracking-[0.15em] hover:opacity-70 transition-opacity">Mon Blog</Link>
-                            <Link to="/create/article" className="text-xs font-semibold uppercase tracking-[0.15em] hover:opacity-70 transition-opacity">Créer un Article</Link>
-                        </>
-                    ) : (
-                        <Link to="/create/blog" className="text-xs font-semibold uppercase tracking-[0.15em] hover:opacity-70 transition-opacity">Créer un Blog</Link>
+
+                    {/* Créer un Blog - Accessible tout le temps (intercepté) */}
+                    <button 
+                        onClick={handleCreateBlogClick} 
+                        className="text-xs font-semibold uppercase tracking-[0.15em] hover:opacity-70 transition-opacity bg-transparent border-none cursor-pointer font-sans text-black p-0"
+                    >
+                        Créer un Blog
+                    </button>
+                    
+                    {/* Créer un Article - Dynamique selon l'existence d'un blog */}
+                    {user && userBlogId && (
+                        <Link to={`/create/blogs/${userBlogId}/article`} className="text-xs font-semibold uppercase tracking-[0.15em] hover:opacity-70 transition-opacity text-blue-600">Créer un Article</Link>
                     )}
                 </nav>
 
@@ -145,7 +186,7 @@ const Header = () => {
                         </div>
                     )}
 
-                    {/* BOUTONS CONNEXION... */}
+                    {/* BOUTONS CONNEXION / PROFIL */}
                     <div className="hidden lg:flex items-center gap-4">
                         {user ? (
                             <>
@@ -183,21 +224,23 @@ const Header = () => {
                     <nav className="flex flex-col items-center gap-6 w-full">
                         <Link onClick={() => setIsOpen(false)} to="/explorer" className="text-lg font-serif tracking-wide text-gray-950 hover:opacity-60 transition-opacity">Explorer</Link>
                         <Link onClick={() => setIsOpen(false)} to="/a-propos" className="text-lg font-serif tracking-wide text-gray-950 hover:opacity-60 transition-opacity">À propos</Link>
+                        
+                        {/* Mon Profil mobile */}
                         {user && (
-                            <Link onClick={() => setIsOpen(false)} to={`/profile/${user.id}`} className="text-lg font-serif tracking-wide text-[var(--primary-color)] hover:opacity-60 transition-opacity">Mon Profil</Link>
+                            <Link onClick={() => setIsOpen(false)} to={`/profile/${user.pseudo}`} className="text-lg font-serif tracking-wide text-[var(--primary-color)] hover:opacity-60 transition-opacity">Mon Profil</Link>
                         )}
-                        {!user ? (
-                            <>
-                                <Link onClick={() => setIsOpen(false)} to="/create/blog" className="text-lg font-serif tracking-wide text-gray-950 hover:opacity-60 transition-opacity">Créer un Blog</Link>
-                                <Link onClick={() => setIsOpen(false)} to="/create/article" className="text-lg font-serif tracking-wide text-gray-950 hover:opacity-60 transition-opacity">Créer un Article</Link>
-                            </>
-                        ) : hasBlog ? (
-                            <>
-                                <Link onClick={() => setIsOpen(false)} to="/create/mes-blogs" className="text-lg font-serif tracking-wide text-gray-950 hover:opacity-60 transition-opacity">Mon Blog</Link>
-                                <Link onClick={() => setIsOpen(false)} to="/create/article" className="text-lg font-serif tracking-wide text-gray-950 hover:opacity-60 transition-opacity">Créer un Article</Link>
-                            </>
-                        ) : (
-                            <Link onClick={() => setIsOpen(false)} to="/create/blog" className="text-lg font-serif tracking-wide text-gray-950 hover:opacity-60 transition-opacity">Créer un Blog</Link>
+
+                        {/* Créer un Blog mobile */}
+                        <button 
+                            onClick={handleCreateBlogClick} 
+                            className="text-lg font-serif tracking-wide text-gray-950 hover:opacity-60 transition-opacity bg-transparent border-none cursor-pointer p-0"
+                        >
+                            Créer un Blog
+                        </button>
+                        
+                        {/* Créer un Article mobile */}
+                        {user && userBlogId && (
+                            <Link onClick={() => setIsOpen(false)} to={`/create/blogs/${userBlogId}/article`} className="text-xs font-semibold uppercase tracking-[0.15em] hover:opacity-70 transition-opacity text-blue-600">Créer un Article</Link>
                         )}
                         
                         <div className="w-12 h-[1px] bg-gray-200 my-2"></div>
@@ -211,10 +254,7 @@ const Header = () => {
                                 >
                                     {user.pseudo}
                                 </Link>
-                                <button 
-                                    onClick={handleLogout} 
-                                    className="text-sm font-sans font-medium uppercase tracking-widest text-red-500 hover:text-red-700 transition-colors cursor-pointer"
-                                >
+                                <button onClick={handleLogout} className="text-sm font-sans font-medium uppercase tracking-widest text-red-500 hover:text-red-700 transition-colors cursor-pointer">
                                     Déconnexion
                                 </button>
                             </>
