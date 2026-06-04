@@ -1,10 +1,25 @@
-    import React from 'react';
-    import { useNavigate } from 'react-router'; 
-    import { Plus, Settings, Trash2, ArrowRight, ArrowLeft } from 'lucide-react';
-    import { useUserBlogs } from '../../hooks/blog/useUserBlogs';
+import React from 'react';
+import { useNavigate } from 'react-router'; 
+import { Plus, Settings, Trash2, ArrowRight, ArrowLeft } from 'lucide-react';
+import { useUserBlogs } from '../../hooks/blog/useUserBlogs';
 
-    const MyBlogs = () => {
-    const { myBlogs, deleteBlog } = useUserBlogs();
+function resolveBgImage(bgImage) {
+  if (bgImage && (bgImage.startsWith("http://") || bgImage.startsWith("https://"))) {
+    return bgImage;
+  }
+  const themeImages = {
+    "cuisine_bg.jpg": "https://images.unsplash.com/photo-1466637574441-749b8f19452f?w=700&q=80",
+    "animaux_bg.jpg": "https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?w=700&q=80",
+    "lifestyle_bg.jpg": "https://images.unsplash.com/photo-1503220317375-aaad61436b1b?w=700&q=80",
+    "sport_bg.jpg": "https://images.unsplash.com/photo-1517649763962-0c623066013b?w=800&q=80",
+    "nature_bg.jpg": "https://images.unsplash.com/photo-1472214222541-d510753a4907?w=700&q=80",
+    "voyage_bg.jpg": "https://images.unsplash.com/photo-1503220317375-aaad61436b1b?w=700&q=80"
+  };
+  return themeImages[bgImage] || "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=700&q=80";
+}
+
+const MyBlogs = () => {
+    const { myBlogs, loading, deleteBlog } = useUserBlogs();
     const navigate = useNavigate(); 
 
     const borderColors = [
@@ -14,6 +29,14 @@
         "border-[var(--success-color)]",
         "border-[var(--category-color)]"
     ];
+
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center min-h-screen bg-[var(--bg-color)]">
+                <span className="loading loading-spinner loading-lg text-[#e99fb4]"></span>
+            </div>
+        );
+    }
 
     return (
         <div className="w-full min-h-screen bg-[var(--bg-color)] px-4 sm:px-8 md:px-12 py-12 font-custom-main text-black">
@@ -60,9 +83,9 @@
             
             {myBlogs.map((blog, index) => {
             const currentBorder = borderColors[index % borderColors.length];
-            const blogCover = blog.cover || "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=600";
-            const blogCategory = blog.category || `Thème ${blog.theme_id}`;
-            const blogStatus = blog.status || "Publié";
+            const blogCover = blog.banniere || resolveBgImage(blog.bg_image);
+            const blogCategory = blog.theme_label || `Thème ${blog.theme_id}`;
+            const blogStatus = "Publié";
             const articlesCount = blog.articlesCount || 0;
 
             return (
@@ -114,7 +137,7 @@
 
                     {/* Accès à l'espace de gestion de CE blog */}
                     <button 
-                    onClick={() => navigate('/create/mon-blog')}
+                    onClick={() => navigate('/create/mes-blogs')}
                     className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-[#7B96EC] hover:text-black transition cursor-pointer"
                     >
                     <span>Gérer</span>

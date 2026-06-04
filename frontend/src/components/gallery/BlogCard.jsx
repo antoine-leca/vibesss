@@ -1,8 +1,30 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router";
 
 function getInitials(pseudo = "") {
   return pseudo.slice(0, 2).toUpperCase();
+}
+
+function resolveProfilePicture(profilePicture, pseudo) {
+  if (profilePicture && (profilePicture.startsWith("http://") || profilePicture.startsWith("https://"))) {
+    return profilePicture;
+  }
+  return `https://api.dicebear.com/7.x/adventurer/svg?seed=${pseudo || "Anonyme"}`;
+}
+
+function resolveBgImage(bgImage) {
+  if (bgImage && (bgImage.startsWith("http://") || bgImage.startsWith("https://"))) {
+    return bgImage;
+  }
+  const themeImages = {
+    "cuisine_bg.jpg": "https://images.unsplash.com/photo-1466637574441-749b8f19452f?w=700&q=80",
+    "animaux_bg.jpg": "https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?w=700&q=80",
+    "lifestyle_bg.jpg": "https://images.unsplash.com/photo-1503220317375-aaad61436b1b?w=700&q=80",
+    "sport_bg.jpg": "https://images.unsplash.com/photo-1517649763962-0c623066013b?w=700&q=80",
+    "nature_bg.jpg": "https://images.unsplash.com/photo-1472214222541-d510753a4907?w=700&q=80",
+    "voyage_bg.jpg": "https://images.unsplash.com/photo-1503220317375-aaad61436b1b?w=700&q=80"
+  };
+  return themeImages[bgImage] || "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=700&q=80";
 }
 
 const IconHeart = ({ filled }) => (
@@ -40,9 +62,9 @@ export default function BlogCard({ blog }) {
     >
       {/* Bannière noire */}
       <div className="flex items-center gap-2 px-2.5 py-2" style={{ background: "#111" }}>
-        {blog.profile_picture ? (
+        {blog.profile_picture || blog.pseudo ? (
           <img
-            src={blog.profile_picture}
+            src={resolveProfilePicture(blog.profile_picture, blog.pseudo)}
             alt={blog.pseudo}
             className="w-5 h-5 rounded-full object-cover flex-shrink-0"
             style={{ border: "1.5px solid rgba(255,255,255,0.25)" }}
@@ -63,7 +85,7 @@ export default function BlogCard({ blog }) {
       {/* Image */}
       <div className="overflow-hidden w-full">
         <img
-          src={blog.bg_image}
+          src={blog.banniere ? blog.banniere : resolveBgImage(blog.bg_image)}
           alt={blog.title}
           className="w-full object-cover transition-transform duration-500 ease-out block"
           style={{ transform: hovered ? "scale(1.05)" : "scale(1)" }}

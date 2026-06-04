@@ -72,6 +72,9 @@ const Header = () => {
                 <nav className="hidden lg:flex items-center justify-center gap-10 flex-1">
                     <Link to="/explorer" className="text-xs font-semibold uppercase tracking-[0.15em] hover:opacity-70 transition-opacity">Explorer</Link>
                     <Link to="/a-propos" className="text-xs font-semibold uppercase tracking-[0.15em] hover:opacity-70 transition-opacity">À propos</Link>
+                    {user && (
+                        <Link to={`/profile/${user.id}`} className="text-xs font-semibold uppercase tracking-[0.15em] hover:opacity-70 transition-opacity text-[#E99FB4]">Mon Profil</Link>
+                    )}
                     <Link to="/create/blog" className="text-xs font-semibold uppercase tracking-[0.15em] hover:opacity-70 transition-opacity">Créer un Blog</Link>
                     <Link to="/create/article" className="text-xs font-semibold uppercase tracking-[0.15em] hover:opacity-70 transition-opacity">Créer un Article</Link>
                 </nav>
@@ -127,7 +130,9 @@ const Header = () => {
                     <div className="hidden lg:flex items-center gap-4">
                         {user ? (
                             <>
-                                <span className="text-xs font-bold uppercase">Hello, {user.pseudo}</span>
+                                <Link to={`/profile/${user.id}`} className="text-xs font-bold uppercase hover:opacity-70 transition-opacity">
+                                    Hello, {user.pseudo}
+                                </Link>
                                 <button onClick={handleLogout} className="px-5 py-2 text-xs font-medium bg-red-100 text-red-600 rounded-full hover:bg-red-200 transition-all cursor-pointer">
                                     Déconnexion
                                 </button>
@@ -159,6 +164,9 @@ const Header = () => {
                     <nav className="flex flex-col items-center gap-6 w-full">
                         <Link onClick={() => setIsOpen(false)} to="/explorer" className="text-lg font-serif tracking-wide text-gray-950 hover:opacity-60 transition-opacity">Explorer</Link>
                         <Link onClick={() => setIsOpen(false)} to="/a-propos" className="text-lg font-serif tracking-wide text-gray-950 hover:opacity-60 transition-opacity">À propos</Link>
+                        {user && (
+                            <Link onClick={() => setIsOpen(false)} to={`/profile/${user.id}`} className="text-lg font-serif tracking-wide text-[var(--primary-color)] hover:opacity-60 transition-opacity">Mon Profil</Link>
+                        )}
                         <Link onClick={() => setIsOpen(false)} to="/create/blog" className="text-xs font-semibold uppercase tracking-[0.15em] hover:opacity-70 transition-opacity">Créer un Blog</Link>
                         <Link onClick={() => setIsOpen(false)} to="/create/article" className="text-xs font-semibold uppercase tracking-[0.15em] hover:opacity-70 transition-opacity">Créer un Article</Link>
                         
@@ -166,9 +174,13 @@ const Header = () => {
 
                         {user ? (
                             <>
-                                <span className="text-sm font-sans font-bold uppercase tracking-widest text-black">
+                                <Link 
+                                    onClick={() => setIsOpen(false)} 
+                                    to={`/profile/${user.id}`} 
+                                    className="text-sm font-sans font-bold uppercase tracking-widest text-black hover:opacity-70 transition-opacity"
+                                >
                                     {user.pseudo}
-                                </span>
+                                </Link>
                                 <button 
                                     onClick={handleLogout} 
                                     className="text-sm font-sans font-medium uppercase tracking-widest text-red-500 hover:text-red-700 transition-colors cursor-pointer"

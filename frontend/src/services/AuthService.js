@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:8080";
+const API_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5001";
 
 const AuthService = {
     register: async (userData) => {
