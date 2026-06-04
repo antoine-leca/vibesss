@@ -1,7 +1,7 @@
-import { useState, useEffect, useRef } from "react";
+import { Bell, Heart, MessageSquare } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useAuth } from "../../services/AuthContext";
-import { Bell, Heart, MessageSquare } from "lucide-react";
 
 const Header = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -149,7 +149,7 @@ const Header = () => {
                     <div className="hidden lg:flex items-center gap-4">
                         {user ? (
                             <>
-                                <Link to={`/profile/${user.id}`} className="text-xs font-bold uppercase hover:opacity-70 transition-opacity">
+                                <Link to={`/profile/${user.pseudo}`} className="text-xs font-bold uppercase hover:opacity-70 transition-opacity">
                                     Hello, {user.pseudo}
                                 </Link>
                                 <button onClick={handleLogout} className="px-5 py-2 text-xs font-medium bg-red-100 text-red-600 rounded-full hover:bg-red-200 transition-all cursor-pointer">
@@ -206,7 +206,7 @@ const Header = () => {
                             <>
                                 <Link 
                                     onClick={() => setIsOpen(false)} 
-                                    to={`/profile/${user.id}`} 
+                                    to={`/profile/${user.pseudo}`} 
                                     className="text-sm font-sans font-bold uppercase tracking-widest text-black hover:opacity-70 transition-opacity"
                                 >
                                     {user.pseudo}
