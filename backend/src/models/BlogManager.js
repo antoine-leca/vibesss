@@ -19,8 +19,44 @@ class BlogManager extends AbstractManager {
         );
     }
 
+    findAll() {
+        return this.database.query(
+            `SELECT 
+                b.id, b.title, b.description, b.creation_date, b.theme_id, b.user_id, b.banniere, b.couleurs,
+                u.pseudo, u.profile_picture,
+                t.bg_image, t.label AS theme_label, t.color_name AS theme_color, t.font_name AS theme_font
+             FROM ${this.table} b
+             INNER JOIN users u ON b.user_id = u.id
+             INNER JOIN themes t ON b.theme_id = t.id`
+        );
+    }
+
+    find(id) {
+        return this.database.query(
+            `SELECT 
+                b.id, b.title, b.description, b.creation_date, b.theme_id, b.user_id, b.banniere, b.couleurs,
+                u.pseudo, u.profile_picture,
+                t.bg_image, t.label AS theme_label, t.color_name AS theme_color, t.font_name AS theme_font
+             FROM ${this.table} b
+             INNER JOIN users u ON b.user_id = u.id
+             INNER JOIN themes t ON b.theme_id = t.id
+             WHERE b.id = ?`,
+            [id]
+        );
+    }
+
     findByUserId(userId) {
-        return this.database.query(`SELECT * FROM ${this.table} WHERE user_id = ?`, [userId]);
+        return this.database.query(
+            `SELECT 
+                b.id, b.title, b.description, b.creation_date, b.theme_id, b.user_id, b.banniere, b.couleurs,
+                u.pseudo, u.profile_picture,
+                t.bg_image, t.label AS theme_label, t.color_name AS theme_color, t.font_name AS theme_font
+             FROM ${this.table} b
+             INNER JOIN users u ON b.user_id = u.id
+             INNER JOIN themes t ON b.theme_id = t.id
+             WHERE b.user_id = ?`,
+            [userId]
+        );
     }
 }
 

@@ -15,7 +15,8 @@
         selectedArticle,
         handleLike,
         openArticle,
-        closeArticle
+        closeArticle,
+        loading
     } = useBlogSpace();
 
     const {
@@ -29,6 +30,14 @@
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }, [currentPage]);
+
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center min-h-screen bg-[var(--bg-color)]">
+                <span className="loading loading-spinner loading-lg text-[#e99fb4]"></span>
+            </div>
+        );
+    }
 
     const borderColors = [
         "border-[var(--primary-color)]",

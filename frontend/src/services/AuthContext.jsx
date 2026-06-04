@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo, useState } from "react";
+import { createContext, useContext, useMemo, useState, useEffect } from "react";
 import AuthService from "./AuthService";
 
 const AuthContext = createContext();
@@ -31,6 +31,23 @@ export function AuthProvider({ children }) {
             localStorage.removeItem("user");
         }
     };
+
+    useEffect(() => {
+        const checkUserValidity = async () => {
+            if (user?.id) {
+                try {
+                    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL || "http://localhost:5001"}/users/${user.id}`);
+                    if (response.status === 404) {
+                        console.warn("Utilisateur non trouvé dans la base de données. Déconnexion automatique.");
+                        logout();
+                    }
+                } catch (error) {
+                    console.error("Impossible de vérifier l'existence de l'utilisateur:", error);
+                }
+            }
+        };
+        checkUserValidity();
+    }, [user?.id]);
 
     // Utilisez useMemo pour stabiliser l'objet context
     const value = useMemo(() => ({ user, login, logout }), [user]);
