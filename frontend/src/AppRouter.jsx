@@ -55,6 +55,7 @@ function AppRouter() {
         <Route element={<PublicLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/explorer" element={<Gallery />} />
+          <Route path="/blogs/:id" element={<BlogSpace isOwner={false} />} />
           <Route path="/comments" element={<CommentSection />} />
           <Route path="/auth/register" element={<AuthForm />} />
           <Route path="/auth/login" element={<AuthForm />} />

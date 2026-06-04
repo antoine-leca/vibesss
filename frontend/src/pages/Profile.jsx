@@ -1,20 +1,43 @@
 import { Calendar, Settings, User } from "lucide-react";
-import { useParams } from "react-router";
+import { useParams, useNavigate } from "react-router";
 import { useProfile } from "../hooks/useProfile";
 import { useAuth } from "../services/AuthContext";
 
 const CATEGORIES = [
-  { id: 'foryou', name: 'FOR YOU', bgColor: 'var(--primary-color, #e99fb4)', textColor: '#fff' },
-  { id: 'chill', name: 'CHILL', bgColor: 'var(--secondary-color, #B5A2D7)', textColor: '#fff' },
-  { id: 'dance', name: 'DANCE', bgColor: 'var(--category-color, #A7CBE0)', textColor: '#fff' },
-  { id: 'lofi', name: 'LOFI', bgColor: 'var(--accent-color, #EFC3A7)', textColor: '#333' },
-  { id: 'focus', name: 'FOCUS', bgColor: 'var(--success-color, #A7C49F)', textColor: '#333' },
-  { id: 'indie', name: 'INDIE', bgColor: '#F4E5A1', textColor: '#333' },
-  { id: 'party', name: 'PARTY', bgColor: '#D0A0E0', textColor: '#fff' },
+  { id: 'cuisine', name: 'CUISINE', bgColor: 'var(--primary-color, #e99fb4)', textColor: '#fff' },
+  { id: 'animaux', name: 'ANIMAUX', bgColor: 'var(--secondary-color, #B5A2D7)', textColor: '#fff' },
+  { id: 'lifestyle', name: 'LIFESTYLE', bgColor: 'var(--category-color, #A7CBE0)', textColor: '#fff' },
+  { id: 'sport', name: 'SPORT', bgColor: 'var(--accent-color, #EFC3A7)', textColor: '#333' },
+  { id: 'nature', name: 'NATURE', bgColor: 'var(--success-color, #A7C49F)', textColor: '#333' },
+  { id: 'voyage', name: 'VOYAGE', bgColor: '#F4E5A1', textColor: '#333' },
 ];
+
+function resolveProfilePicture(profilePicture, pseudo) {
+  if (profilePicture && (profilePicture.startsWith("http://") || profilePicture.startsWith("https://"))) {
+    return profilePicture;
+  }
+  return `https://api.dicebear.com/7.x/adventurer/svg?seed=${pseudo || "Anonyme"}`;
+}
+
+function resolveBgImage(bgImage) {
+  if (bgImage && (bgImage.startsWith("http://") || bgImage.startsWith("https://"))) {
+    return bgImage;
+  }
+  const themeImages = {
+    "cuisine_bg.jpg": "https://images.unsplash.com/photo-1466637574441-749b8f19452f?w=700&q=80",
+    "animaux_bg.jpg": "https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?w=700&q=80",
+    "lifestyle_bg.jpg": "https://images.unsplash.com/photo-1503220317375-aaad61436b1b?w=700&q=80",
+    "sport_bg.jpg": "https://images.unsplash.com/photo-1517649763962-0c623066013b?w=800&q=80",
+    "nature_bg.jpg": "https://images.unsplash.com/photo-1472214222541-d510753a4907?w=800&q=80",
+    "voyage_bg.jpg": "https://images.unsplash.com/photo-1503220317375-aaad61436b1b?w=800&q=80"
+  };
+  return themeImages[bgImage] || "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=700&q=80";
+}
 
 const Profile = () => {
   const { pseudo: urlPseudo } = useParams();
+  const { id } = useParams();
+  const navigate = useNavigate();
   const { user: authUser } = useAuth();
   const { user, blogs: apiBlogs, loading, error, isOwner } = useProfile(urlPseudo, authUser?.id);
 
@@ -76,9 +99,9 @@ const Profile = () => {
         <div className="absolute -bottom-16">
           <div className="relative">
             <div className="w-32 h-32 rounded-full border-4 border-[#E99FB4] overflow-hidden bg-white flex items-center justify-center">
-              {user.profile_picture ? (
+              {user.profile_picture || user.pseudo ? (
                 <img 
-                  src={user.profile_picture} 
+                  src={resolveProfilePicture(user.profile_picture, user.pseudo)} 
                   alt={user.pseudo} 
                   className="w-full h-full object-cover"
                 />
@@ -150,12 +173,23 @@ const Profile = () => {
           <div className="grid grid-cols-1 gap-8">
             {blogs.length > 0 ? (
               blogs.map((blog) => {
-                const category = CATEGORIES.find(c => c.id === blog.category_id) || CATEGORIES[0];
+                const categoryName = blog.theme_label ? blog.theme_label.toLowerCase() : '';
+                const category = CATEGORIES.find(c => c.id === categoryName) || CATEGORIES[2];
                 return (
-                  <div key={blog.id} className="bg-white rounded-[32px] overflow-hidden shadow-sm border hover:shadow-lg transition-all duration-300 group cursor-pointer flex flex-col md:flex-row h-auto md:h-64">
+                  <div 
+                    key={blog.id} 
+                    onClick={() => {
+                      if (isOwner) {
+                        navigate('/create/mes-blogs');
+                      } else {
+                        navigate(`/blogs/${blog.id}`);
+                      }
+                    }}
+                    className="bg-white rounded-[32px] overflow-hidden shadow-sm border hover:shadow-lg transition-all duration-300 group cursor-pointer flex flex-col md:flex-row h-auto md:h-64"
+                  >
                     <div className="md:w-2/5 h-48 md:h-full overflow-hidden relative">
                       <img 
-                        src={blog.bg_image} 
+                        src={blog.banniere ? blog.banniere : resolveBgImage(blog.bg_image)} 
                         alt={blog.title} 
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                       />
