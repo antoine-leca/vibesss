@@ -1,23 +1,40 @@
 import React, { useState } from 'react';
-import { X, MessageSquare, ChevronDown, ChevronUp } from 'lucide-react';
+import { X, MessageSquare, ChevronDown, ChevronUp, Flag } from 'lucide-react';
 import CommentSection from '../comments/CommentSection'; // Chemin d'accès vers Pharell
+import { useAuth } from '../../services/AuthContext';
+import ReportModal from '../layout/ReportModal';
 
 export default function ArticleModal({ article, onClose }) {
     const [showComments, setShowComments] = useState(false);
+    const [isReportOpen, setIsReportOpen] = useState(false);
+    const { user } = useAuth();
 
     if (!article) return null;
 
     return (
+        <>
         <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex justify-center items-center p-4 animate-fadeIn">
         <div className="bg-white rounded-[2rem] w-full max-w-3xl max-h-[90vh] overflow-y-auto shadow-2xl p-6 sm:p-8 relative">
             
             {/* Bouton Fermer */}
-            <button 
-            onClick={onClose} 
-            className="absolute right-6 top-6 text-neutral-400 hover:text-black bg-neutral-100 p-2 rounded-full cursor-pointer transition"
-            >
-            <X size={20} />
-            </button>
+            <div className="absolute right-6 top-6 flex items-center gap-2">
+                {user && (
+                    <button 
+                        onClick={() => setIsReportOpen(true)}
+                        className="text-neutral-400 hover:text-red-500 bg-neutral-100 p-2 rounded-full cursor-pointer transition"
+                        title="Signaler cet article"
+                    >
+                        <Flag size={18} />
+                    </button>
+                )}
+                
+                <button 
+                    onClick={onClose} 
+                    className="text-neutral-400 hover:text-black bg-neutral-100 p-2 rounded-full cursor-pointer transition"
+                >
+                    <X size={20} />
+                </button>
+            </div>
 
             {/* Méta-données */}
             <div className="text-xs font-bold tracking-wider text-[var(--custom-btn-color)] uppercase mb-2">
@@ -59,5 +76,13 @@ export default function ArticleModal({ article, onClose }) {
 
         </div>
         </div>
+        <ReportModal 
+            isOpen={isReportOpen}
+            onClose={() => setIsReportOpen(false)}
+            targetType="article"
+            targetId={article.id}
+            userId={user?.id}
+            />
+    </>
     );
 }

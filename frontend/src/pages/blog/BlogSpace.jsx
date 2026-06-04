@@ -1,12 +1,15 @@
-    import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
     import { useNavigate } from 'react-router'; 
-    import { Heart, ArrowLeft, MessageCircle, ChevronLeft, ChevronRight } from 'lucide-react';
+    import { Heart, ArrowLeft, MessageCircle, ChevronLeft, ChevronRight, Flag } from 'lucide-react';
     import { useBlogSpace } from '../../hooks/blog/useBlogSpace';
     import { usePagination } from '../../hooks/usePagination';
     import ArticleModal from '../../components/blog/ArticleModal';
+    import { useAuth } from '../../services/AuthContext';
+    import ReportModal from '../../components/layout/ReportModal';
 
     const BlogSpace = ({ isOwner }) => {
     const navigate = useNavigate(); 
+    const [isBlogReportOpen, setIsBlogReportOpen] = useState(false);
 
     const {
         blogInfos,
@@ -37,6 +40,8 @@
         "border-[var(--success-color)]",
         "border-[var(--category-color)]"
     ];
+
+    const { user } = useAuth();
 
     return (
         <div className="w-full min-h-screen bg-[var(--bg-color)] px-4 sm:px-8 md:px-12 py-8 md:py-12 font-custom-main text-black flex flex-col justify-between">
@@ -87,6 +92,17 @@
                 <>
                     <span className="text-neutral-300">•</span>
                     <span className="italic font-custom-main-italic">Par {blogInfos.author}</span>
+                    {user && (
+                        <>
+                            <span className="text-neutral-300">•</span>
+                            <button 
+                                onClick={() => setIsBlogReportOpen(true)}
+                                className="flex items-center gap-1 text-[10px] text-neutral-400 hover:text-red-500 transition-colors uppercase font-bold tracking-wider cursor-pointer"
+                            >
+                                <Flag size={10} /> Signaler le blog
+                            </button>
+                        </>
+                    )}
                 </>
                 )}
             </div>
@@ -164,6 +180,15 @@
         )}
 
         <ArticleModal article={selectedArticle} onClose={closeArticle} />
+
+        {/* Modal de signalement du blog */}
+        <ReportModal 
+            isOpen={isBlogReportOpen}
+            onClose={() => setIsBlogReportOpen(false)}
+            targetType="blog"
+            targetId={blogInfos.id}
+            userId={user?.id}
+        />
 
         </div>
     );
