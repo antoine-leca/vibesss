@@ -1,130 +1,100 @@
-    import { useState } from 'react';
+import { useState, useEffect, useCallback } from "react";
+import { useParams } from "react-router"; 
 
-    export const useBlogSpace = () => {
-    // Informations globales du blog
-    const blogInfos = {
-        title: "[Décoration d'intérieur]",
-        author: "Lisa",
-        creationDate: "21 Mai 2026",
-        mainCategory: "LIFESTYLE",
-        description: "Une curation d'espaces minimalistes, d'architectures calmes et de palettes graphiques douces."
-    };
-
-    // Vos articles avec du texte et des commentaires en français
-    const initialArticles = [
-        { 
-        id: 1, 
-        title: "L'art de la Vie Minimaliste", 
-        cover_picture: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?q=80&w=600&auto=format&fit=crop", 
-        date: "21 Mai 2026", 
-        category: "LIFESTYLE", 
-        likes: 14,
-        content: "Le minimalisme n'est pas seulement un style visuel, c'est une philosophie de vie. En épurant notre espace, nous libérons du temps et de l'énergie pour ce qui compte vraiment. Trouver l'équilibre parfait entre esthétique, fonctionnalité et sérénité intérieure permet d'apprécier la beauté texturée des objets simples.",
-        comments: [
-            {
-            id: 1,
-            author: "David L.",
-            avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80",
-            time: "Il y a 2 heures",
-            text: "Absolument magnifique cette refonte ! Cette esthétique minimale est tellement fraîche. J'adore la typographie !",
-            likes: 18,
-            bgColor: "bg-[#E6EEFA]",
-            replies: [
-                {
-                id: 2,
-                author: "Sophie T.",
-                avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80",
-                time: "Il y a 1 heure",
-                text: "Totalement d'accord, David ! C'est incroyablement fluide et agréable à lire.",
-                likes: 7,
-                bgColor: "bg-[#FCEAEB]",
-                }
-            ]
-            }
-        ]
-        },
-        { 
-        id: 2, 
-        title: "Architecture of Calm", 
-        cover_picture: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=600&auto=format&fit=crop", 
-        date: "20 Mai 2026", 
-        category: "DESIGN", 
-        likes: 4,
-        content: "Une exploration des structures modernes qui s'intègrent doucement avec la nature environnante. Les lignes droites rencontrent les arbres, les grandes baies vitrées invitent la lumière du jour sans agresser.",
-        comments: [] // Vide pour tester l'absence de commentaire
-        },
-        { 
-        id: 3, 
-        title: "Textures of Nature", 
-        cover_picture: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=600&auto=format&fit=crop", 
-        date: "19 Mai 2026", 
-        category: "ART", 
-        likes: 7, 
-        content: "L'océan, le sable, le vent laissent des traces graphiques uniques. Focus sur les motifs bruts.", 
-        comments: [] 
-        },
-        { 
-        id: 4, 
-        title: "The Curation of Space", 
-        cover_picture: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=600&auto=format&fit=crop", 
-        date: "18 Mai 2026", 
-        category: "MINIMALISM", 
-        likes: 0, 
-        content: "Comment arranger une pièce pour maximiser le flux d'énergie positive et garder un esprit clair.", 
-        comments: [] 
-        },
-        { 
-        id: 5, 
-        title: "Sustainable Solitude", 
-        cover_picture: "https://images.unsplash.com/photo-1510798831971-661eb04b3739?q=80&w=600&auto=format&fit=crop", 
-        date: "17 Mai 2026", 
-        category: "ECO", 
-        likes: 3, 
-        content: "Vivre à l'écart du bruit pour mieux se reconnecter à l'essentiel environnemental.", 
-        comments: [] 
-        },
-    ];
-
-    const [articles, setArticles] = useState(initialArticles);
+const useBlogSpace = () => {
+    const { blogId } = useParams();
+    
+    const [blogInfos, setBlogInfos] = useState({ title: "", description: "", creationDate: "", mainCategory: "", author: "" });
+    const [articles, setArticles] = useState([]);
     const [likedArticles, setLikedArticles] = useState({});
     const [selectedArticle, setSelectedArticle] = useState(null);
-    const [showComments, setShowComments] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
-    // Gestion du like (Incrémente / Décrémente)
-    const handleLike = (e, id) => {
-        e.stopPropagation(); // Évite que le pop-up s'ouvre au clic sur le bouton cœur
-        const isLiked = likedArticles[id];
-        setLikedArticles({ ...likedArticles, [id]: !isLiked });
-        setArticles(articles.map(art => 
-        art.id === id ? { ...art, likes: isLiked ? art.likes - 1 : art.likes + 1 } : art
-        ));
-    };
+    // Récupération des infos du blog et de ses articles
+    const fetchBlogData = useCallback(async () => {
+        if (!blogId) return;
+        
+        try {
+            // On lance le chargement du blog ET de ses articles en même temps !
+            const [blogRes, articlesRes] = await Promise.all([
+                fetch(`${import.meta.env.VITE_BACKEND_URL}/blogs/${blogId}`),
+                fetch(`${import.meta.env.VITE_BACKEND_URL}/blogs/${blogId}/articles`)
+            ]);
 
-    // Ouverture de la fenêtre pop-up de l'article
-    const openArticle = (article) => {
-        setSelectedArticle(article);
-        setShowComments(false); // Réinitialise l'accordéon à la fermeture
-    };
+            const blogData = await blogRes.json();
+            const articlesData = await articlesRes.json();
 
-    // Fermeture du pop-up
-    const closeArticle = () => {
-        setSelectedArticle(null);
-    };
+            setBlogInfos(blogData);
+            setArticles(articlesData);
+        } catch (error) {
+            console.error("Erreur BlogSpace hook:", error.message);
+        } finally {
+            setIsLoading(false);
+        }
+    }, [blogId]);
 
-    // Gestion du bouton déroulant
-    const toggleComments = () => {
-        setShowComments(!showComments);
-    };
+    // Déclencheur automatique au chargement ou si le blogId change
+    useEffect(() => {
+        fetchBlogData();
+    }, [fetchBlogData]);
+
+    // Gestion des likes asynchrones et sécurisés (UI Optimiste)
+    const handleLike = useCallback(async (e, articleId) => {
+        e.stopPropagation(); // Évite d'ouvrir la modal en cliquant sur le cœur
+
+        const isCurrentlyLiked = likedArticles[articleId];
+        
+        // 1. UI Optimiste : On bascule l'affichage immédiatement pour une sensation de fluidité
+        setLikedArticles(prev => ({
+            ...prev,
+            [articleId]: !isCurrentlyLiked
+        }));
+
+        // 2. Configuration de la requête vers ton contrôleur de likes
+        const url = `${import.meta.env.VITE_BACKEND_URL}/users_articles`;
+        const method = isCurrentlyLiked ? "DELETE" : "POST";
+
+        try {
+            const response = await fetch(url, {
+                method: method,
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                
+                body: JSON.stringify({ articleId }) 
+            });
+
+            if (!response.ok) {
+                throw new Error("Erreur lors de la mise à jour du like côté serveur");
+            }
+
+
+        } catch (error) {
+            console.error("Erreur Like:", error.message);
+            
+            // En cas d'erreur (serveur déconnecté, etc.), on annule le changement visuel
+            setLikedArticles(prev => ({
+                ...prev,
+                [articleId]: isCurrentlyLiked
+            }));
+        }
+    }, [likedArticles]);
+
+    // Gestion de la Modal
+    const openArticle = useCallback((article) => setSelectedArticle(article), []);
+    const closeArticle = useCallback(() => setSelectedArticle(null), []);
 
     return {
         blogInfos,
         articles,
         likedArticles,
         selectedArticle,
-        showComments,
+        isLoading,
         handleLike,
         openArticle,
         closeArticle,
-        toggleComments
+        refresh: fetchBlogData 
     };
-    };
+};
+
+export default useBlogSpace;

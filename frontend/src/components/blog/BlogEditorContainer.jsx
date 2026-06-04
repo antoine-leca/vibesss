@@ -101,9 +101,6 @@ const BlogEditorContainer = () => {
     } catch (err) { alert("Erreur réseau"); }
   };
 
-  console.log("Utilisateur connecté :", user);
-  console.log("ID envoyé au backend :", user?.id);
-
   return (
     <div className="w-full h-full flex flex-col">
       <EditorHeader 
