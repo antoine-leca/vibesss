@@ -8,17 +8,25 @@ const Header = () => {
     const [showNotifs, setShowNotifs] = useState(false);
     const [unreadCount, setUnreadCount] = useState(0);
     const [notifications, setNotifications] = useState([]);
+    const [hasBlog, setHasBlog] = useState(false);
     const { user, logout } = useAuth();
     const navigate = useNavigate();
     const dropdownRef = useRef(null);
 
-    // Récupérer le nombre de non lus
+    // Récupérer le nombre de non lus et vérifier si l'utilisateur possède un blog
     useEffect(() => {
         if (user) {
             fetch(`${import.meta.env.VITE_BACKEND_URL}/notifications/unread/${user.id}`)
                 .then(res => res.json())
                 .then(data => setUnreadCount(data.length))
                 .catch(err => console.error(err));
+
+            fetch(`${import.meta.env.VITE_BACKEND_URL}/blogs/user/${user.id}`)
+                .then(res => res.json())
+                .then(data => setHasBlog(data && data.length > 0))
+                .catch(err => console.error(err));
+        } else {
+            setHasBlog(false);
         }
     }, [user]);
 
@@ -75,8 +83,19 @@ const Header = () => {
                     {user && (
                         <Link to={`/profile/${user.id}`} className="text-xs font-semibold uppercase tracking-[0.15em] hover:opacity-70 transition-opacity text-[#E99FB4]">Mon Profil</Link>
                     )}
-                    <Link to="/create/blog" className="text-xs font-semibold uppercase tracking-[0.15em] hover:opacity-70 transition-opacity">Créer un Blog</Link>
-                    <Link to="/create/article" className="text-xs font-semibold uppercase tracking-[0.15em] hover:opacity-70 transition-opacity">Créer un Article</Link>
+                    {!user ? (
+                        <>
+                            <Link to="/create/blog" className="text-xs font-semibold uppercase tracking-[0.15em] hover:opacity-70 transition-opacity">Créer un Blog</Link>
+                            <Link to="/create/article" className="text-xs font-semibold uppercase tracking-[0.15em] hover:opacity-70 transition-opacity">Créer un Article</Link>
+                        </>
+                    ) : hasBlog ? (
+                        <>
+                            <Link to="/create/mes-blogs" className="text-xs font-semibold uppercase tracking-[0.15em] hover:opacity-70 transition-opacity">Mon Blog</Link>
+                            <Link to="/create/article" className="text-xs font-semibold uppercase tracking-[0.15em] hover:opacity-70 transition-opacity">Créer un Article</Link>
+                        </>
+                    ) : (
+                        <Link to="/create/blog" className="text-xs font-semibold uppercase tracking-[0.15em] hover:opacity-70 transition-opacity">Créer un Blog</Link>
+                    )}
                 </nav>
 
                 <div className="w-1/4 flex justify-end items-center gap-6">
@@ -167,8 +186,19 @@ const Header = () => {
                         {user && (
                             <Link onClick={() => setIsOpen(false)} to={`/profile/${user.id}`} className="text-lg font-serif tracking-wide text-[var(--primary-color)] hover:opacity-60 transition-opacity">Mon Profil</Link>
                         )}
-                        <Link onClick={() => setIsOpen(false)} to="/create/blog" className="text-xs font-semibold uppercase tracking-[0.15em] hover:opacity-70 transition-opacity">Créer un Blog</Link>
-                        <Link onClick={() => setIsOpen(false)} to="/create/article" className="text-xs font-semibold uppercase tracking-[0.15em] hover:opacity-70 transition-opacity">Créer un Article</Link>
+                        {!user ? (
+                            <>
+                                <Link onClick={() => setIsOpen(false)} to="/create/blog" className="text-lg font-serif tracking-wide text-gray-950 hover:opacity-60 transition-opacity">Créer un Blog</Link>
+                                <Link onClick={() => setIsOpen(false)} to="/create/article" className="text-lg font-serif tracking-wide text-gray-950 hover:opacity-60 transition-opacity">Créer un Article</Link>
+                            </>
+                        ) : hasBlog ? (
+                            <>
+                                <Link onClick={() => setIsOpen(false)} to="/create/mes-blogs" className="text-lg font-serif tracking-wide text-gray-950 hover:opacity-60 transition-opacity">Mon Blog</Link>
+                                <Link onClick={() => setIsOpen(false)} to="/create/article" className="text-lg font-serif tracking-wide text-gray-950 hover:opacity-60 transition-opacity">Créer un Article</Link>
+                            </>
+                        ) : (
+                            <Link onClick={() => setIsOpen(false)} to="/create/blog" className="text-lg font-serif tracking-wide text-gray-950 hover:opacity-60 transition-opacity">Créer un Blog</Link>
+                        )}
                         
                         <div className="w-12 h-[1px] bg-gray-200 my-2"></div>
 

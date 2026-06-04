@@ -67,13 +67,15 @@ const MyBlogs = () => {
             
             {/* BOUTON DROITE : Créer un nouvel espace */}
             <div className="w-full md:w-48 flex justify-center md:justify-end order-3 max-w-xs mx-auto md:max-w-none md:mb-1">
-            <button 
-                onClick={() => navigate('/create/blog')} // Redirige vers le formulaire de création
-                className="flex items-center gap-2 bg-[#7B96EC] hover:bg-blue-600 text-white text-xs sm:text-sm font-bold px-5 py-2.5 rounded-full shadow-sm transition-all duration-300 ease-in-out cursor-pointer w-full md:w-auto justify-center"
-            >
-                <Plus size={18} />
-                <span>Créer un nouveau blog</span>
-            </button>
+            {myBlogs.length === 0 && (
+              <button 
+                  onClick={() => navigate('/create/blog')} // Redirige vers le formulaire de création
+                  className="flex items-center gap-2 bg-[#7B96EC] hover:bg-blue-600 text-white text-xs sm:text-sm font-bold px-5 py-2.5 rounded-full shadow-sm transition-all duration-300 ease-in-out cursor-pointer w-full md:w-auto justify-center"
+              >
+                  <Plus size={18} />
+                  <span>Créer un nouveau blog</span>
+              </button>
+            )}
             </div>
 
         </header>
@@ -149,16 +151,18 @@ const MyBlogs = () => {
             })}
 
             {/* Carte Création (Lien du bas) */}
-            <button 
-            onClick={() => navigate('/create/blog')} // Corrigé ici aussi
-            className="bg-transparent border-[3px] border-dashed border-neutral-300 hover:border-black rounded-[2rem] flex flex-col items-center justify-center p-6 md:p-8 min-h-[280px] md:min-h-[350px] text-neutral-400 hover:text-black transition-all duration-300 cursor-pointer group"
-            >
-            <div className="w-12 h-12 md:w-16 md:h-16 bg-neutral-100 group-hover:bg-black group-hover:text-white rounded-full flex items-center justify-center mb-4 transition-all duration-300">
-                <Plus size={24} />
-            </div>
-            <span className="font-bold text-base md:text-lg">Créer un nouveau blog</span>
-            <span className="text-xs md:text-sm font-medium mt-2">Commencez une nouvelle histoire</span>
-            </button>
+            {myBlogs.length === 0 && (
+              <button 
+              onClick={() => navigate('/create/blog')} // Corrigé ici aussi
+              className="bg-transparent border-[3px] border-dashed border-neutral-300 hover:border-black rounded-[2rem] flex flex-col items-center justify-center p-6 md:p-8 min-h-[280px] md:min-h-[350px] text-neutral-400 hover:text-black transition-all duration-300 cursor-pointer group"
+              >
+              <div className="w-12 h-12 md:w-16 md:h-16 bg-neutral-100 group-hover:bg-black group-hover:text-white rounded-full flex items-center justify-center mb-4 transition-all duration-300">
+                  <Plus size={24} />
+              </div>
+              <span className="font-bold text-base md:text-lg">Créer un nouveau blog</span>
+              <span className="text-xs md:text-sm font-medium mt-2">Commencez une nouvelle histoire</span>
+              </button>
+            )}
 
         </div>
         </div>
