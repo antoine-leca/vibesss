@@ -268,11 +268,11 @@ INSERT INTO comments (id, content, moderation_status, article_id, user_id) VALUE
 -- =====================================================================
 -- Étape A : On crée les 5 fiches de signalements globales
 INSERT INTO reports (id, report_reason, description, status) VALUES
-(1, 'spam', 'Ce blog ne contient que des liens vers des sites malveillants de contrefaçons.', 'active'),
-(2, 'inappropriate', 'La bannière de ce blog présente du contenu graphique non modéré.', 'active'),
-(3, 'copyright', 'Cet article est un copier-coller intégral d un papier universitaire protégé.', 'active'),
-(4, 'bully', 'Propos injurieux proférés à l encontre de l auteur dans l espace commentaire.', 'active'),
-(5, 'spam', 'Publicité intempestive glissée au milieu du message.', 'active');
+(1, 'SPAM', 'Ce blog ne contient que des liens vers des sites malveillants de contrefaçons.', 'active'),
+(2, 'CONTENU INAPPROPRIÉ', 'La bannière de ce blog présente du contenu graphique non modéré.', 'active'),
+(3, 'COPYRIGHT', 'Cet article est un copier-coller intégral d un papier universitaire protégé.', 'active'),
+(4, 'INTIMIDATION', 'Propos injurieux proférés à l encontre de l auteur dans l espace commentaire.', 'active'),
+(5, 'SPAM', 'Publicité intempestive glissée au milieu du message.', 'active');
 
 
 
