@@ -4,11 +4,14 @@ const UserService = {
     getByPseudo: async (pseudo) => {
         try {
             const response = await fetch(`${API_URL}/users/${pseudo}`);
-            if (!response.ok) throw new Error("User not found");
+            if (!response.ok) {
+                if (response.status === 404) return null;
+                throw new Error("Erreur serveur");
+            }
             return await response.json();
         } catch (error) {
-            console.error(error);
-            return null;
+            console.error("UserService.getByPseudo error:", error);
+            throw error;
         }
     },
 
@@ -20,6 +23,22 @@ const UserService = {
         } catch (error) {
             console.error(error);
             return [];
+        }
+    },
+
+    update: async (id, userData) => {
+        try {
+            const response = await fetch(`${API_URL}/users/${id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(userData),
+            });
+            return response.ok;
+        } catch (error) {
+            console.error("UserService.update error:", error);
+            return false;
         }
     }
 };

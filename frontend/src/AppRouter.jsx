@@ -66,9 +66,13 @@ function AppRouter() {
         <Route path="/create" element={<ProtectedRoute allowedRoles={['user', 'admin']}/>}>
           <Route path='blog' element={<CreateBlog />} />
           <Route path='article' element={<CreateArticle />} />
-          <Route path='mon-blog' element={<BlogSpace  isOwner={true} />} />
+          {/* <Route path='mon-blog' element={<BlogSpace  isOwner={true} />} /> */}
         </Route>
 
+        {/* ROUTES UTILISATEURS CONNECTÉS (User connecté ou admin)*/}
+        <Route path="/blog" element={<ProtectedRoute allowedRoles={['user', 'admin']}/>}>
+          <Route path=':id' element={<BlogSpace  isOwner={true} />} />
+        </Route>
 
         {/* ROUTES ADMIN (Protège le layout et tous ses enfants) */}
         <Route path='/admin' element={

@@ -28,7 +28,6 @@ const {
 router.post("/auth/register", hashPassword, userController.add);
 router.post("/auth/login", userController.getUserByEmail, verifyPassword);
 router.get("/auth/logout", logout);
-router.put("/users/:id", hashPassword, userController.edit);
 
 // Reports (Déplacé ici pour les tests)
 router.get("/reports", reportController.browse);
@@ -53,10 +52,10 @@ router.get("/articles/:articleId/comments", commentController.readByArticle);
 
 // ------------- ROUTES PROTÉGÉES (AVEC TOKEN)
 
+router.use(verifyToken); // Toutes les routes ci-dessous nécessitent un token
+
 // Users Actions
-router.put("/users/:id", hashPassword, userController.edit);
-router.post("/users/email", userController.getUserByEmail);
-router.post("/users/pseudo", userController.getUserByPseudo);
+router.put("/users/:id", userController.edit); // Route de mise à jour de profil, sans hashPassword
 router.delete("/users/:id", userController.destroy);
 
 // Notifications
