@@ -1,7 +1,7 @@
-import React from 'react';
-import { useNavigate } from 'react-router'; 
-import { Plus, Settings, Trash2, ArrowRight, ArrowLeft } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Plus, Settings, Trash2 } from 'lucide-react';
+import { useNavigate } from 'react-router';
 import { useUserBlogs } from '../../hooks/blog/useUserBlogs';
+import { useAuth } from '../../services/AuthContext';
 
 function resolveBgImage(bgImage) {
   if (bgImage && (bgImage.startsWith("http://") || bgImage.startsWith("https://"))) {
@@ -21,6 +21,7 @@ function resolveBgImage(bgImage) {
 const MyBlogs = () => {
     const { myBlogs, loading, deleteBlog } = useUserBlogs();
     const navigate = useNavigate(); 
+    const { user } = useAuth();
 
     const borderColors = [
         "border-[var(--primary-color)]",
@@ -47,7 +48,7 @@ const MyBlogs = () => {
             {/* BOUTON GAUCHE : Retour à l'accueil / profil */}
             <div className="w-full md:w-48 flex justify-center md:justify-start order-2 md:order-1 max-w-xs mx-auto md:max-w-none md:mb-1">
             <button 
-                onClick={() => navigate('/')} // Redirige vers la home ou /profile
+                onClick={() => navigate(`/profile/${user?.pseudo}`)} // Redirige vers le profil via le pseudo
                 className="flex items-center gap-2 bg-neutral-800 hover:bg-black text-white text-xs sm:text-sm font-bold px-5 py-2.5 rounded-full shadow-sm transition-all duration-300 ease-in-out cursor-pointer w-full md:w-auto justify-center"
             >
                 <ArrowLeft size={16} />

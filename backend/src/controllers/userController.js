@@ -15,7 +15,7 @@ const read = async (req, res) => {
   try {
     // On tente d'abord de trouver l'utilisateur par ID
     let [rows] = await models.user.findUser(req.params.id);
-    
+
     // Si rien n'est trouvé (cas où le paramètre est un pseudo), on cherche par pseudo
     if (rows[0] == null) {
       [rows] = await models.user.findUserByPseudo(req.params.id);
@@ -80,10 +80,10 @@ const add = async (req, res) => {
 
 const edit = async (req, res) => {
   try {
-    const user = req.body;
-    user.id = parseInt(req.params.id, 10);
+    const userId = parseInt(req.params.id, 10);
+    const { firstname, lastname, bio } = req.body; // Seuls les champs modifiables sont extraits
 
-    const [result] = await models.user.update(user);
+    const [result] = await models.user.update(userId, firstname, lastname, bio);
     if (result.affectedRows === 0) {
       res.sendStatus(404);
     } else {

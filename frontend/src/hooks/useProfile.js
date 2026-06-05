@@ -8,37 +8,34 @@ export const useProfile = (pseudo, currentUserId) => {
     const [error, setError] = useState(null);
     const [isOwner, setIsOwner] = useState(false);
 
-    useEffect(() => {
-        const fetchProfileData = async () => {
-            setLoading(true);
-            setError(null);
+    const fetchProfileData = async () => {
+        setLoading(true);
+        setError(null);
 
-            try {
-                // Récupération des données réelles depuis l'API
-                const userData = await UserService.getByPseudo(pseudo);
+        try {
+            const userData = await UserService.getByPseudo(pseudo);
+
+            if (userData) {
                 const userBlogs = await UserService.getBlogsByUserId(userData.id);
-
-                if (userData) {
-                    setUser(userData);
-                    setBlogs(userBlogs || []);
-
-                    // Vérifier si c'est le propriétaire
-                    setIsOwner(String(userData.id) === String(currentUserId));
-                } else {
-                    setError("Utilisateur non trouvé");
-                }
-            } catch (error) {
-                console.error("Erreur lors du chargement du profil:", error);
-                setError("Une erreur est survenue lors du chargement du profil");
-            } finally {
-                setLoading(false);
+                setUser(userData);
+                setBlogs(userBlogs || []);
+                setIsOwner(String(userData.id) === String(currentUserId));
+            } else {
+                setError("Utilisateur non trouvé");
             }
-        };
+        } catch (error) {
+            console.error("Erreur lors du chargement du profil:", error);
+            setError("Une erreur est survenue lors du chargement du profil");
+        } finally {
+            setLoading(false);
+        }
+    };
 
+    useEffect(() => { // Appeler fetchProfileData dans l'useEffect
         if (pseudo) {
             fetchProfileData();
         }
     }, [pseudo, currentUserId]);
 
-    return { user, blogs, loading, error, isOwner };
+    return { user, blogs, loading, error, isOwner, refetchProfile: fetchProfileData };
 };
