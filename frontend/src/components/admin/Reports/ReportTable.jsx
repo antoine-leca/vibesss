@@ -6,32 +6,25 @@ import ReportRow from "./ReportsRow";
 const ReportTable = ({ reports, onStatusChange, onDelete, isLoading }) => {
   return (
     <div className="overflow-x-auto">
-      <table className="w-full text-left border-separate border-spacing-y-2">
+      <table className="w-full text-left text-[11px]">
         <thead>
-          <tr 
-            className="text-white/40 text-[10px] uppercase tracking-[0.2em]"
-            style={{ fontFamily: "var(--title-font)" }}
-          >
-            <th className="px-4 py-2 font-black">Date</th>
-            <th className="px-4 py-2 font-black">Auteur</th>
-            <th className="px-4 py-2 font-black">Contenu Visé</th>
-            <th className="px-4 py-2 font-black">Motif</th>
-            <th className="px-4 py-2 font-black text-center">État</th>
-            <th className="px-4 py-2 font-black text-right">Actions</th>
+          <tr className="border-b-2 border-white/40 bg-white/20 text-gray-700 uppercase font-black tracking-wider">
+            <th className="py-2.5 px-4">Date</th>
+            <th className="py-2.5 px-4">Auteur</th>
+            <th className="py-2.5 px-4">Contenu Visé</th>
+            <th className="py-2.5 px-4">Motif</th>
+            <th className="py-2.5 px-4 text-center">État</th>
+            <th className="py-2.5 px-4 text-right">Actions</th>
           </tr>
         </thead>
         <tbody>
           {isLoading ? (
             <tr>
-              <td colSpan="6" className="text-center py-10 opacity-50 font-bold uppercase tracking-widest">
-                Chargement...
-              </td>
+              <td colSpan="6" className="py-8 text-center text-[11px] italic text-gray-400">Chargement...</td>
             </tr>
           ) : reports.length === 0 ? (
             <tr>
-              <td colSpan="6" className="text-center py-10 opacity-50 text-sm italic">
-                Aucun signalement. Tout est en ordre ! ✨
-              </td>
+              <td colSpan="6" className="py-8 text-center text-gray-400 opacity-50 italic">Aucun signalement</td>
             </tr>
           ) : (
             reports.map((report) => (

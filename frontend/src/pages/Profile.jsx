@@ -1,4 +1,4 @@
-import { User } from "lucide-react";
+import { Calendar, Settings, User } from "lucide-react";
 import { useNavigate, useParams } from "react-router";
 import ProfileBanner from "../components/profile/ProfileBanner";
 import ProfileBlogCard from "../components/profile/ProfileBlogCard";

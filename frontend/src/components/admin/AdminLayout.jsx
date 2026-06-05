@@ -15,10 +15,10 @@ export default function AdminLayout() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-[#F197A9] flex flex-col md:flex-row overflow-x-hidden">
+    <div className="min-h-screen bg-[#FCEB92] flex flex-col md:flex-row overflow-x-hidden">
       
       {/* Header Mobile - Burger à droite */}
-      <nav className="md:hidden bg-[#B5A8D5] p-2 px-4 flex justify-between items-center shadow-sm z-50">
+      <nav className="md:hidden bg-[#FBF7D2] p-2 px-4 flex justify-between items-center shadow-sm z-50">
         <h1 className="font-bold text-xs">Vibesss Admin</h1>
         <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="p-1">
           {isMenuOpen ? <X size={18} /> : <Menu size={18} />}
@@ -27,7 +27,7 @@ export default function AdminLayout() {
 
       {/* Sidebar Desktop plus fine (w-48) */}
       <aside className={`
-        bg-[#B5A8D5] md:w-48 md:min-h-screen transition-all duration-300
+        bg-[#FBF7D2] md:w-48 md:min-h-screen transition-all duration-300
         ${isMenuOpen ? "block" : "hidden md:block"}
       `}>
         <div className="p-4">

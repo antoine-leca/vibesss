@@ -58,7 +58,11 @@ class UserManager extends AbstractManager {
 
     findAllUsers() {
         return this.database.query(
-            `SELECT id, firstname, lastname, pseudo, email, bio, profile_picture, status, created_at FROM users`
+            `SELECT u.id, u.firstname, u.lastname, u.pseudo, u.email, u.bio, u.profile_picture, u.status, u.created_at,
+                    MAX(ur.role_id = 2) AS is_admin
+             FROM users u
+             LEFT JOIN users_roles ur ON u.id = ur.user_id
+             GROUP BY u.id, u.firstname, u.lastname, u.pseudo, u.email, u.bio, u.profile_picture, u.status, u.created_at`
         );
     }
 
