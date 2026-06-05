@@ -1,5 +1,5 @@
 import React from 'react';
-import { Send } from 'lucide-react'; // <--- AJOUTEZ CETTE LIGNE
+import { Send } from 'lucide-react';
 import ColorPicker from './ColorPicker';
 
 const MOCK_ARTICLES = [
@@ -49,7 +49,9 @@ const ArticlesSection = ({ backgroundColor, onColorChange, blogTitle, onPublish,
                 <p className="text-sm text-black/60 font-custom-main line-clamp-2">
                   {article.excerpt}
                 </p>
-                <div className="card-actions justify-between items-center mt-2 pt-2 border-t border-black/5">
+                
+                
+                <div className="flex justify-between items-center mt-auto pt-2">
                   <span className="text-xs text-black/40 font-custom-main">{article.date}</span>
                   <div 
                     className="badge badge-lg text-white font-medium font-custom-main px-3 py-2 rounded-lg"
@@ -67,7 +69,7 @@ const ArticlesSection = ({ backgroundColor, onColorChange, blogTitle, onPublish,
 
       {/* Section d'appel à l'action final */}
       <div className="relative z-10 flex flex-col items-center pb-20 px-6">
-        <div className="w-full max-w-md h-px bg-black/5 mb-12" /> {/* Séparateur discret */}
+        <div className="w-full max-w-md h-px bg-black/5 mb-12" /> 
         
         <button
           onClick={onPublish}
