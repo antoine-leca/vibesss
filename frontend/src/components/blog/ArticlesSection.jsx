@@ -8,9 +8,7 @@ const MOCK_ARTICLES = [
   { id: 3, title: "Troisième publication", date: "Il y a 1 semaine", excerpt: "Du contenu de qualité arrive bientôt..." },
 ];
 
-const ArticlesSection = ({ backgroundColor, onColorChange, blogTitle, onPublish }) => {
-
-
+const ArticlesSection = ({ backgroundColor, onColorChange, blogTitle, onPublish, hasBlog }) => {
   return (
     <div className="relative min-h-[500px] overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
       
@@ -75,11 +73,12 @@ const ArticlesSection = ({ backgroundColor, onColorChange, blogTitle, onPublish 
           onClick={onPublish}
           className="group relative px-12 py-5 bg-[var(--primary-color)] text-white font-bold rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95 flex items-center gap-4 overflow-hidden"
         >
-          {/* Effet de brillance au hover */}
           <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out" />
           
-          <span className="text-lg">Créer mon blog maintenant</span>
-          <Send size={22} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+          <span className="text-lg">
+            {hasBlog ? "Mettre à jour mon blog" : "Créer mon blog maintenant"}
+          </span>
+          <Send size={22} />
         </button>
       </div>
 

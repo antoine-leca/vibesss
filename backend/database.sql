@@ -204,6 +204,8 @@ INSERT INTO users_roles (user_id, role_id) VALUES
 INSERT INTO blogs (id, title, description, theme_id, user_id) VALUES
 (1, 'Le Blog Tech de Lisa', 'Mes aventures dans le monde du développement web et de React.', 3, 2),
 (2, 'Les Carnets de Thomas', 'Partage d expériences quotidiennes d un passionné de tech.', 3, 3),
+(1, 'Le Blog Tech de Lisa', 'Mes aventures dans le monde du développement web et de React.', 3, 2),
+(2, 'Les Carnets de Thomas', 'Partage d expériences quotidiennes d un passionné de tech.', 3, 3),
 (3, 'Julie Kitchen & Co', 'Mes meilleures recettes gourmandes simples à réaliser.', 1, 4),
 (4, 'Maxime Photo Portfolio', 'Focus, lumière et compositions urbaines au jour le jour.', 6, 5),
 (5, 'Emma Green Life', 'Astuces quotidiennes et partages pour un mode de vie plus vert.', 5, 6),

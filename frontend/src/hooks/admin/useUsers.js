@@ -11,6 +11,8 @@ const useUsers = () => {
             const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/users`);
             const data = await response.json();
             setUsers(data);
+            // DEBUG: log fetched users to verify admin flag presence
+            console.log("[useUsers] fetched users:", data);
         } catch (error) {
             console.error("Erreur hook:", error.message);
         } finally {
