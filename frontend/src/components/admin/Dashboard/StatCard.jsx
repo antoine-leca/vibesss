@@ -1,9 +1,13 @@
-const StatCard = ({ value, label }) => (
-  <div className="bg-[#FBF7D2] p-3 rounded-xl flex flex-col items-center justify-center text-center shadow-sm border border-black/5">
-    <span className="text-xl font-bold text-gray-800 tracking-tight">{value}</span>
-    <span className="text-[10px] font-semibold text-gray-500 uppercase tracking-tighter mt-0.5 leading-none">
-      {label}
-    </span>
+import React from "react";
+
+const StatCard = ({ value, label, icon, bg }) => (
+  <div
+    className="rounded-2xl p-4 flex flex-col items-center justify-center text-center border-2 border-white/50"
+    style={{ background: bg }}
+  >
+    {icon && <span className="text-2xl mb-1 opacity-60">{icon}</span>}
+    <span className="text-2xl font-black text-gray-800 leading-none tracking-tight">{value}</span>
+    <span className="text-[9px] font-black text-gray-500 uppercase tracking-[.12em] mt-1">{label}</span>
   </div>
 );
 
