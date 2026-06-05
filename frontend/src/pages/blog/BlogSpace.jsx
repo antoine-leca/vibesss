@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router'; 
-import { Heart, ArrowLeft, MessageCircle, ChevronLeft, ChevronRight, Flag } from 'lucide-react';
+import { ArrowLeft, ChevronLeft, ChevronRight, Flag, Heart, MessageCircle } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
+import ArticleModal from '../../components/blog/ArticleModal';
+import ReportModal from '../../components/layout/ReportModal';
 import { useBlogSpace } from '../../hooks/blog/useBlogSpace';
 import { usePagination } from '../../hooks/usePagination';
-import ArticleModal from '../../components/blog/ArticleModal';
 import { useAuth } from '../../services/AuthContext';
-import ReportModal from '../../components/layout/ReportModal';
 
-const BlogSpace = ({ isOwner }) => {
+    const BlogSpace = ({ isOwner }) => {
     const navigate = useNavigate(); 
+    const { user } = useAuth();
     const [isBlogReportOpen, setIsBlogReportOpen] = useState(false);
     const { user } = useAuth();
 
@@ -60,20 +61,16 @@ const BlogSpace = ({ isOwner }) => {
     return (
         <div className="w-full min-h-screen bg-[var(--bg-color)] px-4 sm:px-8 md:px-12 py-8 md:py-12 font-custom-main text-black flex flex-col justify-between">
             
-            <div>
-                {/* En-tête du blog */}
-                <header className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center md:items-end gap-4 pb-6 mt-12 md:mt-16">
-                    
-                    {/* BOUTON GAUCHE : Retour aux blogs */}
-                    <div className="w-full md:w-48 flex justify-center md:justify-start order-2 md:order-1 max-w-xs mx-auto md:max-w-none md:mb-1">
-                        <button 
-                            onClick={() => navigate('/create/mes-blogs')} 
-                            className="flex items-center gap-2 bg-[var(--secondary-color)] hover:bg-black text-white text-xs sm:text-sm font-bold px-5 py-2.5 rounded-full shadow-sm transition-all duration-300 ease-in-out cursor-pointer w-full md:w-auto justify-center"
-                        >
-                            <ArrowLeft size={16} />
-                            <span>Mes blogs</span>
-                        </button>
-                    </div>
+            {/* BOUTON GAUCHE : Corrigé avec /create/mes-blogs */}
+            <div className="w-full md:w-48 flex justify-center md:justify-start order-2 md:order-1 max-w-xs mx-auto md:max-w-none md:mb-1">
+                <button 
+                onClick={() => navigate(`/profile/${user?.pseudo}`)} // Retour au profil via le pseudo
+                className="flex items-center gap-2 bg-[var(--secondary-color)] hover:bg-black text-white text-xs sm:text-sm font-bold px-5 py-2.5 rounded-full shadow-sm transition-all duration-300 ease-in-out cursor-pointer w-full md:w-auto justify-center"
+                >
+                <ArrowLeft size={16} />
+                <span>Mon Profil</span>
+                </button>
+            </div>
 
                     {/* TITRE AU MILIEU */}
                     <h1 className="font-custom-title font-black text-3xl sm:text-5xl md:text-7xl text-black text-center flex-1 order-1 md:order-2 tracking-tight mt-6 md:mt-0">
