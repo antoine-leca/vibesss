@@ -47,10 +47,10 @@ const ProfileInfo = ({ user, isOwner, onProfileUpdate }) => {
         )}
       </div>
 
-      {/* Modal de modification */}
+      {/* Modal de modification perso */}
       <EditProfileModal 
         user={user} 
-        isOpen={isEditModalOpen} 
+        isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
         onUpdateSuccess={onProfileUpdate} 
       />

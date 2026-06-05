@@ -18,19 +18,15 @@ class UserManager extends AbstractManager {
         );
     }
 
-    update(user) {
+    // Méthode de mise à jour partielle (PATCH) pour firstname, lastname, bio
+    update(id, firstname, lastname, bio) {
         return this.database.query(
-            `UPDATE ${this.table} SET lastname = ?, firstname = ?, pseudo = ?, email = ?, password = ?, bio = ?, profile_picture = ?, status = ? WHERE id = ?`,
+            `UPDATE ${this.table} SET lastname = ?, firstname = ?, bio = ? WHERE id = ?`,
             [
-                user.lastname,
-                user.firstname,
-                user.pseudo,
-                user.email,
-                user.password,
-                user.bio,
-                user.profile_picture,
-                user.status,
-                user.id
+                lastname,
+                firstname,
+                bio,
+                id
             ]
         );
     }

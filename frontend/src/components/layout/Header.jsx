@@ -1,8 +1,8 @@
+import { Bell, Heart, MessageSquare, User } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useAuth } from "../../services/AuthContext";
-import BlogService from "../../services/BlogService"; 
-import { Bell, Heart, MessageSquare } from "lucide-react";
+import BlogService from "../../services/BlogService";
 
 const Header = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -118,20 +118,18 @@ const Header = () => {
                 {/* NAVIGATION PC */}
                 <nav className="hidden lg:flex items-center justify-center gap-10 flex-1">
                     <Link to="/explorer" className="text-xs font-semibold uppercase tracking-[0.15em] hover:opacity-70 transition-opacity">Explorer</Link>
-                    <Link to="/a-propos" className="text-xs font-semibold uppercase tracking-[0.15em] hover:opacity-70 transition-opacity">À propos</Link>
                     
-                    {/* Lien Profil si connecté */}
-                    {user && (
-                        <Link to={`/profile/${user.pseudo}`} className="text-xs font-semibold uppercase tracking-[0.15em] hover:opacity-70 transition-opacity text-[#E99FB4]">Mon Profil</Link>
+                    {/* Mon Blog or Créer un Blog */}
+                    {userBlogId ? (
+                        <Link to={`/blog/${userBlogId}`} className="text-xs font-semibold uppercase tracking-[0.15em] hover:opacity-70 transition-opacity">Mon Blog</Link>
+                    ) : (
+                        <button 
+                            onClick={handleCreateBlogClick} 
+                            className="text-xs font-semibold uppercase tracking-[0.15em] hover:opacity-70 transition-opacity bg-transparent border-none cursor-pointer font-sans text-black p-0"
+                        >
+                            Créer un Blog
+                        </button>
                     )}
-
-                    {/* Créer un Blog - Accessible tout le temps (intercepté) */}
-                    <button 
-                        onClick={handleCreateBlogClick} 
-                        className="text-xs font-semibold uppercase tracking-[0.15em] hover:opacity-70 transition-opacity bg-transparent border-none cursor-pointer font-sans text-black p-0"
-                    >
-                        Créer un Blog
-                    </button>
                     
                     {/* Créer un Article - Dynamique selon l'existence d'un blog */}
                     {user && userBlogId && (
@@ -190,8 +188,9 @@ const Header = () => {
                     <div className="hidden lg:flex items-center gap-4">
                         {user ? (
                             <>
-                                <Link to={`/profile/${user.pseudo}`} className="text-xs font-bold uppercase hover:opacity-70 transition-opacity">
-                                    Hello, {user.pseudo}
+                                <Link to={`/profile/${user.pseudo}`} className="flex items-center gap-2 text-xs font-bold uppercase hover:opacity-70 transition-opacity">
+                                    <User size={16} />
+                                    <span>Hello, {user.pseudo}</span>
                                 </Link>
                                 <button onClick={handleLogout} className="px-5 py-2 text-xs font-medium bg-red-100 text-red-600 rounded-full hover:bg-red-200 transition-all cursor-pointer">
                                     Déconnexion
@@ -223,20 +222,18 @@ const Header = () => {
                 <div className="lg:hidden w-full bg-white border-t border-gray-100 shadow-xl flex flex-col items-center justify-center py-10 px-6 box-border animate-fadeIn">
                     <nav className="flex flex-col items-center gap-6 w-full">
                         <Link onClick={() => setIsOpen(false)} to="/explorer" className="text-lg font-serif tracking-wide text-gray-950 hover:opacity-60 transition-opacity">Explorer</Link>
-                        <Link onClick={() => setIsOpen(false)} to="/a-propos" className="text-lg font-serif tracking-wide text-gray-950 hover:opacity-60 transition-opacity">À propos</Link>
                         
-                        {/* Mon Profil mobile */}
-                        {user && (
-                            <Link onClick={() => setIsOpen(false)} to={`/profile/${user.pseudo}`} className="text-lg font-serif tracking-wide text-[var(--primary-color)] hover:opacity-60 transition-opacity">Mon Profil</Link>
+                        {/* Mon Blog or Créer un Blog mobile */}
+                        {userBlogId ? (
+                            <Link onClick={() => setIsOpen(false)} to={`/blog/${userBlogId}`} className="text-lg font-serif tracking-wide text-gray-950 hover:opacity-60 transition-opacity">Mon Blog</Link>
+                        ) : (
+                            <button 
+                                onClick={handleCreateBlogClick} 
+                                className="text-lg font-serif tracking-wide text-gray-950 hover:opacity-60 transition-opacity bg-transparent border-none cursor-pointer p-0"
+                            >
+                                Créer un Blog
+                            </button>
                         )}
-
-                        {/* Créer un Blog mobile */}
-                        <button 
-                            onClick={handleCreateBlogClick} 
-                            className="text-lg font-serif tracking-wide text-gray-950 hover:opacity-60 transition-opacity bg-transparent border-none cursor-pointer p-0"
-                        >
-                            Créer un Blog
-                        </button>
                         
                         {/* Créer un Article mobile */}
                         {user && userBlogId && (
@@ -250,8 +247,9 @@ const Header = () => {
                                 <Link 
                                     onClick={() => setIsOpen(false)} 
                                     to={`/profile/${user.pseudo}`} 
-                                    className="text-sm font-sans font-bold uppercase tracking-widest text-black hover:opacity-70 transition-opacity"
+                                    className="flex items-center gap-2 text-sm font-sans font-bold uppercase tracking-widest text-black hover:opacity-70 transition-opacity"
                                 >
+                                    <User size={18} />
                                     {user.pseudo}
                                 </Link>
                                 <button onClick={handleLogout} className="text-sm font-sans font-medium uppercase tracking-widest text-red-500 hover:text-red-700 transition-colors cursor-pointer">

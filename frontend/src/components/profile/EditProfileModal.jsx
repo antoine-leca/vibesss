@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import UserService from "../../services/UserService";
 
 const EditProfileModal = ({ user, isOpen, onClose, onUpdateSuccess }) => {
@@ -9,16 +9,7 @@ const EditProfileModal = ({ user, isOpen, onClose, onUpdateSuccess }) => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const dialogRef = useRef(null);
-
-  // Utilisation de showModal() pour activer le backdrop DaisyUI/Natif
-  useEffect(() => {
-    if (isOpen) {
-      dialogRef.current?.showModal();
-    } else {
-      dialogRef.current?.close();
-    }
-  }, [isOpen]);
+  if (!isOpen) return null;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -36,11 +27,21 @@ const EditProfileModal = ({ user, isOpen, onClose, onUpdateSuccess }) => {
   };
 
   return (
-    <dialog ref={dialogRef} className="modal backdrop-blur-sm" onClose={onClose}>
-      <div className="modal-box bg-[#FCF8F5] rounded-[2.5rem] border-2 border-[#E99FB4] shadow-2xl p-8 max-w-md">
-        <form method="dialog">
-          <button onClick={onClose} className="btn btn-sm btn-circle btn-ghost absolute right-6 top-6 hover:bg-[#E99FB4]/10 transition-colors">✕</button>
-        </form>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      {/* Backdrop */}
+      <div 
+        className="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity" 
+        onClick={onClose}
+      />
+      
+      {/* Modal Content */}
+      <div className="bg-[#FCF8F5] rounded-[2.5rem] border-2 border-[#E99FB4] shadow-2xl p-8 max-w-md w-full relative z-10 animate-in fade-in zoom-in duration-200">
+        <button 
+          onClick={onClose} 
+          className="absolute right-6 top-6 p-2 rounded-full hover:bg-[#E99FB4]/10 transition-colors text-black font-bold cursor-pointer"
+        >
+          ✕
+        </button>
         
         <div className="text-center mb-8">
           <h3 className="font-black text-3xl font-custom-title text-black tracking-tight mb-2">
@@ -52,38 +53,38 @@ const EditProfileModal = ({ user, isOpen, onClose, onUpdateSuccess }) => {
         </div>
         
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="form-control w-full">
-            <label className="label">
-              <span className="label-text font-bold text-[10px] uppercase tracking-widest text-neutral-400 font-custom-main">Prénom</span>
+          <div className="flex flex-col w-full">
+            <label className="mb-1">
+              <span className="font-bold text-[10px] uppercase tracking-widest text-neutral-400 font-custom-main">Prénom</span>
             </label>
             <input 
               type="text" 
-              className="input input-bordered w-full rounded-2xl bg-white border-2 border-neutral-100 focus:border-[#FF649E] focus:outline-none font-custom-main transition-all" 
+              className="w-full rounded-2xl bg-white border-2 border-neutral-100 focus:border-[#FF649E] outline-none font-custom-main transition-all px-4 py-2" 
               value={formData.firstname}
               onChange={(e) => setFormData({...formData, firstname: e.target.value})}
               placeholder="Votre prénom"
             />
           </div>
 
-          <div className="form-control w-full">
-            <label className="label">
-              <span className="label-text font-bold text-[10px] uppercase tracking-widest text-neutral-400 font-custom-main">Nom</span>
+          <div className="flex flex-col w-full">
+            <label className="mb-1">
+              <span className="font-bold text-[10px] uppercase tracking-widest text-neutral-400 font-custom-main">Nom</span>
             </label>
             <input 
               type="text" 
-              className="input input-bordered w-full rounded-2xl bg-white border-2 border-neutral-100 focus:border-[#FF649E] focus:outline-none font-custom-main transition-all" 
+              className="w-full rounded-2xl bg-white border-2 border-neutral-100 focus:border-[#FF649E] outline-none font-custom-main transition-all px-4 py-2" 
               value={formData.lastname}
               onChange={(e) => setFormData({...formData, lastname: e.target.value})}
               placeholder="Votre nom"
             />
           </div>
 
-          <div className="form-control w-full">
-            <label className="label">
-              <span className="label-text font-bold text-[10px] uppercase tracking-widest text-neutral-400 font-custom-main">Bio (max 500 caractères)</span>
+          <div className="flex flex-col w-full">
+            <label className="mb-1">
+              <span className="font-bold text-[10px] uppercase tracking-widest text-neutral-400 font-custom-main">Bio (max 500 caractères)</span>
             </label>
             <textarea 
-              className="textarea textarea-bordered h-32 rounded-2xl bg-white border-2 border-neutral-100 focus:border-[#FF649E] focus:outline-none font-custom-main transition-all leading-relaxed resize-none" 
+              className="h-32 rounded-2xl bg-white border-2 border-neutral-100 focus:border-[#FF649E] outline-none font-custom-main transition-all px-4 py-2 leading-relaxed resize-none" 
               value={formData.bio}
               onChange={(e) => setFormData({...formData, bio: e.target.value})}
               placeholder="Racontez-nous quelque chose sur vous..."
@@ -91,14 +92,18 @@ const EditProfileModal = ({ user, isOpen, onClose, onUpdateSuccess }) => {
             ></textarea>
           </div>
 
-          <div className="modal-action pt-4">
-            <button type="submit" disabled={isSubmitting} className="btn flex-1 bg-[#FF649E] hover:bg-[#E99FB4] text-white border-none rounded-full h-12 shadow-md shadow-[#FF649E]/20 transition-all font-bold uppercase tracking-widest text-xs cursor-pointer">
+          <div className="pt-4">
+            <button 
+              type="submit" 
+              disabled={isSubmitting} 
+              className="w-full bg-[#FF649E] hover:bg-[#E99FB4] text-white border-none rounded-full h-12 shadow-md shadow-[#FF649E]/20 transition-all font-bold uppercase tracking-widest text-xs cursor-pointer disabled:opacity-50"
+            >
               {isSubmitting ? "Enregistrement..." : "Sauvegarder les modifications"}
             </button>
           </div>
         </form>
       </div>
-    </dialog>
+    </div>
   );
 };
 

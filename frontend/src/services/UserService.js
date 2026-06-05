@@ -29,7 +29,8 @@ const UserService = {
     update: async (id, userData) => {
         try {
             const response = await fetch(`${API_URL}/users/${id}`, {
-                method: "PUT",
+                method: "PATCH",
+                credentials: "include",
                 headers: {
                     "Content-Type": "application/json",
                 },

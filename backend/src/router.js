@@ -80,7 +80,7 @@ router.use(verifyToken);
 router.use(verifyToken); // Toutes les routes ci-dessous nécessitent un token
 
 // Users Actions
-router.put("/users/:id", userController.edit);
+router.patch("/users/:id", userController.edit);
 router.post("/users/email", userController.getUserByEmail);
 router.post("/users/pseudo", userController.getUserByPseudo);
 router.delete("/users/:id", userController.destroy);
