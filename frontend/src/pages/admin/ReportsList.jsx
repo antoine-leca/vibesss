@@ -11,35 +11,23 @@ const sortReportsByDate = (a, b) => {
 
 const ReportsList = () => {
   const { reports, isLoading, updateStatus, deleteReport, refresh } = useReports();
+  
   const sortedReports = useMemo(() => [...reports].sort(sortReportsByDate), [reports]);
-
-  // On applique la même logique de pagination que pour les membres
   const { currentItems, ...pagination } = usePagination(sortedReports, 10);
 
   return (
     <div className="max-w-4xl mx-auto space-y-3">
+      {/* Header */}
       <div className="flex justify-between items-end px-1">
         <div>
-          <h2 
-            className="text-[10px] font-black text-gray-700/40 uppercase tracking-[0.3em]"
-            style={{ fontFamily: "var(--main-font)" }}
-          >
-            Administration
-          </h2>
-          <h1 
-            className="text-2xl font-black text-gray-800 uppercase tracking-tighter"
-            style={{ fontFamily: "var(--main-font)" }}
-          >
-            Signalements
-          </h1>
+          <h2 className="text-[10px] font-black text-gray-700/40 uppercase tracking-[0.3em]">Administration</h2>
+          <h1 className="text-2xl font-black text-gray-800 uppercase tracking-tighter">Signalements</h1>
         </div>
 
         <div className="text-right">
           <button 
             onClick={refresh}
-            disabled={isLoading}
-            className="text-[10px] font-black uppercase text-gray-400 hover:text-gray-700 transition-colors tracking-widest"
-            style={{ fontFamily: "var(--main-font)" }}
+            className="text-[10px] font-black uppercase text-gray-400 hover:text-gray-700 tracking-widest"
           >
             {isLoading ? "..." : "Actualiser"}
           </button>
@@ -49,7 +37,7 @@ const ReportsList = () => {
         </div>
       </div>
 
-      {/* Table Container - style cohérent avec UsersList */}
+      {/* Table Container */}
       <div className="bg-white/55 backdrop-blur-md rounded-2xl border-2 border-white/70 overflow-hidden shadow-lg">
         <ReportTable 
           reports={currentItems}

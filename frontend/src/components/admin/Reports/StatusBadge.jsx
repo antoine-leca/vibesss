@@ -14,27 +14,32 @@ const StatusBadge = ({ status, onClick }) => {
       color: "#991b1b",
       borderColor: "#fecaca",
     },
+    pending: {
+      backgroundColor: "#fef9c3",
+      color: "#854d0e",
+      borderColor: "#fef08a",
+    },
   };
 
   const labelMap = {
     resolved: "Traité",
     rejected: "Rejeté",
+    pending: "En attente",
   };
 
-  const label = labelMap[status] || "En attente";
+  const currentStatus = status || "pending";
 
   return (
     <button
       onClick={onClick}
       style={{
-        fontFamily: "var(--main-font)",
-        backgroundColor: styleMap[status]?.backgroundColor,
-        color: styleMap[status]?.color,
-        borderColor: styleMap[status]?.borderColor,
+        backgroundColor: styleMap[currentStatus]?.backgroundColor,
+        color: styleMap[currentStatus]?.color,
+        borderColor: styleMap[currentStatus]?.borderColor,
       }}
       className="px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all active:scale-95 border-2"
     >
-      {label}
+      {labelMap[currentStatus]}
     </button>
   );
 };
