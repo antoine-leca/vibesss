@@ -64,14 +64,20 @@ const BlogSpace = ({ isOwner }) => {
                 {/* En-tête du blog */}
                 <header className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center md:items-end gap-4 pb-6 mt-12 md:mt-16">
                     
-                    {/* BOUTON GAUCHE : Retour aux blogs */}
+                    {/* BOUTON GAUCHE : Intelligent et dynamique */}
                     <div className="w-full md:w-48 flex justify-center md:justify-start order-2 md:order-1 max-w-xs mx-auto md:max-w-none md:mb-1">
                         <button 
-                            onClick={() => navigate('/create/mes-blogs')} 
+                            onClick={() => {
+                                if (isOwner && user) {
+                                    navigate(`/profile/${user.pseudo}`);
+                                } else {
+                                    navigate('/explorer');
+                                }
+                            }} 
                             className="flex items-center gap-2 bg-[var(--secondary-color)] hover:bg-black text-white text-xs sm:text-sm font-bold px-5 py-2.5 rounded-full shadow-sm transition-all duration-300 ease-in-out cursor-pointer w-full md:w-auto justify-center"
                         >
                             <ArrowLeft size={16} />
-                            <span>Mes blogs</span>
+                            <span>{isOwner ? "Mon Profil" : "Explorer"}</span>
                         </button>
                     </div>
 
