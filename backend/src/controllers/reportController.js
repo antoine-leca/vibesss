@@ -16,8 +16,23 @@ const add = async (req, res) => {
   try {
     const { report_reason, description, user_id, article_id, blog_id, comment_id } = req.body;
 
-    const [result] = await models.report.insert({ report_reason, description });
-    const report_id = result.insertId
+    // Dictionnaire pour traduire les motifs du Front (FR) vers l'ENUM de la BDD (EN)
+const reasonMapping = {
+  "Harcèlement": "bully",
+  "Spam / Publicité": "spam",
+  "Spam": "spam",
+  "Contenu inapproprié": "inappropriate",
+  "Droits d'auteur": "copyright",
+  "Plagiat": "copyright",
+  "Autre": "inappropriate" 
+};
+
+    // On récupère la valeur traduite, ou on garde celle d'origine par sécurité
+    const cleanReason = reasonMapping[report_reason] || report_reason;
+
+    // On insère le rapport avec le motif nettoyé pour l'ENUM
+    const [result] = await models.report.insert({ report_reason: cleanReason, description });
+    const report_id = result.insertId;
 
     await models.userReport.insert({
       user_id,
@@ -34,6 +49,7 @@ const add = async (req, res) => {
     res.sendStatus(500);
   }
 };
+
 const edit = async (req, res) => {
   try {
     const { status } = req.body;
