@@ -17,6 +17,10 @@ DROP TABLE IF EXISTS users;
 
 SET FOREIGN_KEY_CHECKS=1;
 
+-- =====================================================================
+-- CRÉATION DES TABLES
+-- =====================================================================
+
 CREATE TABLE users (
   id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   lastname VARCHAR(150) NULL,
@@ -144,29 +148,28 @@ CREATE TABLE users_reports (
   FOREIGN KEY (report_id) REFERENCES reports(id) ON DELETE CASCADE
 );
 
-
+-- =====================================================================
+-- ÉVOLUTION DE LA STRUCTURE (ALTER)
+-- =====================================================================
 ALTER TABLE blogs 
 ADD COLUMN banniere LONGTEXT NULL AFTER theme_id,
 ADD COLUMN couleurs LONGTEXT NULL AFTER banniere;
 
-
-INSERT INTO themes (label, color_name, font_name, bg_image) VALUES 
-('Cuisine', 'orange', 'Playfair Display', 'https://images.unsplash.com/photo-1466637574441-749b8f19452f?w=800&q=80'),
-('Animaux', 'brown', 'Arial', 'https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?w=800&q=80'),
-('Lifestyle', 'pastel-pink', 'Montserrat', 'https://images.unsplash.com/photo-1503220317375-aaad61436b1b?w=800&q=80'),
-('Sport', 'red', 'Impact', 'https://images.unsplash.com/photo-1517649763962-0c623066013b?w=800&q=80'),
-('Nature', 'green', 'Helvetica', 'https://images.unsplash.com/photo-1472214222541-d510753a4907?w=800&q=80'),
-('Voyage', 'blue', 'Roboto', 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&q=80');
-
-
-
--- Seed initial data
+-- =====================================================================
+-- INSERTS : SEED DATA INITIALE
+-- =====================================================================
 INSERT INTO roles (id, label) VALUES (1, 'user'), (2, 'admin');
 
-
+INSERT INTO themes (id, label, color_name, font_name, bg_image) VALUES 
+(1, 'Cuisine', 'orange', 'Playfair Display', 'https://images.unsplash.com/photo-1466637574441-749b8f19452f?w=800&q=80'),
+(2, 'Animaux', 'brown', 'Arial', 'https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?w=800&q=80'),
+(3, 'Lifestyle', 'pastel-pink', 'Montserrat', 'https://images.unsplash.com/photo-1503220317375-aaad61436b1b?w=800&q=80'),
+(4, 'Sport', 'red', 'Impact', 'https://images.unsplash.com/photo-1517649763962-0c623066013b?w=800&q=80'),
+(5, 'Nature', 'green', 'Helvetica', 'https://images.unsplash.com/photo-1472214222541-d510753a4907?w=800&q=80'),
+(6, 'Voyage', 'blue', 'Roboto', 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&q=80');
 
 -- =====================================================================
--- 1. INSÉRTION DES 17 UTILISATEURS (1 Admin [id: 1] + 16 Users [id: 2 à 17])
+-- 1. INSÉRTION DES 17 UTILISATEURS
 -- =====================================================================
 INSERT INTO users (id, firstname, lastname, pseudo, email, password, bio, profile_picture, status) VALUES
 (1, 'Véronique', 'Admin', 'veronique_admin', 'admin@vibesss.com', '$2b$10$FakeHashForPassword123', 'Administratrice de la plateforme Vibesss.', 'https://i.pravatar.cc/150?img=32', 'active'),
@@ -187,18 +190,16 @@ INSERT INTO users (id, firstname, lastname, pseudo, email, password, bio, profil
 (16, 'Manon', 'Brunet', 'manon_b', 'manon@vibesss.com', '$2b$10$FakeHashForPassword123', 'Mindset positif et méditation.', 'https://i.pravatar.cc/150?img=26', 'active'),
 (17, 'Léo', 'Simon', 'leo_s', 'leo@vibesss.com', '$2b$10$FakeHashForPassword123', 'Vivre mieux avec moins d objets.', 'https://i.pravatar.cc/150?img=60', 'active');
 
-
 -- =====================================================================
--- 2. ASSOCIATIONS ROLES (User 1 = Admin / Users 2 à 17 = User)
+-- 2. ASSOCIATIONS ROLES
 -- =====================================================================
 INSERT INTO users_roles (user_id, role_id) VALUES
-(1, 2), -- Admin
+(1, 2),
 (2, 1), (3, 1), (4, 1), (5, 1), (6, 1), (7, 1), (8, 1), (9, 1),
 (10, 1), (11, 1), (12, 1), (13, 1), (14, 1), (15, 1), (16, 1), (17, 1);
 
-
 -- =====================================================================
--- 3. INSÉRTION DES 16 BLOGS (Un par utilisateur standard, liés à différents thèmes)
+-- 3. INSÉRTION DES 16 BLOGS
 -- =====================================================================
 INSERT INTO blogs (id, title, description, theme_id, user_id) VALUES
 (1, 'Le Blog Tech de Lisa', 'Mes aventures dans le monde du développement web et de React.', 3, 2),
@@ -218,12 +219,11 @@ INSERT INTO blogs (id, title, description, theme_id, user_id) VALUES
 (15, 'Manon Mindset', 'Prendre soin de son esprit avec la gestion du stress quotidienne.', 5, 16),
 (16, 'Léo Minimalisme', 'Guide d introduction pratique pour désencombrer sa vie.', 5, 17);
 
-
 -- =====================================================================
--- 4. INSÉRTION DES ARTICLES (1 par blog, écrit par le propriétaire du blog)
+-- 4. INSÉRTION DES ARTICLES
 -- =====================================================================
 INSERT INTO articles (id, title, content_text, content_image, status, blog_id, user_id) VALUES
-(1, 'Débuter avec React en 2026', 'React continue d évoluer. Aujourd hui nous allons voir comment bien structurer ses contextes globaux pour les hooks personnalisés...', 'react.jpg', 'published', 1, 2),
+(1, 'Débuter avec React en 2026', 'React continue d evoluer. Aujourd hui nous allons voir comment bien structurer ses contextes globaux pour les hooks personnalisés...', 'react.jpg', 'published', 1, 2),
 (2, 'Ma routine matinale productive', 'Se lever tôt ne suffit pas, il faut un plan clair. Voici les 3 habitudes que j ai mises en place pour attaquer ma journée...', 'morning.jpg', 'published', 2, 3),
 (3, 'Recette secrète du fondant au chocolat', 'Le secret réside uniquement dans la qualité du chocolat et le temps de cuisson précis à la minute près. Suivez le guide...', 'choc.jpg', 'published', 3, 4),
 (4, 'Capturer la lumière en ville', 'La photographie urbaine demande de la patience, surtout pendant l heure bleue où les contrastes deviennent magiques...', 'photo.jpg', 'published', 4, 5),
@@ -240,47 +240,41 @@ INSERT INTO articles (id, title, content_text, content_image, status, blog_id, u
 (15, 'Méditation et gestion du stress', 'Prendre seulement cinq minutes par jour pour se concentrer sur sa respiration peut radicalement faire baisser l anxiété...', 'zen.jpg', 'published', 15, 16),
 (16, 'Vivre avec moins d objets', 'Le minimalisme n est pas un manque, c est au contraire redonner de la valeur à ce que l on possède vraiment...', 'minimal.jpg', 'published', 16, 17);
 
-
 -- =====================================================================
--- 5. INSÉRTION DES COMMENTAIRES (1 par article, rédigé par un user distinct)
+-- 5. INSÉRTION DES COMMENTAIRES
 -- =====================================================================
 INSERT INTO comments (id, content, moderation_status, article_id, user_id) VALUES
-(1, 'Super article, l explication sur les hooks est super claire !', 'approved', 1, 3),        -- Thomas commente Lisa
-(2, 'Je vais tester cette routine dès demain matin, merci !', 'approved', 2, 4),     -- Julie commente Thomas
-(3, 'Un délice ! Testé et approuvé par toute la famille.', 'approved', 3, 5),     -- Maxime commente Julie
-(4, 'La composition de ta troisième photo est vraiment incroyable.', 'approved', 4, 6), -- Emma commente Maxime
-(5, 'Pas facile de s y mettre au début mais les étapes aident bien.', 'approved', 5, 7),   -- Lucas commente Emma
-(6, 'Le prix de vente reste quand même un sacré frein à l achat.', 'approved', 6, 8),     -- Chloé commente Lucas
-(7, 'J adore totalement les associations de couleurs proposées.', 'approved', 7, 9),      -- Nathan commente Chloé
-(8, 'Totalement d accord avec ton numéro 2 de la liste !', 'approved', 8, 10),    -- Inès commente Nathan
-(9, 'Les photos donnent tellement envie d y aller !', 'approved', 9, 11),         -- Hugo commente Inès
-(10, 'Merci pour les précieux conseils sur la récupération active.', 'approved', 10, 12),  -- Sarah commente Hugo
-(11, 'Ce thriller est déjà commandé et placé dans ma liste d attente !', 'approved', 11, 13),-- Enzo commente Sarah
-(12, 'Docker change vraiment la vie une fois mis en production.', 'approved', 12, 14),   -- Camille commente Enzo
-(13, 'Tes styles et choix de couleurs m inspirent énormément.', 'approved', 13, 15),     -- Arthur commente Camille
-(14, 'Je bloque sur le boss du chapitre 3, il est beaucoup trop dur !', 'approved', 14, 16), -- Manon commente Arthur
-(15, 'Un sujet essentiel traité avec beaucoup de douceur, merci.', 'approved', 15, 17),  -- Léo commente Manon
-(16, 'Contenu très inspirant, hâte de lire ton prochain billet !', 'approved', 16, 1);    -- L Admin commente Léo
-
+(1, 'Super article, l explication sur les hooks est super claire !', 'approved', 1, 3),
+(2, 'Je vais tester cette routine dès demain matin, merci !', 'approved', 2, 4),
+(3, 'Un délice ! Testé et approuvé par toute la famille.', 'approved', 3, 5),
+(4, 'La composition de ta troisième photo est vraiment incroyable.', 'approved', 4, 6),
+(5, 'Pas facile de s y mettre au début mais les étapes aident bien.', 'approved', 5, 7),
+(6, 'Le prix de vente reste quand même un sacré frein à l achat.', 'approved', 6, 8),
+(7, 'J adore totalement les associations de couleurs proposées.', 'approved', 7, 9),
+(8, 'Totalement d accord avec ton numéro 2 de la liste !', 'approved', 8, 10),
+(9, 'Les photos donnent tellement envie d y aller !', 'approved', 9, 11),
+(10, 'Merci pour les précieux conseils sur la récupération active.', 'approved', 10, 12),
+(11, 'Ce thriller est déjà commandé et placé dans ma liste d attente !', 'approved', 11, 13),
+(12, 'Docker change vraiment la vie une fois mis en production.', 'approved', 12, 14),
+(13, 'Tes styles et choix de couleurs m inspirent énormément.', 'approved', 13, 15),
+(14, 'Je bloque sur le boss du chapitre 3, il est beaucoup trop dur !', 'approved', 14, 16),
+(15, 'Un sujet essentiel traité avec beaucoup de douceur, merci.', 'approved', 15, 17),
+(16, 'Contenu très inspirant, hâte de lire ton prochain billet !', 'approved', 16, 1);
 
 -- =====================================================================
--- 6. INSÉRTION DES 5 SIGNALEMENTS (2 Blogs, 1 Article, 2 Commentaires)
+-- 6. INSÉRTION DES SIGNALEMENTS (ENUMs stricts en minuscules)
 -- =====================================================================
--- Étape A : On crée les 5 fiches de signalements globales
 INSERT INTO reports (id, report_reason, description, status) VALUES
-(1, 'SPAM', 'Ce blog ne contient que des liens vers des sites malveillants de contrefaçons.', 'active'),
-(2, 'CONTENU INAPPROPRIÉ', 'La bannière de ce blog présente du contenu graphique non modéré.', 'active'),
-(3, 'COPYRIGHT', 'Cet article est un copier-coller intégral d un papier universitaire protégé.', 'active'),
-(4, 'INTIMIDATION', 'Propos injurieux proférés à l encontre de l auteur dans l espace commentaire.', 'active'),
-(5, 'SPAM', 'Publicité intempestive glissée au milieu du message.', 'active');
+(1, 'spam', 'Ce blog ne contient que des liens vers des sites malveillants de contrefaçons.', 'active'),
+(2, 'inappropriate', 'La bannière de ce blog presents du contenu graphique non modéré.', 'active'),
+(3, 'copyright', 'Cet article est un copier-coller intégral d un papier universitaire protégé.', 'active'),
+(4, 'bully', 'Propos injurieux proférés à l encontre de l auteur dans l espace commentaire.', 'active'),
+(5, 'spam', 'Publicité intempestive glissée au milieu du message.', 'active');
 
-
-
--- Étape B : On fait les liaisons dans la table Pivot "users_reports"
--- (Chaque report est lié à l utilisateur qui signale, et à l entité ciblée)
+-- Liaisons Pivot
 INSERT INTO users_reports (user_id, blog_id, article_id, comment_id, report_id) VALUES
-(10, 1,    NULL, NULL, 1), -- Inès (User 10) signale le Blog de Lisa (Blog 1)
-(11, 2,    NULL, NULL, 2), -- Hugo (User 11) signale le Blog de Thomas (Blog 2)
-(12, NULL, 3,    NULL, 3), -- Sarah (User 12) signale l Article de Julie (Article 3)
-(13, NULL, NULL, 1,    4), -- Enzo (User 13) signale le Commentaire de Thomas (Commentaire 1)
-(14, NULL, NULL, 2,    5); -- Camille (User 14) signale le Commentaire de Julie (Commentaire 2)
+(10, 1,    NULL, NULL, 1),
+(11, 2,    NULL, NULL, 2),
+(12, NULL, 3,    NULL, 3),
+(13, NULL, NULL, 1,    4),
+(14, NULL, NULL, 2,    5);
