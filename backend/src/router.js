@@ -77,8 +77,10 @@ router.use(verifyToken);
 // ------------- ROUTES PROTÉGÉES (CONNEXION OBLIGATOIRE) -------------
 // =========================================================================
 
-// Users Actions (Modifications)
-router.put("/users/:id", hashPassword, userController.edit);
+router.use(verifyToken); // Toutes les routes ci-dessous nécessitent un token
+
+// Users Actions
+router.put("/users/:id", userController.edit);
 router.post("/users/email", userController.getUserByEmail);
 router.post("/users/pseudo", userController.getUserByPseudo);
 router.delete("/users/:id", userController.destroy);
