@@ -75,6 +75,10 @@ export default function CommentSection({ articleId }) {
     setComments((prev) => [mapped, ...prev]);
   };
 
+  const removeCommentFromState = (deletedCommentId) => {
+    setComments(previousComments => previousComments.filter(comment => comment.id !== deletedCommentId));
+  };
+
   return (
     <div className="max-w-3xl mx-auto px-4 py-8 font-sans bg-white min-h-screen">
       {/* Compteur de commentaires */}
@@ -109,10 +113,18 @@ export default function CommentSection({ articleId }) {
           ) : (
             comments.map((comment) => (
               <div key={comment.id} className="space-y-4">
-                <CommentCard comment={comment} />
+                <CommentCard 
+                  comment={comment} 
+                  onDeleteSuccess={removeCommentFromState} 
+                />
                 
                 {comment.replies && comment.replies.map((reply) => (
-                  <CommentCard key={reply.id} comment={reply} isReply={true} />
+                  <CommentCard 
+                    key={reply.id} 
+                    comment={reply} 
+                    isReply={true} 
+                    onDeleteSuccess={removeCommentFromState} 
+                  />
                 ))}
               </div>
             ))
