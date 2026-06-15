@@ -25,6 +25,9 @@ class ReportManager extends AbstractManager {
             `SELECT 
                 r.id, r.report_reason, r.description, r.status, r.report_date,
                 u.firstname as reporter_name,
+                ur.article_id, ur.comment_id,
+                -- On prend le blog_id du signalement OU celui de l'article s'il existe
+                COALESCE(ur.blog_id, a.blog_id) as blog_id, 
                 a.title as article_title,
                 b.title as blog_title,
                 c.content as comment_text
@@ -32,7 +35,7 @@ class ReportManager extends AbstractManager {
             INNER JOIN users_reports ur ON r.id = ur.report_id
             INNER JOIN users u ON ur.user_id = u.id
             LEFT JOIN articles a ON ur.article_id = a.id
-            LEFT JOIN blogs b ON ur.blog_id = b.id
+            LEFT JOIN blogs b ON ur.blog_id = b.id -- Ici b est lié à ur.blog_id
             LEFT JOIN comments c ON ur.comment_id = c.id
             ORDER BY r.report_date DESC`
         );

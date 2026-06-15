@@ -1,18 +1,32 @@
-import { Trash2 } from 'lucide-react';
+import { Trash2, ExternalLink } from 'lucide-react';
+import { useNavigate } from 'react-router';
 import StatusBadge from "./StatusBadge";
 
-/**
- * ReportRow : Gère l'affichage d'une seule ligne du tableau.
- * On utilise les variables du root.css pour le style.
- */
 const ReportRow = ({ report, onStatusChange, onDelete }) => {
-  const dateStr = new Date(report.report_date).toLocaleDateString('fr-FR', { year: 'numeric', month: 'short', day: 'numeric' });
+  const navigate = useNavigate();
+  
+  
+  const handleViewContent = () => {
+   
+    if (report.article_id && report.blog_id) {
+      navigate(`/blogs/${report.blog_id}`); 
+    } 
+    // Si c'est un blog
+    else if (report.blog_id) {
+      navigate(`/blogs/${report.blog_id}`);
+    } 
+    // Cas de secours pour éviter le "null"
+    else {
+      alert("Détails du contenu non disponibles pour ce type de signalement.");
+    }
+  };
 
   return (
-    <tr className="border-b border-white/20 hover:bg-white/10 transition-colors text-gray-800">
-      {/* Date du signalement */}
+    <tr className="border-b border-white/20 hover:bg-white/10 transition-colors">
+       {/* Date du signalement */}
       <td className="py-2.5 px-4 text-[10px] font-black text-gray-600" style={{ fontFamily: "var(--main-font)" }}>
-        {dateStr}
+        {/* CORRECTION 1 : Ajout de l'accolade fermante } */}
+        {new Date(report.report_date).toLocaleDateString('fr-FR', { year: 'numeric', month: 'short', day: 'numeric' })}
       </td>
 
       {/* Qui a fait le signalement */}
@@ -22,17 +36,27 @@ const ReportRow = ({ report, onStatusChange, onDelete }) => {
 
       {/* Le contenu visé (ex: Article "Titre...") */}
       <td className="py-2.5 px-4">
-        <div className="flex flex-col">
-          <span 
-            className="text-[10px] uppercase text-gray-700 font-black tracking-widest w-fit px-2 py-0.5 rounded shadow-sm"
-            style={{ backgroundColor: "var(--secondary-color)" }}
+        <div className="flex items-center gap-2">
+          <div className="flex flex-col flex-1">
+            <span className="text-[10px] uppercase text-gray-700 font-black tracking-widest w-fit px-2 py-0.5 rounded shadow-sm"
+              style={{ backgroundColor: "var(--secondary-color)" }}
+            >
+              {report.article_id ? "Article" : report.blog_id ? "Blog" : "Commentaire"}
+            </span>
+            <span className="text-[11px] truncate max-w-[120px] italic opacity-90 font-bold text-gray-800 mt-1" style={{ fontFamily: "var(--main-font-italic)" }}>
+              "{report.article_title || report.blog_title || report.comment_text}"
+            </span>
+          </div>
+          
+          {/* Bouton pour aller voir le contenu */}
+          <button 
+            onClick={handleViewContent}
+            className="p-1 hover:bg-white/20 rounded text-blue-500"
+            title="Voir le contenu"
           >
-            {report.article_id ? "Article" : report.blog_id ? "Blog" : "Commentaire"}
-          </span>
-          <span className="text-[11px] truncate max-w-[150px] italic opacity-90 font-bold text-gray-800 mt-1" style={{ fontFamily: "var(--main-font-italic)" }}>
-            "{report.article_title || report.blog_title || report.comment_text}"
-          </span>
-        </div>
+            <ExternalLink size={14} />
+          </button>
+        </div> {/* CORRECTION 2 : Ajout de la fermeture de la div flex-items-center */}
       </td>
 
       {/* Le motif du signalement */}
@@ -57,9 +81,8 @@ const ReportRow = ({ report, onStatusChange, onDelete }) => {
 
       {/* Bouton de suppression de l'alerte */}
       <td className="py-2.5 px-7 text-right">
-        <button 
-          onClick={() => onDelete(report.id)}
-          className="p-1.5 hover:bg-red-500/20 rounded-lg transition-all text-red-600 opacity-70 hover:opacity-100 disabled:opacity-30"
+         {/* Suppression du signalement */}
+         <button onClick={() => onDelete(report.id)} className="p-1.5 hover:bg-red-500/20 rounded-lg transition-all text-red-600 opacity-70 hover:opacity-100 disabled:opacity-30"
           title="Supprimer"
         >
           <Trash2 size={14} />
