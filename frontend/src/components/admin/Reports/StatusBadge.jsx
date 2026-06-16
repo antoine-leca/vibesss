@@ -1,30 +1,21 @@
-/**
- * Composant atomique : StatusBadge
- * Gère uniquement l'affichage coloré du statut d'un signalement.
- */
+
 const StatusBadge = ({ status, onClick }) => {
   const styleMap = {
-    resolved: {
-      backgroundColor: "#dcfce7",
-      color: "#166534",
-      borderColor: "#86efac",
+    active: { // Traité
+      backgroundColor: "#dcfce7", color: "#166534", borderColor: "#86efac"
     },
-    rejected: {
-      backgroundColor: "#fee2e2",
-      color: "#991b1b",
-      borderColor: "#fecaca",
+    inactive: { // Rejeté
+      backgroundColor: "#fee2e2", color: "#991b1b", borderColor: "#fecaca"
     },
-    pending: {
-      backgroundColor: "#fef9c3",
-      color: "#854d0e",
-      borderColor: "#fef08a",
-    },
+    pending: { // En attente
+      backgroundColor: "#fef9c3", color: "#854d0e", borderColor: "#fef08a"
+    }
   };
 
   const labelMap = {
-    resolved: "Traité",
-    rejected: "Rejeté",
-    pending: "En attente",
+    active: "Traité",
+    inactive: "Rejeté",
+    pending: "En attente"
   };
 
   const currentStatus = status || "pending";

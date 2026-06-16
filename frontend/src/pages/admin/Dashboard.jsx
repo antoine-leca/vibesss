@@ -13,10 +13,10 @@ export default function Dashboard() {
 
       {/* Stats grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mx-auto">
-        <StatCard value={stats.users}    label="Utilisateurs" bg="#d7f8e2" icon="👤" />
-        <StatCard value={stats.blogs}    label="Blogs"        bg="#ddd6f7" icon="✍️" />
-        <StatCard value={stats.articles} label="Articles"     bg="#fde8d6" icon="📄" />
-        <StatCard value={stats.reports}  label="Signalements" bg="#f8d7e3" icon="🚩" />
+        <StatCard value={stats.users}    label="Utilisateurs" bg="#d7f8e2" />
+        <StatCard value={stats.blogs}    label="Blogs"        bg="#ddd6f7" />
+        <StatCard value={stats.articles} label="Articles"     bg="#fde8d6" />
+        <StatCard value={stats.reports}  label="Signalements" bg="#f8d7e3" />
       </div>
 
       {/* Activity panel */}
