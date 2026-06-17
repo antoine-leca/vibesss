@@ -7,48 +7,56 @@ Vibesss est une plateforme de blogging moderne conçue pour offrir une expérien
 ##  Installation Rapide
 
 ### 1. Cloner et Installer
-bash
+```bash
 git clone <votre_url_de_repo>
 cd vibesss
 npm install
-
 2. Base de Données
-Créez un fichier .env dans le dossier backend et lancez la migration : npm run migrate 
+Créez un fichier .env dans le dossier backend et lancez la migration :
+
+Bash
+npm run migrate
 
 Stack Technique
-
 Frontend
-
 React 19 & Vite : Performance et rapidité.
+
 Tailwind CSS & DaisyUI : Interface moderne et responsive.
+
 Tiptap : Éditeur de texte riche (Rich Text Editor).
+
 Lucide React : Icônes élégantes.
 
 Backend
-
 Node.js & Express 5 : API robuste.
+
 MySQL : Gestion des données structurées.
+
 Argon2 & JWT : Sécurité et authentification renforcée.
+
 Sanitize-HTML : Protection contre les failles XSS.
 
- Fonctionnalités Clés
-
- Édition Avancée
-
+Fonctionnalités Clés
+Édition Avancée
 Création d'articles avec mise en forme riche (gras, images, etc.).
+
 Compteur de caractères intégré à l'éditeur.
 
- Modération Super-Admin
-
+Modération Super-Admin
 Actions Directes : Suppression d'articles, blogs et commentaires directement depuis la vue publique pour les admins.
+
 Dashboard de Reporting : Gestion centralisée des signalements de la communauté.
 
-💬 Interaction Sociale
+Interaction Sociale
 Système de commentaires avec réponses.
+
 Likes dynamiques sur les articles.
+
 Signalement de contenu (Spam, Harcèlement, etc.).
 
+Structure du Projet
 
+Plaintext
 vibesss/
 ├── backend/                # API Express & Base de données
 │   ├── src/
@@ -63,7 +71,6 @@ vibesss/
 │   │   └── pages/          # Home, BlogSpace, Profile
 └── docker-compose.yml      # Orchestration Docker
 
+🤝 Équipe
 
-Équipe
-
-Projet réalizé par la TeamBossLady
+Projet réalisé par la TeamBossLady
