@@ -41,11 +41,14 @@ const AuthForm = () => {
                 });
                 
                 if (response.ok) {
-                    console.log("Inscription réussie !");
                     navigate("/auth/login");
                 } else {
-                    const data = await response.json();
-                    setError(data.message || "Erreur lors de l'inscription");
+                    let message = "Erreur lors de l'inscription";
+                    try {
+                        const data = await response.json();
+                        message = data.message || message;
+                    } catch { /* réponse non-JSON */ }
+                    setError(message);
                 }
             } else {
                 const response = await AuthService.login({

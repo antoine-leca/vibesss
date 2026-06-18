@@ -1,8 +1,10 @@
     import React, { useState, useEffect, useRef } from 'react';
     import { Link } from 'react-router';
     import { Home, User, Menu, X, Undo2, Redo2, Save, Send, LogOut } from 'lucide-react';
+    import { useAuth } from '../../services/AuthContext';
 
     export default function EditorHeader({ editor, onPublish, onSaveDraft, onNavigate }) {
+    const { user } = useAuth();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const menuRef = useRef(null);
 
@@ -23,14 +25,14 @@
         <div className="flex items-center gap-3 sm:gap-4">
             <Link to="/" className="text-white cursor-pointer hover:text-[#E76F85] transition-colors"><Home size={18} /></Link>
             <span className="font-serif text-lg sm:text-xl font-bold tracking-wide">Vibesss</span>
-            <div className="flex items-center gap-3 sm:gap-4 ml-1 sm:ml-4 border-l border-white/20 pl-3 sm:pl-4">
+            <div className="flex items-center gap-3 sm:gap-4 ml-1 sm:ml-4 pl-3 sm:pl-4">
             <button type="button" onClick={() => editor.chain().focus().undo().run()} disabled={!editor.can().undo()} className="text-white disabled:opacity-20 cursor-pointer"><Undo2 size={16} strokeWidth={2.5} /></button>
             <button type="button" onClick={() => editor.chain().focus().redo().run()} disabled={!editor.can().redo()} className="text-white disabled:opacity-20 cursor-pointer"><Redo2 size={16} strokeWidth={2.5} /></button>
             </div>
         </div>
 
         <div className="flex items-center gap-4 relative">
-            <button type="button" className="text-white cursor-pointer hover:text-[#E76F85]"><User size={18} /></button>
+            <Link to={`/profile/${user?.pseudo}`} className="text-white cursor-pointer hover:text-[#E76F85]"><User size={18} /></Link>
             <button type="button" onClick={() => setIsMenuOpen(!isMenuOpen)} className={`cursor-pointer transition-colors ${isMenuOpen ? 'text-[#E76F85]' : 'text-white'}`}>
             {isMenuOpen ? <X size={22} /> : <Menu size={22} />}
             </button>

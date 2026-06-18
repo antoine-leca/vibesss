@@ -60,7 +60,21 @@ const getUserByPseudo = async (req, res, next) => {
     }
   } catch (err) {
     console.error(err);
-    res.status(500).send("Error retrieving data from database");
+    res.status(500).json({ message: "Erreur serveur" });
+  }
+};
+
+const checkEmailAvailability = async (req, res, next) => {
+  const { email } = req.body;
+  try {
+    const [users] = await models.user.findUserByEmail(email);
+    if (users[0] != null) {
+      return res.status(409).json({ message: "Cette adresse email est déjà utilisée" });
+    }
+    next();
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Erreur serveur" });
   }
 };
 
@@ -74,7 +88,16 @@ const add = async (req, res) => {
     res.location(`/users/${userId}`).sendStatus(201);
   } catch (err) {
     console.error("Erreur lors de la création user/role:", err);
-    res.sendStatus(500);
+    if (err.code === "ER_DUP_ENTRY") {
+      if (err.message.includes("pseudo")) {
+        return res.status(409).json({ message: "Ce pseudo est déjà utilisé" });
+      }
+      if (err.message.includes("email")) {
+        return res.status(409).json({ message: "Cette adresse email est déjà utilisée" });
+      }
+      return res.status(409).json({ message: "Ces informations sont déjà utilisées" });
+    }
+    res.status(500).json({ message: "Erreur lors de la création du compte" });
   }
 };
 
@@ -144,6 +167,7 @@ module.exports = {
   read,
   getUserByEmail,
   getUserByPseudo,
+  checkEmailAvailability,
   getStats,
   add,
   edit,
