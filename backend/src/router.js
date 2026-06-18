@@ -27,7 +27,7 @@ const {
 // =========================================================================
 
 // Auth & Profil de base
-router.post("/auth/register", hashPassword, userController.add);
+router.post("/auth/register", userController.validatePassword, userController.checkEmailAvailability, userController.getUserByPseudo, hashPassword, userController.add);
 router.post("/auth/login", userController.getUserByEmail, verifyPassword);
 router.get("/auth/logout", logout);
 
