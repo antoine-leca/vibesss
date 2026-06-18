@@ -64,6 +64,22 @@ const getUserByPseudo = async (req, res, next) => {
   }
 };
 
+const validatePassword = (req, res, next) => {
+  const { password } = req.body;
+  const failed = [];
+  if (password.length < 8) failed.push("8 caractères minimum");
+  if (!/[A-Z]/.test(password)) failed.push("une majuscule");
+  if (!/[a-z]/.test(password)) failed.push("une minuscule");
+  if (!/[0-9]/.test(password)) failed.push("un chiffre");
+  if (!/[^A-Za-z0-9]/.test(password)) failed.push("un caractère spécial");
+  if (failed.length > 0) {
+    return res.status(400).json({
+      message: `Le mot de passe doit contenir ${failed.join(", ")}`
+    });
+  }
+  next();
+};
+
 const checkEmailAvailability = async (req, res, next) => {
   const { email } = req.body;
   try {
@@ -167,6 +183,7 @@ module.exports = {
   read,
   getUserByEmail,
   getUserByPseudo,
+  validatePassword,
   checkEmailAvailability,
   getStats,
   add,

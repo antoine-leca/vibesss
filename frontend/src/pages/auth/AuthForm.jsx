@@ -1,4 +1,4 @@
-import { Eye, EyeClosed } from 'lucide-react';
+import { Eye, EyeClosed, Check, X } from 'lucide-react';
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useAuth } from "../../services/AuthContext";
@@ -20,6 +20,14 @@ const AuthForm = () => {
         confirmPassword: ""
     });
     const [error, setError] = useState("");
+
+    const passwordRules = [
+        { label: "min 8 caractères", test: (p) => p.length >= 8 },
+        { label: "Une majuscule", test: (p) => /[A-Z]/.test(p) },
+        { label: "Une minuscule", test: (p) => /[a-z]/.test(p) },
+        { label: "Un chiffre", test: (p) => /[0-9]/.test(p) },
+        { label: "Un caractère spécial", test: (p) => /[^A-Za-z0-9]/.test(p) },
+    ];
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -154,6 +162,28 @@ const AuthForm = () => {
                                     </button>
                                 </div>
                             </div>
+
+                            {isRegister && formData.password.length > 0 && (
+                                <div className="flex flex-col gap-1 -mt-2">
+                                    <div className="flex justify-center">
+                                        <span className={`flex items-center justify-around text-sm whitespace-nowrap ${passwordRules[0].test(formData.password) ? "text-green-600" : "text-red-500"}`}>
+                                            {passwordRules[0].test(formData.password) ? <Check size={14} strokeWidth={2.5} /> : <X size={14} strokeWidth={2.5} />}
+                                            {passwordRules[0].label}
+                                        </span>
+                                    </div>
+                                    <div className="flex flex-wrap gap-1">
+                                        {passwordRules.slice(1).map((rule) => {
+                                            const ok = rule.test(formData.password);
+                                            return (
+                                                <span key={rule.label} className={`flex-1 basis-[45%] flex items-center justify-center gap-1.5 text-sm whitespace-nowrap ${ok ? "text-green-600" : "text-red-500"}`}>
+                                                    {ok ? <Check size={14} strokeWidth={2.5} /> : <X size={14} strokeWidth={2.5} />}
+                                                    {rule.label}
+                                                </span>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            )}
 
                             {isRegister && (
                                 <div className="flex flex-col">
