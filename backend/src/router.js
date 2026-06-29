@@ -22,25 +22,38 @@ const {
     logout
 } = require("./auth");
 
+// ------------ IMPORTS VALIDATORS
+const { validateRegister, validateLogin } = require("./utils/validators/validateAuth");
+const { validateUserEdit } = require("./utils/validators/validateUser");
+const { validateArticleAdd, validateArticleEdit } = require("./utils/validators/validateArticle");
+const { validateCommentAdd, validateCommentEdit } = require("./utils/validators/validateComment");
+const { validateBlogAdd, validateBlogEdit } = require("./utils/validators/validateBlog");
+const { validateBlogCategoryAdd, validateBlogCategoryDestroy } = require("./utils/validators/validateBlogCategory");
+const { validateReportAdd, validateReportEdit } = require("./utils/validators/validateReport");
+const { validateNotificationAdd, validateNotificationId, validateNotificationUserId } = require("./utils/validators/validateNotification");
+const { validateLike } = require("./utils/validators/validateLike");
+const { validateUserRoleAdd } = require("./utils/validators/validateUserRole");
+const { validateThemeAdd } = require("./utils/validators/validateTheme");
+
 // =========================================================================
 // ------------- ROUTES PUBLIQUES (ACCESSIBLES SANS TOKEN) -------------
 // =========================================================================
 
 // Auth & Profil de base
-router.post("/auth/register", userController.validatePassword, userController.checkEmailAvailability, userController.getUserByPseudo, hashPassword, userController.add);
-router.post("/auth/login", userController.getUserByEmail, verifyPassword);
+router.post("/auth/register", ...validateRegister, userController.validatePassword, userController.checkEmailAvailability, userController.getUserByPseudo, hashPassword, userController.add);
+router.post("/auth/login", ...validateLogin, userController.getUserByEmail, verifyPassword);
 router.get("/auth/logout", logout);
 
 // Users (Lecture publique)
 router.get("/users", userController.browse);
 router.get("/users/:id", userController.read);
 
-// Blogs (Lecture publique) 
+// Blogs (Lecture publique)
 router.get("/blogs", blogController.browse);
 router.get("/blogs/:id", blogController.read);
 router.get("/blogs/user/:id", blogController.getByUserId); // Nécessaire pour l'initialisation du container
 
-// Articles (Lecture publique) 
+// Articles (Lecture publique)
 router.get("/articles", articleController.browse);
 router.get("/articles/:id", articleController.read);
 router.get("/blogs/:blogId/articles", articleController.browseByBlog);
@@ -58,8 +71,8 @@ router.get("/roles", roleController.browse);
 
 // Reports (Public pour tes tests actuels)
 router.get("/reports", reportController.browse);
-router.post("/reports", reportController.add);
-router.put("/reports/:id", reportController.edit);
+router.post("/reports", ...validateReportAdd, reportController.add);
+router.put("/reports/:id", ...validateReportEdit, reportController.edit);
 router.delete("/reports/:id", reportController.destroy);
 
 // Stats & Activities Admin (À protéger plus tard si besoin)
@@ -80,47 +93,47 @@ router.use(verifyToken);
 router.use(verifyToken); // Toutes les routes ci-dessous nécessitent un token
 
 // Users Actions
-router.patch("/users/:id", userController.edit);
+router.patch("/users/:id", ...validateUserEdit, userController.edit);
 router.post("/users/email", userController.getUserByEmail);
 router.post("/users/pseudo", userController.getUserByPseudo);
 router.delete("/users/:id", userController.destroy);
 
 // Notifications Private Data
 router.get("/notifications", notifController.browse);
-router.get("/notifications/unread/:userId", notifController.getUnread);
-router.get("/notifications/user/:userId", notifController.getByUser);
-router.post("/notifications", notifController.add);
-router.put("/notifications/:id", notifController.markAsRead);
-router.delete("/notifications/:id", notifController.destroy);
+router.get("/notifications/unread/:userId", ...validateNotificationUserId, notifController.getUnread);
+router.get("/notifications/user/:userId", ...validateNotificationUserId, notifController.getByUser);
+router.post("/notifications", ...validateNotificationAdd, notifController.add);
+router.put("/notifications/:id", ...validateNotificationId, notifController.markAsRead);
+router.delete("/notifications/:id", ...validateNotificationId, notifController.destroy);
 
 // Articles Actions (Écriture)
-router.post("/articles", articleController.add);
-router.put("/articles/:id", articleController.edit);
+router.post("/articles", ...validateArticleAdd, articleController.add);
+router.put("/articles/:id", ...validateArticleEdit, articleController.edit);
 router.delete("/articles/:id", articleController.destroy);
 router.delete("/articles/user/:userId", articleController.destroyAllbyUser);
 
 // Comments Actions (Écriture)
-router.post("/comments", commentController.add);
-router.put("/comments/:id", commentController.edit);
+router.post("/comments", ...validateCommentAdd, commentController.add);
+router.put("/comments/:id", ...validateCommentEdit, commentController.edit);
 router.delete("/comments/:id", commentController.destroy);
 
 // Blogs Actions (Écriture)
-router.post("/blogs", blogController.add);
-router.put("/blogs/:id", blogController.edit);
+router.post("/blogs", ...validateBlogAdd, blogController.add);
+router.put("/blogs/:id", ...validateBlogEdit, blogController.edit);
 router.delete("/blogs/:id", blogController.destroy);
 
 // Blogs Categories Actions
-router.post("/blogs_categories", blogCategoryController.add);
-router.delete("/blogs_categories/:blogId/:categoryId", blogCategoryController.destroy);
+router.post("/blogs_categories", ...validateBlogCategoryAdd, blogCategoryController.add);
+router.delete("/blogs_categories/:blogId/:categoryId", ...validateBlogCategoryDestroy, blogCategoryController.destroy);
 
 // Likes Actions
-router.post("/users_articles", userLikeArticleController.add);
-router.delete("/users_articles", userLikeArticleController.destroy);
+router.post("/users_articles", ...validateLike, userLikeArticleController.add);
+router.delete("/users_articles", ...validateLike, userLikeArticleController.destroy);
 
 // Themes Actions
-router.post("/themes", themeController.add);
+router.post("/themes", ...validateThemeAdd, themeController.add);
 
 // Roles Actions
-router.post("/users_roles", userRoleController.add);
+router.post("/users_roles", ...validateUserRoleAdd, userRoleController.add);
 
 module.exports = router;

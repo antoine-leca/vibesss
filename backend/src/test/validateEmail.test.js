@@ -1,4 +1,4 @@
-const { validateEmail } = require('../utils/validateEmail');
+const { validateEmail } = require('../utils/validators/validateEmail');
 
 describe('Fonction Backend : validateEmail (Validation de format)', () => {
 
