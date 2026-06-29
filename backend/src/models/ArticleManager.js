@@ -26,10 +26,8 @@ class ArticleManager extends AbstractManager {
     // Mettre à jour un article
     update(article) {
         return this.database.query(
-            `UPDATE ${this.table} SET user_id = ?, blog_id = ?, title = ?, content_text = ?, content_image = ?, release_date = ?, status = ? WHERE id = ?`,
+            `UPDATE ${this.table} SET title = ?, content_text = ?, content_image = ?, release_date = ?, status = ? WHERE id = ?`,
             [
-                article.user_id,
-                article.blog_id,
                 article.title,
                 article.content_text,
                 article.content_image,
