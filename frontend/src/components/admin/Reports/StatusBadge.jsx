@@ -2,13 +2,13 @@
 const StatusBadge = ({ status, onClick }) => {
   const styleMap = {
     active: { // Traité
-      backgroundColor: "#dcfce7", color: "#166534", borderColor: "#86efac"
+      backgroundColor: "var(--success-color)", color: "#1f2937", borderColor: "var(--success-color)"
     },
     inactive: { // Rejeté
-      backgroundColor: "#fee2e2", color: "#991b1b", borderColor: "#fecaca"
+      backgroundColor: "var(--primary-color)", color: "#1f2937", borderColor: "var(--primary-color)"
     },
     pending: { // En attente
-      backgroundColor: "#fef9c3", color: "#854d0e", borderColor: "#fef08a"
+      backgroundColor: "var(--secondary-color)", color: "#1f2937", borderColor: "var(--secondary-color)"
     }
   };
 
@@ -22,13 +22,16 @@ const StatusBadge = ({ status, onClick }) => {
 
   return (
     <button
+      type="button"
       onClick={onClick}
+      title="Changer le statut"
+      aria-label={`Changer le statut: ${labelMap[currentStatus]}`}
       style={{
         backgroundColor: styleMap[currentStatus]?.backgroundColor,
         color: styleMap[currentStatus]?.color,
         borderColor: styleMap[currentStatus]?.borderColor,
       }}
-      className="px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all active:scale-95 border-2"
+      className="px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all active:scale-95 border-2 hover:brightness-95 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1"
     >
       {labelMap[currentStatus]}
     </button>
