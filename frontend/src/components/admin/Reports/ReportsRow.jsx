@@ -12,20 +12,17 @@ const ReportRow = ({ report, onStatusChange, onDelete }) => {
     navigate("/comments");
   } 
   
- 
-  else if (report.article_id && report.blog_id) {
+ else if (report.article_id && report.blog_id) {
     
     navigate(`/blogs/${report.blog_id}#article-${report.article_id}`);
   } 
   
-  
-  else if (report.blog_id) {
+   else if (report.blog_id) {
     
     navigate(`/blogs/${report.blog_id}`);
   } 
   
-  // Cas de secours si aucune liaison n'est détectée
-  else {
+else {
     alert("Détails du contenu non disponibles.");
   }
 };
