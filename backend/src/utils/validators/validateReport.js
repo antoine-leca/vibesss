@@ -11,7 +11,7 @@ const REPORT_REASONS = [
   "Autre",
 ];
 
-const REPORT_STATUSES = ["pending", "reviewed", "resolved"];
+const REPORT_STATUSES = ["pending", "active", "inactive"];
 
 const validateReportAdd = [
   body("report_reason")

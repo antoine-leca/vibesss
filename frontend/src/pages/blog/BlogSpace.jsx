@@ -69,7 +69,7 @@ const BlogSpace = ({ isOwner }) => {
     const borderColors = ["border-[var(--primary-color)]", "border-[var(--secondary-color)]", "border-[var(--accent-color)]", "border-[var(--success-color)]", "border-[var(--category-color)]"];
 
     return (
-        <div className="w-full min-h-screen bg-[var(--bg-color)] px-4 sm:px-8 md:px-12 py-8 md:py-12 font-custom-main text-black flex flex-col justify-between">
+        <div className="w-full min-h-screen overflow-x-hidden bg-[var(--bg-color)] px-4 sm:px-8 md:px-12 py-8 md:py-12 font-custom-main text-black flex flex-col justify-between">
             <div>
                 <header className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center md:items-end gap-4 pb-6 mt-12 md:mt-16">
                     <div className="w-full md:w-48 flex justify-center md:justify-start order-2 md:order-1 max-w-xs mx-auto md:max-w-none md:mb-1">

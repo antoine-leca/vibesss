@@ -56,7 +56,7 @@ const ReportRow = ({ report, onStatusChange, onDelete }) => {
           >
             <ExternalLink size={14} />
           </button>
-        </div> {/* CORRECTION 2 : Ajout de la fermeture de la div flex-items-center */}
+        </div> 
       </td>
 
       {/* Le motif du signalement */}
