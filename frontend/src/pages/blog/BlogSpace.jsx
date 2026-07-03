@@ -150,6 +150,7 @@ const BlogSpace = ({ isOwner }) => {
                         return (
                             <div 
                                 key={article.id} 
+                                id={`article-${article.id}`} // <--- LIGNE AJOUTÉE ICI POUR L'ANCRE DYNAMIQUE
                                 onClick={() => openArticle(article)} 
                                 className={`break-inside-avoid bg-white rounded-2xl border-2 ${currentBorder} shadow-sm overflow-hidden p-4 flex flex-col justify-between transition-all duration-300 hover:scale-[1.01] cursor-pointer`}
                             >
