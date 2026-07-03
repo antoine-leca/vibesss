@@ -1,0 +1,46 @@
+version: "3.8"
+
+services:
+  api:
+    build: ./backend
+    ports:
+      - "8080:8080" 
+    environment:
+      - APP_PORT=8080
+      - FRONTEND_URL=http://localhost:5173
+      - DB_HOST=db 
+      - DB_PORT=3306 
+      - DB_USER=root
+      - DB_PASSWORD=root # On force 'root'
+      - DB_NAME=vibesss
+      - JWT_SECRET=29a64e210ff3c274c6a376ae6e1e4e709ebd44e1e124ea0736a147e909f79383
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    depends_on:
+      - db
+
+  web:
+    build: ./frontend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_BACKEND_URL=http://localhost:8080
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - api
+
+  db:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root # On force 'root'
+      - MYSQL_DATABASE=vibesss
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
