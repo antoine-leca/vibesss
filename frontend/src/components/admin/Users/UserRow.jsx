@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
-import { Trash2 } from 'lucide-react';
+import { Trash2, Shield } from 'lucide-react';
 import { checkIsAdmin } from '../../../utils/adminUtils';
 
-const UserRow = ({ user, onDelete }) => {
+const UserRow = ({ user, onDelete, onRoleChange }) => {
   const [isDeleting, setIsDeleting] = useState(false);
-  const isAdmin = checkIsAdmin(user);
+  const [isUpdatingRole, setIsUpdatingRole] = useState(false);
+  
+  // Utilisation de user.role_id (2 = Admin, 1 = User) ou fallback sur l'utilitaire
+  const currentRoleId = user.role_id || (checkIsAdmin(user) ? 2 : 1);
+  const isAdmin = currentRoleId === 2;
 
   const formatDate = (dateString) => {
     if (!dateString) return '--';
@@ -18,6 +22,17 @@ const UserRow = ({ user, onDelete }) => {
       setIsDeleting(true);
       await onDelete(user.id);
       setIsDeleting(false);
+    }
+  };
+
+  const handleRoleSelect = async (e) => {
+    const newRoleId = parseInt(e.target.value, 10);
+    if (newRoleId === currentRoleId) return;
+
+    if (window.confirm(`Changer le rôle de ${user.pseudo} ?`)) {
+      setIsUpdatingRole(true);
+      await onRoleChange(user.id, newRoleId);
+      setIsUpdatingRole(false);
     }
   };
 
@@ -39,13 +54,32 @@ const UserRow = ({ user, onDelete }) => {
       </td>
       <td className="py-2.5 px-4 font-bold text-[12px] uppercase tracking-tight">{user.pseudo}</td>
       <td className="py-2.5 px-4 text-[10px] text-gray-600 opacity-75">{user.email}</td>
+
+      {/* Colonne Rôle avec Selecteur dynamique */}
+      <td className="py-2.5 px-4 text-center">
+        <select
+          value={currentRoleId}
+          onChange={handleRoleSelect}
+          disabled={isUpdatingRole}
+          className={`text-[10px] font-bold px-2 py-1 rounded-md border outline-none cursor-pointer transition-all ${
+            isAdmin 
+              ? "bg-yellow-100 text-yellow-800 border-yellow-300" 
+              : "bg-white/50 text-gray-700 border-gray-300"
+          }`}
+        >
+          <option value={1}>Utilisateur</option>
+          <option value={2}>Admin </option>
+        </select>
+      </td>
+
       <td className="py-2.5 px-4 text-center font-bold text-gray-700">{user.blogs_count || 0}</td>
       <td className="py-2.5 px-4 text-center text-[10px] font-medium text-gray-500">{formatDate(user.created_at)}</td>
       <td className="py-2.5 px-4 text-right">
         <button 
           onClick={handleDelete}
-          disabled={isDeleting || isAdmin} // Protection contre suppression admin
+          disabled={isDeleting || isAdmin} // Protection contre la suppression d'un admin
           className="p-1.5 text-gray-400 hover:text-red-500 disabled:opacity-30 transition-colors"
+          title={isAdmin ? "Impossible de supprimer un administrateur" : "Supprimer le membre"}
         >
           <Trash2 size={14} />
         </button>

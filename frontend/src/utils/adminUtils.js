@@ -2,7 +2,7 @@
 export const isAdminValue = (value) => {
     if (value == null) return false;
     const normalized = String(value).toLowerCase();
-    return ["admin", "2", "true", "1"].includes(normalized);
+    return ["admin", "2", "true"].includes(normalized);
 };
 
 export const extractRoleValue = (item) => {

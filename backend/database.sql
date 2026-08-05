@@ -3,7 +3,6 @@ SET FOREIGN_KEY_CHECKS=0;
 DROP TABLE IF EXISTS users_reports;
 DROP TABLE IF EXISTS users_blogs;
 DROP TABLE IF EXISTS users_articles;
-DROP TABLE IF EXISTS users_roles;
 DROP TABLE IF EXISTS blogs_categories;
 DROP TABLE IF EXISTS notifs;
 DROP TABLE IF EXISTS comments;
@@ -21,6 +20,11 @@ SET FOREIGN_KEY_CHECKS=1;
 -- CRÉATION DES TABLES
 -- =====================================================================
 
+CREATE TABLE roles (
+  id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  label VARCHAR(50) NOT NULL
+);
+
 CREATE TABLE users (
   id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   lastname VARCHAR(150) NULL,
@@ -31,12 +35,9 @@ CREATE TABLE users (
   bio VARCHAR(500) NULL,
   profile_picture VARCHAR(255) NULL,
   status ENUM('active','inactive') DEFAULT 'active',
-  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE roles (
-  id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  label VARCHAR(50) NOT NULL
+  role_id INT(11) UNSIGNED NOT NULL DEFAULT 1,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT users_ibfk_1 FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 CREATE TABLE categories (
@@ -119,14 +120,6 @@ CREATE TABLE blogs_categories (
   FOREIGN KEY (categorie_id) REFERENCES categories(id) ON DELETE CASCADE
 );
 
-CREATE TABLE users_roles (
-  user_id INT(11) UNSIGNED NOT NULL,
-  role_id INT(11) UNSIGNED NOT NULL,
-  PRIMARY KEY (user_id, role_id),
-  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-  FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE
-);
-
 CREATE TABLE users_articles (
   user_id INT(11) UNSIGNED NOT NULL,
   article_id INT(11) UNSIGNED NOT NULL,
@@ -169,37 +162,29 @@ INSERT INTO themes (id, label, color_name, font_name, bg_image) VALUES
 (6, 'Voyage', 'blue', 'Roboto', 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&q=80');
 
 -- =====================================================================
--- 1. INSÉRTION DES 17 UTILISATEURS
+-- 1. INSERTION DES 17 UTILISATEURS AVEC LEUR ROLE_ID
 -- =====================================================================
-INSERT INTO users (id, firstname, lastname, pseudo, email, password, bio, profile_picture, status) VALUES
-(1, 'Véronique', 'Admin', 'veronique_admin', 'admin@vibesss.com', '$2b$10$FakeHashForPassword123', 'Administratrice de la plateforme Vibesss.', 'https://i.pravatar.cc/150?img=32', 'active'),
-(2, 'Lisa', 'Dev', 'lisa_dev', 'lisa@vibesss.com', '$2b$10$FakeHashForPassword123', 'Apprentie développeuse passionnée de React.', 'https://i.pravatar.cc/150?img=47', 'active'),
-(3, 'Thomas', 'Bernard', 'thomas_b', 'thomas@vibesss.com', '$2b$10$FakeHashForPassword123', 'Aime le café et le code propre.', 'https://i.pravatar.cc/150?img=33', 'active'),
-(4, 'Julie', 'Wagner', 'julie_w', 'julie@vibesss.com', '$2b$10$FakeHashForPassword123', 'Cuisine, partage et bonne humeur.', 'https://i.pravatar.cc/150?img=44', 'active'),
-(5, 'Maxime', 'Rousseau', 'maxime_rc', 'maxime@vibesss.com', '$2b$10$FakeHashForPassword123', 'Photographe amateur à mes heures perdues.', 'https://i.pravatar.cc/150?img=12', 'active'),
-(6, 'Emma', 'Petit', 'emma_p', 'emma@vibesss.com', '$2b$10$FakeHashForPassword123', 'En route vers le mode de vie zéro déchet !', 'https://i.pravatar.cc/150?img=18', 'active'),
-(7, 'Lucas', 'Moreau', 'lucas_m', 'lucas@vibesss.com', '$2b$10$FakeHashForPassword123', 'Fan d automobile et de nouvelles technologies.', 'https://i.pravatar.cc/150?img=53', 'active'),
-(8, 'Chloé', 'Dubois', 'chloe_d', 'chloe@vibesss.com', '$2b$10$FakeHashForPassword123', 'Toujours à l affût des tendances mode.', 'https://i.pravatar.cc/150?img=61', 'active'),
-(9, 'Nathan', 'Girard', 'nathan_g', 'nathan@vibesss.com', '$2b$10$FakeHashForPassword123', 'La vie est meilleure en musique.', 'https://i.pravatar.cc/150?img=54', 'active'),
-(10, 'Inès', 'Laurent', 'ines_l', 'ines@vibesss.com', '$2b$10$FakeHashForPassword123', 'Globe-trotteuse compulsive.', 'https://i.pravatar.cc/150?img=28', 'active'),
-(11, 'Hugo', 'Fontaine', 'hugo_f', 'hugo@vibesss.com', '$2b$10$FakeHashForPassword123', 'Le sport comme hygiène de vie.', 'https://i.pravatar.cc/150?img=56', 'active'),
-(12, 'Sarah', 'Klein', 'sarah_k', 'sarah@vibesss.com', '$2b$10$FakeHashForPassword123', 'Dévoreuse de thrillers et de romans.', 'https://i.pravatar.cc/150?img=43', 'active'),
-(13, 'Enzo', 'Valentin', 'enzo_v', 'enzo@vibesss.com', '$2b$10$FakeHashForPassword123', 'Docker et Node font bon ménage.', 'https://i.pravatar.cc/150?img=59', 'active'),
-(14, 'Camille', 'Roux', 'camille_r', 'camille@vibesss.com', '$2b$10$FakeHashForPassword123', 'Artiste peintre et amoureuse de Paris.', 'https://i.pravatar.cc/150?img=49', 'active'),
-(15, 'Arthur', 'Thomas', 'arthur_t', 'arthur@vibesss.com', '$2b$10$FakeHashForPassword123', 'Gamer passionné de RPG.', 'https://i.pravatar.cc/150?img=15', 'active'),
-(16, 'Manon', 'Brunet', 'manon_b', 'manon@vibesss.com', '$2b$10$FakeHashForPassword123', 'Mindset positif et méditation.', 'https://i.pravatar.cc/150?img=26', 'active'),
-(17, 'Léo', 'Simon', 'leo_s', 'leo@vibesss.com', '$2b$10$FakeHashForPassword123', 'Vivre mieux avec moins d objets.', 'https://i.pravatar.cc/150?img=60', 'active');
+INSERT INTO users (id, firstname, lastname, pseudo, email, password, bio, profile_picture, status, role_id) VALUES
+(1, 'Véronique', 'Admin', 'veronique_admin', 'admin@vibesss.com', '$2b$10$FakeHashForPassword123', 'Administratrice de la plateforme Vibesss.', 'https://i.pravatar.cc/150?img=32', 'active', 2),
+(2, 'Lisa', 'Dev', 'lisa_dev', 'lisa@vibesss.com', '$2b$10$FakeHashForPassword123', 'Apprentie développeuse passionnée de React.', 'https://i.pravatar.cc/150?img=47', 'active', 1),
+(3, 'Thomas', 'Bernard', 'thomas_b', 'thomas@vibesss.com', '$2b$10$FakeHashForPassword123', 'Aime le café et le code propre.', 'https://i.pravatar.cc/150?img=33', 'active', 1),
+(4, 'Julie', 'Wagner', 'julie_w', 'julie@vibesss.com', '$2b$10$FakeHashForPassword123', 'Cuisine, partage et bonne humeur.', 'https://i.pravatar.cc/150?img=44', 'active', 1),
+(5, 'Maxime', 'Rousseau', 'maxime_rc', 'maxime@vibesss.com', '$2b$10$FakeHashForPassword123', 'Photographe amateur à mes heures perdues.', 'https://i.pravatar.cc/150?img=12', 'active', 1),
+(6, 'Emma', 'Petit', 'emma_p', 'emma@vibesss.com', '$2b$10$FakeHashForPassword123', 'En route vers le mode de vie zéro déchet !', 'https://i.pravatar.cc/150?img=18', 'active', 1),
+(7, 'Lucas', 'Moreau', 'lucas_m', 'lucas@vibesss.com', '$2b$10$FakeHashForPassword123', 'Fan d automobile et de nouvelles technologies.', 'https://i.pravatar.cc/150?img=53', 'active', 1),
+(8, 'Chloé', 'Dubois', 'chloe_d', 'chloe@vibesss.com', '$2b$10$FakeHashForPassword123', 'Toujours à l affût des tendances mode.', 'https://i.pravatar.cc/150?img=61', 'active', 1),
+(9, 'Nathan', 'Girard', 'nathan_g', 'nathan@vibesss.com', '$2b$10$FakeHashForPassword123', 'La vie est meilleure en musique.', 'https://i.pravatar.cc/150?img=54', 'active', 1),
+(10, 'Inès', 'Laurent', 'ines_l', 'ines@vibesss.com', '$2b$10$FakeHashForPassword123', 'Globe-trotteuse compulsive.', 'https://i.pravatar.cc/150?img=28', 'active', 1),
+(11, 'Hugo', 'Fontaine', 'hugo_f', 'hugo@vibesss.com', '$2b$10$FakeHashForPassword123', 'Le sport comme hygiène de vie.', 'https://i.pravatar.cc/150?img=56', 'active', 1),
+(12, 'Sarah', 'Klein', 'sarah_k', 'sarah@vibesss.com', '$2b$10$FakeHashForPassword123', 'Dévoreuse de thrillers et de romans.', 'https://i.pravatar.cc/150?img=43', 'active', 1),
+(13, 'Enzo', 'Valentin', 'enzo_v', 'enzo@vibesss.com', '$2b$10$FakeHashForPassword123', 'Docker et Node font bon ménage.', 'https://i.pravatar.cc/150?img=59', 'active', 1),
+(14, 'Camille', 'Roux', 'camille_r', 'camille@vibesss.com', '$2b$10$FakeHashForPassword123', 'Artiste peintre et amoureuse de Paris.', 'https://i.pravatar.cc/150?img=49', 'active', 1),
+(15, 'Arthur', 'Thomas', 'arthur_t', 'arthur@vibesss.com', '$2b$10$FakeHashForPassword123', 'Gamer passionné de RPG.', 'https://i.pravatar.cc/150?img=15', 'active', 1),
+(16, 'Manon', 'Brunet', 'manon_b', 'manon@vibesss.com', '$2b$10$FakeHashForPassword123', 'Mindset positif et méditation.', 'https://i.pravatar.cc/150?img=26', 'active', 1),
+(17, 'Léo', 'Simon', 'leo_s', 'leo@vibesss.com', '$2b$10$FakeHashForPassword123', 'Vivre mieux avec moins d objets.', 'https://i.pravatar.cc/150?img=60', 'active', 1);
 
 -- =====================================================================
--- 2. ASSOCIATIONS ROLES
--- =====================================================================
-INSERT INTO users_roles (user_id, role_id) VALUES
-(1, 2),
-(2, 1), (3, 1), (4, 1), (5, 1), (6, 1), (7, 1), (8, 1), (9, 1),
-(10, 1), (11, 1), (12, 1), (13, 1), (14, 1), (15, 1), (16, 1), (17, 1);
-
--- =====================================================================
--- 3. INSÉRTION DES 16 BLOGS
+-- 2. INSERTION DES 16 BLOGS
 -- =====================================================================
 INSERT INTO blogs (id, title, description, theme_id, user_id) VALUES
 (1, 'Le Blog Tech de Lisa', 'Mes aventures dans le monde du développement web et de React.', 3, 2),
@@ -220,7 +205,7 @@ INSERT INTO blogs (id, title, description, theme_id, user_id) VALUES
 (16, 'Léo Minimalisme', 'Guide d introduction pratique pour désencombrer sa vie.', 5, 17);
 
 -- =====================================================================
--- 4. INSÉRTION DES ARTICLES
+-- 3. INSERTION DES ARTICLES
 -- =====================================================================
 INSERT INTO articles (id, title, content_text, content_image, status, blog_id, user_id) VALUES
 (1, 'Débuter avec React en 2026', 'React continue d evoluer. Aujourd hui nous allons voir comment bien structurer ses contextes globaux pour les hooks personnalisés...', 'react.jpg', 'published', 1, 2),
@@ -241,7 +226,7 @@ INSERT INTO articles (id, title, content_text, content_image, status, blog_id, u
 (16, 'Vivre avec moins d objets', 'Le minimalisme n est pas un manque, c est au contraire redonner de la valeur à ce que l on possède vraiment...', 'minimal.jpg', 'published', 16, 17);
 
 -- =====================================================================
--- 5. INSÉRTION DES COMMENTAIRES
+-- 4. INSERTION DES COMMENTAIRES
 -- =====================================================================
 INSERT INTO comments (id, content, moderation_status, article_id, user_id) VALUES
 (1, 'Super article, l explication sur les hooks est super claire !', 'approved', 1, 3),
@@ -262,7 +247,7 @@ INSERT INTO comments (id, content, moderation_status, article_id, user_id) VALUE
 (16, 'Contenu très inspirant, hâte de lire ton prochain billet !', 'approved', 16, 1);
 
 -- =====================================================================
--- 6. INSÉRTION DES SIGNALEMENTS (ENUMs stricts en minuscules)
+-- 5. INSERTION DES SIGNALEMENTS
 -- =====================================================================
 INSERT INTO reports (id, report_reason, description, status) VALUES
 (1, 'spam', 'Ce blog ne contient que des liens vers des sites malveillants de contrefaçons.', 'active'),

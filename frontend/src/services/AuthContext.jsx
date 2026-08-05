@@ -14,7 +14,8 @@ export function AuthProvider({ children }) {
         const minimalUser = {
             id: userData.id,
             pseudo: userData.pseudo,
-            role: userData.role
+            role_id: userData.role_id,
+            role: userData.role_name || userData.role
         };
 
         setUser(minimalUser);
@@ -49,8 +50,13 @@ export function AuthProvider({ children }) {
         checkUserValidity();
     }, [user?.id]);
 
-    // Utilisez useMemo pour stabiliser l'objet context
-    const value = useMemo(() => ({ user, login, logout }), [user]);
+    // useMemo inclut maintenant un booléen isAdmin directement accessible
+    const value = useMemo(() => ({
+        user,
+        isAdmin: user?.role_id === 2,
+        login,
+        logout
+    }), [user]);
 
     return (
         <AuthContext.Provider value={value}>

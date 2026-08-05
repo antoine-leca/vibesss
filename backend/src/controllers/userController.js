@@ -99,11 +99,9 @@ const add = async (req, res) => {
     const [result] = await models.user.insert(req.body);
     const userId = result.insertId;
 
-    await models.userRole.insert(userId, 1);
-
     res.location(`/users/${userId}`).sendStatus(201);
   } catch (err) {
-    console.error("Erreur lors de la création user/role:", err);
+    console.error("Erreur lors de la création de l'utilisateur:", err);
     if (err.code === "ER_DUP_ENTRY") {
       if (err.message.includes("pseudo")) {
         return res.status(409).json({ message: "Ce pseudo est déjà utilisé" });
@@ -134,6 +132,29 @@ const edit = async (req, res) => {
   }
 };
 
+// Modification du rôle d'un utilisateur par un Admin (RBAC)
+const editRole = async (req, res, next) => {
+  try {
+    const userId = parseInt(req.params.id, 10);
+    const { role_id } = req.body;
+
+    if (!role_id || ![1, 2].includes(Number(role_id))) {
+      return res.status(400).json({ message: "Le role_id fourni est invalide (doit être 1 ou 2)" });
+    }
+
+    const [result] = await models.user.updateRole(userId, role_id);
+
+    if (result.affectedRows === 0) {
+      return res.sendStatus(404);
+    }
+
+    res.sendStatus(204);
+  } catch (err) {
+    console.error(err);
+    res.sendStatus(500);
+  }
+};
+
 const destroy = async (req, res) => {
   try {
     const [result] = await models.user.delete(req.params.id);
@@ -150,22 +171,26 @@ const destroy = async (req, res) => {
 
 const getStats = async (req, res) => {
   try {
-    const [[users]] = await models.user.getCounter();
-    const [[blogs]] = await models.blog.getCounter();
-    const [[articles]] = await models.article.getCounter();
-    const [[reports]] = await models.report.getCounter();
+    const [usersRows] = await models.user.getCounter();
+    const [blogsRows] = await models.blog.getCounter();
+    const [articlesRows] = await models.article.getCounter();
+    const [reportsRows] = await models.report.getCounter();
+
+    const users = usersRows[0] || {};
+    const blogs = blogsRows[0] || {};
+    const articles = articlesRows[0] || {};
+    const reports = reportsRows[0] || {};
 
     res.json({
-      users: users.total,
-      blogs: blogs.total,
-      articles: articles.total,
-      reports: reports.total
+      users: users.total ?? users["COUNT(*)"] ?? 0,
+      blogs: blogs.total ?? blogs["COUNT(*)"] ?? 0,
+      articles: articles.total ?? articles["COUNT(*)"] ?? 0,
+      reports: reports.total ?? reports["COUNT(*)"] ?? 0,
     });
   } catch (err) {
-    console.error(err);
-    res.status(500).send("Erreur lors de la récuperation des statistiques");
+    console.error("Erreur dans getStats :", err);
+    res.status(500).send("Erreur lors de la récupération des statistiques");
   }
-
 };
 
 const getActivities = async (req, res) => {
@@ -188,6 +213,7 @@ module.exports = {
   getStats,
   add,
   edit,
+  editRole,
   destroy,
   getActivities,
 };
