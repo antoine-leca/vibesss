@@ -13,12 +13,13 @@ const blogCategoryController = require("./controllers/blogCategoryController");
 const userLikeArticleController = require("./controllers/userLikeArticleController");
 const themeController = require("./controllers/themeController");
 const roleController = require("./controllers/roleController");
-const userRoleController = require("./controllers/userRoleController");
 
+// ------------ IMPORTS SERVICES / AUTH
 const {
     hashPassword,
     verifyPassword,
     verifyToken,
+    verifyAdmin,
     logout
 } = require("./auth");
 
@@ -32,7 +33,6 @@ const { validateBlogCategoryAdd, validateBlogCategoryDestroy } = require("./util
 const { validateReportAdd, validateReportEdit } = require("./utils/validators/validateReport");
 const { validateNotificationAdd, validateNotificationId, validateNotificationUserId } = require("./utils/validators/validateNotification");
 const { validateLike } = require("./utils/validators/validateLike");
-const { validateUserRoleAdd } = require("./utils/validators/validateUserRole");
 const { validateThemeAdd } = require("./utils/validators/validateTheme");
 
 // =========================================================================
@@ -51,7 +51,7 @@ router.get("/users/:id", userController.read);
 // Blogs (Lecture publique)
 router.get("/blogs", blogController.browse);
 router.get("/blogs/:id", blogController.read);
-router.get("/blogs/user/:id", blogController.getByUserId); // Nécessaire pour l'initialisation du container
+router.get("/blogs/user/:id", blogController.getByUserId);
 
 // Articles (Lecture publique)
 router.get("/articles", articleController.browse);
@@ -63,21 +63,17 @@ router.get("/comments", commentController.browse);
 router.get("/comments/:id", commentController.read);
 router.get("/articles/:articleId/comments", commentController.readByArticle);
 
-// Themes & Categories (Lecture publique pour l'éditeur)
+// Themes & Categories (Lecture publique)
 router.get("/themes", themeController.browse);
 router.get("/blogs_categories", blogCategoryController.browse);
 router.get("/blogs_categories/blog/:blogId", blogCategoryController.findByBlogId);
 router.get("/roles", roleController.browse);
 
-// Reports (Public pour tes tests actuels)
+// Reports (Lecture/Création publique pour tests)
 router.get("/reports", reportController.browse);
 router.post("/reports", ...validateReportAdd, reportController.add);
 router.put("/reports/:id", ...validateReportEdit, reportController.edit);
 router.delete("/reports/:id", reportController.destroy);
-
-// Stats & Activities Admin (À protéger plus tard si besoin)
-router.get("/admin/stats", userController.getStats);
-router.get("/admin/activities", userController.getActivities);
 
 
 // =========================================================================
@@ -89,8 +85,6 @@ router.use(verifyToken);
 // =========================================================================
 // ------------- ROUTES PROTÉGÉES (CONNEXION OBLIGATOIRE) -------------
 // =========================================================================
-
-router.use(verifyToken); // Toutes les routes ci-dessous nécessitent un token
 
 // Users Actions
 router.patch("/users/:id", ...validateUserEdit, userController.edit);
@@ -133,7 +127,16 @@ router.delete("/users_articles", ...validateLike, userLikeArticleController.dest
 // Themes Actions
 router.post("/themes", ...validateThemeAdd, themeController.add);
 
-// Roles Actions
-router.post("/users_roles", ...validateUserRoleAdd, userRoleController.add);
+
+// =========================================================================
+// ------------- ROUTES STRICTEMENT ADMINISTRATEUR (role_id = 2) -------------
+// =========================================================================
+
+// Stats & Activités du tableau de bord Admin
+router.get("/admin/stats", verifyAdmin, userController.getStats);
+router.get("/admin/activities", verifyAdmin, userController.getActivities);
+
+// Gestion des rôles utilisateurs (RBAC)
+router.patch("/admin/users/:id/role", verifyAdmin, userController.editRole);
 
 module.exports = router;

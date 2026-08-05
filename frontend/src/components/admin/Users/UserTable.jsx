@@ -5,7 +5,8 @@ const UserTable = ({
   users, 
   isLoading, 
   pagination, 
-  onDelete 
+  onDelete,
+  onRoleChange
 }) => {
   
   if (isLoading) {
@@ -22,6 +23,7 @@ const UserTable = ({
               <th className="py-2.5 px-4">Avatar</th>
               <th className="py-2.5 px-4">Pseudo</th>
               <th className="py-2.5 px-4">Email</th>
+              <th className="py-2.5 px-4 text-center">Rôle</th>
               <th className="py-2.5 px-4 text-center">Blogs</th>
               <th className="py-2.5 px-4 text-center">Inscription</th>
               <th className="py-2.5 px-4 text-right">Actions</th>
@@ -34,11 +36,12 @@ const UserTable = ({
                   key={user.id} 
                   user={user} 
                   onDelete={onDelete}
+                  onRoleChange={onRoleChange}
                 />
               ))
             ) : (
               <tr>
-                <td colSpan="6" className="py-8 text-center text-gray-400 opacity-50 italic">
+                <td colSpan="7" className="py-8 text-center text-gray-400 opacity-50 italic">
                   Aucun membre
                 </td>
               </tr>
@@ -47,8 +50,8 @@ const UserTable = ({
         </table>
       </div>
 
-      {/* Pagination - Style Dashboard */}
-      {pagination.totalPages > 1 && (
+      {/* Pagination */}
+      {pagination && pagination.totalPages > 1 && (
         <div className="flex justify-center items-center gap-4 py-2 border-t-2 border-white/40">
           <button
             onClick={pagination.prevPage}

@@ -12,7 +12,8 @@ const sortUsers = (a, b) => {
 };
 
 const UsersList = () => {
-    const { users, isLoading, isRefreshing, deleteUser, refresh } = useUsers();
+    // 1. Extraire la fonction de mise à jour du rôle depuis useUsers (ex: updateRole ou changeRole)
+    const { users, isLoading, isRefreshing, deleteUser, updateRole, refresh } = useUsers();
     
     const sortedUsers = useMemo(() => [...users].sort(sortUsers), [users]);
     const { currentItems, ...pagination } = usePagination(sortedUsers, 10);
@@ -37,6 +38,7 @@ const UsersList = () => {
                     users={currentItems}
                     isLoading={isLoading}
                     onDelete={deleteUser}
+                    onRoleChange={updateRole} // <-- 2. LA PROP MANQUANTE EST AJOUTÉE ICI
                     pagination={pagination}
                 />
             </div>

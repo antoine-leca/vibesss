@@ -30,18 +30,27 @@ function PublicLayout() {
   );
 }
 
-// Composant de protection
+// Composant de protection hybride (supporte role_id numérique ou libellé string)
 function ProtectedRoute({ children, allowedRoles }) {
-  const { user } = useAuth();
+  const { user, isAdmin } = useAuth();
 
   // Si pas connecté -> login
   if (!user) {
     return <Navigate to="/auth/login" replace />;
   }
 
-  // Si rôle spécifique requis et non possédé -> home
-  if (allowedRoles && !allowedRoles.includes(user.role)) {
-    return <Navigate to="/" replace />;
+  // Vérification de rôle (compatible role_id, role textuel et raccourci isAdmin)
+  if (allowedRoles) {
+    const hasRole = allowedRoles.some((role) => {
+      if (role === 'admin') return isAdmin || user.role_id === 2 || user.role === 'admin';
+      if (role === 'user') return user.role_id === 1 || user.role === 'user' || user.role_id === 2 || user.role === 'admin';
+      if (typeof role === 'number') return user.role_id === role;
+      return user.role === role;
+    });
+
+    if (!hasRole) {
+      return <Navigate to="/" replace />;
+    }
   }
 
   return children || <Outlet />;
@@ -102,24 +111,19 @@ function AppRouter() {
           <Route path="/profile/:pseudo" element={<Profile />} />
         </Route>
 
-        {/* ROUTES UTILISATEURS CONNECTÉS (User connecté ou admin)*/}
+        {/* ROUTES UTILISATEURS CONNECTÉS (User connecté ou admin) */}
         <Route path="/create" element={<ProtectedRoute allowedRoles={['user', 'admin']}/>}>
           <Route path='blog' element={<CreateBlog />} />
-          {/* <Route path='mon-blog' element={<BlogSpace  isOwner={true} />} /> */}
-
-         {/* ROUTE PROTÉGÉE : On crée un article pour un blog précis via son :blogId */}
           <Route path='blogs/:blogId/article' element={<CreateArticle />} />
-          
-        {/* ROUTE PROTÉGÉE : Voir l'espace de gestion de MON propre blog */}
-          <Route path='mon-blog/:blogId' element={<BlogSpace  isOwner={true} />} />
+          <Route path='mon-blog/:blogId' element={<BlogSpace isOwner={true} />} />
         </Route>
 
-        {/* ROUTES UTILISATEURS CONNECTÉS (User connecté ou admin)*/}
+        {/* ROUTES UTILISATEURS CONNECTÉS */}
         <Route path="/blog" element={<ProtectedRoute allowedRoles={['user', 'admin']}/>}>
-          <Route path=':id' element={<BlogSpace  isOwner={true} />} />
+          <Route path=':id' element={<BlogSpace isOwner={true} />} />
         </Route>
 
-        {/* ROUTES ADMIN (Protège le layout et tous ses enfants) */}
+        {/* ROUTES ADMIN */}
         <Route path='/admin' element={
           <ProtectedRoute allowedRoles={['admin']}>
             <AdminLayout />
@@ -131,8 +135,6 @@ function AppRouter() {
           <Route path='reports' element={<ReportsList />} />
         </Route>
 
-        {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
-        
       </Routes>
     </Router>
   );
