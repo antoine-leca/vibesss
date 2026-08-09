@@ -1,11 +1,17 @@
 import React from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useAuth } from "../../services/AuthContext";
 import { checkIsAdmin } from "../../utils/adminUtils";
 
 const Footer = () => {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const canAccessAdmin = checkIsAdmin(user);
+
+  const handleLogout = async () => {
+    await logout();
+    navigate("/");
+  };
 
   return (
     <footer className="w-full">
@@ -62,7 +68,7 @@ const Footer = () => {
                 </h3>
                 <ul className="flex flex-col gap-3 text-left font-normal text-white text-[22px] sm:text-[38px]">
                   <li><Link to="/explorer" className="hover:text-black transition-colors">Explorer</Link></li>
-                  <li><Link to="create/blog" className="hover:text-black transition-colors">Créer un Blog</Link></li>
+                  <li><Link to="/create/blog" className="hover:text-black transition-colors">Créer un Blog</Link></li>
                   {canAccessAdmin && (
                     <li>
                       <Link to="/admin" className="hover:text-black transition-colors font-semibold" aria-label="Accéder à l'administration">
@@ -78,8 +84,28 @@ const Footer = () => {
                   Compte
                 </h3>
                 <ul className="flex flex-col gap-3 text-left font-normal text-white text-[22px] sm:text-[38px]">
-                  <li><Link to="auth/register" className="hover:text-black transition-colors">Inscription</Link></li>
-                  <li><Link to="auth/login" className="hover:text-black transition-colors">Connexion</Link></li>
+                  {user ? (
+                    <>
+                      <li>
+                        <Link to={`/profile/${user.pseudo}`} className="hover:text-black transition-colors">
+                          Mon Profil
+                        </Link>
+                      </li>
+                      <li>
+                        <button
+                          onClick={handleLogout}
+                          className="hover:text-black transition-colors text-left bg-transparent border-none p-0 cursor-pointer font-normal text-white text-[22px] sm:text-[38px]"
+                        >
+                          Déconnexion
+                        </button>
+                      </li>
+                    </>
+                  ) : (
+                    <>
+                      <li><Link to="/auth/register" className="hover:text-black transition-colors">Inscription</Link></li>
+                      <li><Link to="/auth/login" className="hover:text-black transition-colors">Connexion</Link></li>
+                    </>
+                  )}
                 </ul>
               </div>
             </div>
