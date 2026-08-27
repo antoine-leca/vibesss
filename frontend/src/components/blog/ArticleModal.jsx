@@ -87,10 +87,11 @@ export default function ArticleModal({ article, onClose }) {
                 <img src={article.cover_picture} alt={article.title} className="w-full h-full object-cover" />
                 </div>
 
-                {/* Contenu / Description */}
-                <p className="text-neutral-700 text-base sm:text-lg leading-relaxed mb-8 font-light whitespace-pre-line">
-                {article.content}
-                </p>
+                {/* Contenu / Description interprété en HTML */}
+                <div 
+                    className="text-neutral-700 text-base sm:text-lg leading-relaxed mb-8 font-light space-y-4 [&_ul]:list-disc [&_ul]:pl-5 [&_strong]:font-bold [&_em]:italic"
+                    dangerouslySetInnerHTML={{ __html: article.content }} 
+                />
 
                 <hr className="border-neutral-100 mb-6" />
 
