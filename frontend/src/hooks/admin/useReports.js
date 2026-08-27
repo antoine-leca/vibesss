@@ -20,7 +20,12 @@ const useReports = () => {
     useEffect(() => { fetchReports(); }, [fetchReports]);
 
     const updateStatus = async (id, currentStatus) => {
-        const newStatus = currentStatus === "pending" ? "resolved" : "pending";
+        const statusCycle = { 
+            pending: "active",   
+            active: "inactive",  
+            inactive: "pending" 
+        };
+        const newStatus = statusCycle[currentStatus] || "pending";
         try {
             const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/reports/${id}`, {
                 method: "PUT",

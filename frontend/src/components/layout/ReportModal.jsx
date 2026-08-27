@@ -58,7 +58,7 @@ const ReportModal = ({ isOpen, onClose, targetType, targetId, userId }) => {
             <div className="bg-white/10 backdrop-blur-xl border border-white/20 p-6 rounded-2xl w-full max-w-md shadow-2xl text-white">
                 <div className="flex justify-between items-center mb-6">
                     <h2 className="text-xl font-bold flex items-center gap-2">
-                        <span className="text-red-400 text-2xl">🚩</span> Signaler le contenu
+                        <span className="text-red-400 text-2xl"></span> Signaler le contenu
                     </h2>
                     <button
                         onClick={onClose}

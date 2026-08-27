@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo, useState } from "react";
+import { createContext, useContext, useMemo, useState, useEffect } from "react";
 import AuthService from "./AuthService";
 
 const AuthContext = createContext();
@@ -14,7 +14,8 @@ export function AuthProvider({ children }) {
         const minimalUser = {
             id: userData.id,
             pseudo: userData.pseudo,
-            role: userData.role
+            role_id: userData.role_id,
+            role: userData.role_name || userData.role
         };
 
         setUser(minimalUser);
@@ -32,8 +33,30 @@ export function AuthProvider({ children }) {
         }
     };
 
-    // Utilisez useMemo pour stabiliser l'objet context
-    const value = useMemo(() => ({ user, login, logout }), [user]);
+    useEffect(() => {
+        const checkUserValidity = async () => {
+            if (user?.id) {
+                try {
+                    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL || "http://localhost:5001"}/users/${user.id}`);
+                    if (response.status === 404) {
+                        console.warn("Utilisateur non trouvé dans la base de données. Déconnexion automatique.");
+                        logout();
+                    }
+                } catch (error) {
+                    console.error("Impossible de vérifier l'existence de l'utilisateur:", error);
+                }
+            }
+        };
+        checkUserValidity();
+    }, [user?.id]);
+
+    // useMemo inclut maintenant un booléen isAdmin directement accessible
+    const value = useMemo(() => ({
+        user,
+        isAdmin: user?.role_id === 2,
+        login,
+        logout
+    }), [user]);
 
     return (
         <AuthContext.Provider value={value}>

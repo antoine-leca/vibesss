@@ -30,7 +30,6 @@ pool.getConnection().catch(() => {
 const models = {};
 
 const ArticleManager = require("./ArticleManager");
-
 models.article = new ArticleManager();
 models.article.setDatabase(pool);
 
@@ -38,73 +37,46 @@ const ReportManager = require("./ReportManager");
 models.report = new ReportManager();
 models.report.setDatabase(pool);
 
-
 const NotifManager = require("./NotifManager");
-
 models.notif = new NotifManager();
 models.notif.setDatabase(pool);
 
 const CategoryManager = require("./CategoryManager");
-
 models.categories = new CategoryManager();
 models.categories.setDatabase(pool);
 
-
 const BlogManager = require("./BlogManager");
-
 models.blog = new BlogManager();
 models.blog.setDatabase(pool);
 
-
 const CommentManager = require("./CommentManager");
-
 models.comment = new CommentManager();
 models.comment.setDatabase(pool);
 
-
 const UserManager = require("./UserManager");
-
 models.user = new UserManager();
 models.user.setDatabase(pool);
 
-
 const UserReportManager = require('./UserReportManager');
-
 models.userReport = new UserReportManager();
 models.userReport.setDatabase(pool);
 
-
 const UserLikeArticleManager = require("./UserLikeArticleManager");
-
 models.userLikeArticle = new UserLikeArticleManager();
 models.userLikeArticle.setDatabase(pool);
 
-
 const RoleManager = require("./RoleManager");
-
 models.role = new RoleManager();
 models.role.setDatabase(pool);
 
-
 const ThemeManager = require("./ThemeManager");
-
 models.theme = new ThemeManager();
 models.theme.setDatabase(pool);
 
 const BlogCategoryManager = require("./BlogCategoryManager");
-
 models.blogCategory = new BlogCategoryManager();
 models.blogCategory.setDatabase(pool);
 
-
-const UserRoleManager = require("./UserRoleManager");
-
-models.userRole = new UserRoleManager();
-models.userRole.setDatabase(pool);
-
-
-// bonus: use a proxy to personalize error message,
-// when asking for a non existing model
 
 const handler = {
   get(obj, prop) {
@@ -122,6 +94,5 @@ const handler = {
     );
   },
 };
-
 
 module.exports = new Proxy(models, handler);

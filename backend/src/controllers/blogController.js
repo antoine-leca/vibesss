@@ -1,6 +1,5 @@
 const models = require("../models");
 
-
 const browse = async (req, res) => {
   try {
     const [rows] = await models.blog.findAll();
@@ -21,7 +20,7 @@ const read = async (req, res) => {
       return res.status(404);
     }
     else {
-    res.status(200).json(rows[0]);
+      res.status(200).json(rows[0]);
     }
 
   } catch (err) {
@@ -31,20 +30,21 @@ const read = async (req, res) => {
 };
 
 const add = async (req, res) => {
-
-  const blog = {...req.body};
-
-  if (!blog.title) {
-    return res.status(400).json({ message: "Le titre est requis." });
-  }
+  const blog = { ...req.body };
 
   try {
+    // 1. On vérifie si un blog existe déjà pour cet user
+    const [existingBlog] = await models.blog.findByUserId(blog.user_id);
+    
+    if (existingBlog.length > 0) {
+      return res.status(400).json({ 
+        message: "Vous possédez déjà un blog. Un seul blog est autorisé par utilisateur." 
+      });
+    }
 
-    const [result] = await models.blog.insert (blog);
-
-    res.status(201).json({
-      id: result.insertId,
-    });
+    // 2. Si non, on procède à l'insertion
+    const [result] = await models.blog.insert(blog);
+    res.status(201).json({ id: result.insertId });
 
   } catch (err) {
     console.error(err);
@@ -53,21 +53,35 @@ const add = async (req, res) => {
 };
 
 const edit = async (req, res) => {
- 
-  const { theme_id, title, description } = req.body;
-   const id = parseInt(req.params.id, 10);
+  const { title, description, theme_id, banniere, couleurs } = req.body;
+  const id = parseInt(req.params.id, 10);
+
   if (!title) {
     return res.status(400).json({ message: "Le titre est requis." });
   }
 
   try {
-
     const [result] = await models.blog.update({
-        id,
-        theme_id,
-        title,
-        description
+      id,
+      theme_id,
+      title,
+      description,
+      banniere,
+      couleurs
     });
+
+    if (result.affectedRows === 0) res.sendStatus(404);
+    else res.sendStatus(204);
+  } catch (err) {
+    console.error(err);
+    res.sendStatus(500);
+  }
+};
+
+const destroy = async (req, res) => {
+  const [result] = await models.blog.delete(req.params.id);
+
+  try {
 
     if (result.affectedRows === 0) {
       res.status(404);
@@ -75,28 +89,19 @@ const edit = async (req, res) => {
     else {
       res.sendStatus(204);
     }
-
   } catch (err) {
     console.error(err);
     res.status(500);
   }
 };
 
-
-const destroy = async (req, res) => {
-    const [result] = await models.blog.delete(req.params.id);
-
+const getByUserId = async (req, res) => {
   try {
-
-    if (result.affectedRows === 0) {
-      res.status(404);
-    }
-    else {
-    res.sendStatus(204);
-    }
+    const [rows] = await models.blog.findByUserId(req.params.id);
+    res.status(200).json(rows);
   } catch (err) {
     console.error(err);
-    res.status(500);
+    res.sendStatus(500);
   }
 };
 
@@ -107,4 +112,5 @@ module.exports = {
   add,
   edit,
   destroy,
+  getByUserId,
 };

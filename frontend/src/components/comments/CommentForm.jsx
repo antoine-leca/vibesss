@@ -3,10 +3,12 @@ import { Link } from 'react-router';
 import { useAuth } from '../../services/AuthContext';
 
 
-export default function CommentForm({ onCommentAdded }) {
+export default function CommentForm({ onCommentAdded, articleId }) {
   const { user } = useAuth();
   const [text, setText] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  // 💡 NOUVEAU : État pour afficher un message d'erreur stylisé sans alert()
+  const [error, setError] = useState('');
 
   if (!user) {
     return (
@@ -32,63 +34,95 @@ export default function CommentForm({ onCommentAdded }) {
 
     try {
       setSubmitting(true);
+      setError(''); // Réinitialise l'erreur à chaque tentative
+      
+      const payload = { 
+        content: text,
+        article_id: articleId,
+        user_id: user.id
+      };
+
+      console.log("Envoi du commentaire:", payload);
+      console.log("URL backend:", import.meta.env.VITE_BACKEND_URL);
+
       const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/comments`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ content: text }),
+        // 💡 MODIFIÉ : On envoie enfin TOUTES les infos attendues par ton contrôleur SQL !
+        body: JSON.stringify({ 
+          content: text,
+          article_id: articleId,
+          user_id: user.id // ou user.user_id selon la structure de ton token/payload
+        }),
         credentials: "include"
       });
 
+      console.log("📬 Status réponse:", response.status);
+      
       if (!response.ok) {
-        throw new Error("Failed to post comment");
+        const errorText = await response.text();
+        console.error("Erreur serveur:", errorText);
+        throw new Error(`Erreur ${response.status}: ${errorText}`);
       }
 
       const newComment = await response.json();
+      console.log("Commentaire créé:", newComment);
+      
       onCommentAdded(newComment);
       setText('');
     } catch (err) {
       console.error(err);
-      alert("Erreur lors de la publication du commentaire.");
+      // 💡 MODIFIÉ : Message d'erreur stylisé au lieu de l'alert()
+      setError("Impossible de publier le commentaire. Réessayez plus tard.");
     } finally {
       setSubmitting(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex items-center gap-3 mb-8">
-     
-      {user.profile_picture ? (
-        <img 
-          src={user.profile_picture} 
-          alt={user.pseudo} 
-          className="w-9 h-9 rounded-full object-cover border border-gray-100"
-        />
-      ) : (
-        <div className="w-9 h-9 rounded-full bg-[#FCEAEB] text-[#D97B84] flex items-center justify-center font-bold text-sm select-none">
-          {initials}
-        </div>
-      )}
+    <div className="mb-8">
+      <form onSubmit={handleSubmit} className="flex items-center gap-3">
       
-      {/* Formulaire */}
-      <div className="flex-1 relative flex items-center">
-        <input 
-          type="text" 
-          placeholder="Add to the discussion..." 
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          disabled={submitting}
-          className="w-full pl-5 pr-24 py-2.5 bg-white border border-gray-200 rounded-full text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:border-gray-300 transition disabled:bg-gray-50"
-        />
-        <button 
-          type="submit"
-          disabled={submitting || !text.trim()}
-          className="absolute right-1.5 px-5 py-1.5 bg-[#7B96EC] hover:bg-[#6984DC] text-white font-semibold text-xs tracking-wide rounded-full uppercase transition disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {submitting ? '...' : 'Post'}
-        </button>
-      </div>
-    </form>
+        {user.profile_picture ? (
+          <img 
+            src={user.profile_picture} 
+            alt={user.pseudo} 
+            className="w-9 h-9 rounded-full object-cover border border-gray-100"
+          />
+        ) : (
+          <div className="w-9 h-9 rounded-full bg-[#FCEAEB] text-[#D97B84] flex items-center justify-center font-bold text-sm select-none">
+            {initials}
+          </div>
+        )}
+        
+        {/* Formulaire */}
+        <div className="flex-1 relative flex items-center">
+          <input 
+            type="text" 
+            placeholder="Add to the discussion..." 
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            disabled={submitting}
+            className="w-full pl-5 pr-24 py-2.5 bg-white border border-gray-200 rounded-full text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:border-gray-300 transition disabled:bg-gray-50"
+          />
+          <button 
+            type="submit"
+            disabled={submitting || !text.trim()}
+            className="absolute right-1.5 px-5 py-1.5 bg-[#7B96EC] hover:bg-[#6984DC] text-white font-semibold text-xs tracking-wide rounded-full uppercase transition disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {submitting ? '...' : 'Post'}
+          </button>
+        </div>
+      </form>
+
+      {/*  Affichage de l'erreur en pur Tailwind sous le champ */}
+      {error && (
+        <p className="text-xs text-[#E76F85] font-medium mt-2 ml-12 animate-in fade-in duration-200">
+          {error}
+        </p>
+      )}
+    </div>
   );
 }

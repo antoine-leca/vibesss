@@ -1,14 +1,25 @@
 const models = require("../models");
 
 const add = async (req, res) => {
-    const { userId, articleId } = req.body; // userId = celui qui like
+    // SÉCURITÉ : Le userId de celui qui like vient maintenant du Token (req.payload.sub)
+    const userId = req.payload.sub; 
+    const { articleId } = req.body; 
+
+    if (!articleId) {
+        return res.status(400).send("L'identifiant de l'article (articleId) est requis.");
+    }
 
     try {
-        //  On ajoute le like en DB
+        // 1. On ajoute le like en DB
         await models.userLikeArticle.insert(userId, articleId);
         
         // 2. On récupère le propriétaire de l'article
         const [[article]] = await models.article.find(articleId);
+        
+        if (!article) {
+            return res.status(404).send("Article non trouvé");
+        }
+        
         const ownerId = article.user_id;
 
         // 3. On crée la notification de type 'like'
@@ -33,7 +44,13 @@ const add = async (req, res) => {
 };
 
 const destroy = async (req, res) => {
-    const { userId, articleId } = req.body;
+    // on sécurise l'ID avec le Token
+    const userId = req.payload.sub;
+    const { articleId } = req.body;
+
+    if (!articleId) {
+        return res.status(400).send("L'identifiant de l'article (articleId) est requis.");
+    }
 
     try {
         const [result] = await models.userLikeArticle.deleteLike(userId, articleId);
@@ -52,4 +69,3 @@ module.exports = {
     add,
     destroy
 };
-

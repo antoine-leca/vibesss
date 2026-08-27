@@ -1,5 +1,6 @@
-import React, { useRef } from 'react';
-import { Camera } from 'lucide-react';
+import React from 'react';
+import { Send } from 'lucide-react';
+import ColorPicker from './ColorPicker';
 
 const MOCK_ARTICLES = [
   { id: 1, title: "Premier article de test", date: "Il y a 2 jours", excerpt: "Ceci est un extrait de l'article..." },
@@ -7,71 +8,53 @@ const MOCK_ARTICLES = [
   { id: 3, title: "Troisième publication", date: "Il y a 1 semaine", excerpt: "Du contenu de qualité arrive bientôt..." },
 ];
 
-const ArticlesSection = ({ backgroundImage, onBackgroundChange, blogTitle }) => {
-  const bgInputRef = useRef(null);
-
-  const handleFileChange = (event) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => onBackgroundChange(e.target.result);
-      reader.readAsDataURL(file);
-    }
-    event.target.value = '';
-  };
-
+const ArticlesSection = ({ backgroundColor, onColorChange, blogTitle, onPublish, hasBlog }) => {
   return (
     <div className="relative min-h-[500px] overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
-      <input
-        type="file"
-        ref={bgInputRef}
-        onChange={handleFileChange}
-        accept="image/*"
-        className="hidden"
-      />
       
-      {/* Image de fond */}
-      {backgroundImage && (
-        <div className="absolute inset-0">
-          <img src={backgroundImage} alt="Fond" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-white/50 backdrop-blur-sm" />
-        </div>
+      {backgroundColor && (
+        <div 
+          className="absolute inset-0 transition-colors duration-300" 
+          style={{ backgroundColor: backgroundColor }}
+        />
       )}
 
-      {/* Bouton changement fond */}
-      <button
-        onClick={() => bgInputRef.current?.click()}
-        className="btn btn-sm absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm border:80 hover:bg-white text-black border-0 shadow-lg hover:shadow-xl hover:scale-105 transition-all z-20 gap-2 font-custom-main"
-      >
-        <Camera size={16} />
-        Changer le fond
-      </button>
+      {/* ColorPicker en haut à DROITE */}
+      <div className="absolute top-6 right-6 z-20">
+        <ColorPicker 
+          backgroundColor={backgroundColor}
+          onColorChange={onColorChange}
+        />
+      </div>
 
       {/* Articles simulés */}
-      <div className="relative z-10 px-6 sm:px-12 py-12">
-        <h2 className="text-2xl sm:text-3xl font-custom-title font-bold text-black mb-8">
-          Derniers articles
-        </h2>
+      <div className="relative z-10 px-6 sm:px-12 py-12 mt-20">
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {MOCK_ARTICLES.map((article) => (
             <div 
               key={article.id}
-              className="card bg-[var(--card-color)] shadow-lg hover:shadow-xl transition-shadow border border-black/5"
+              className="card bg-white shadow-lg hover:shadow-2xl transition-all duration-300 border border-black/5 rounded-2xl overflow-hidden hover:-translate-y-1"
             >
-              <figure className="h-32">
+              <figure className="h-40">
                 <div 
-                  className="w-full h-full rounded-t-2xl"
+                  className="w-full h-full"
                   style={{ background: 'linear-gradient(135deg, var(--secondary-color) 0%, var(--category-color) 100%)' }}
                 />
               </figure>
-              <div className="card-body p-6">
-                <h3 className="card-title text-lg font-custom-title">{article.title}</h3>
-                <p className="text-sm text-black/60 font-custom-main">{article.excerpt}</p>
-                <div className="card-actions justify-between items-center mt-2">
+              <div className="card-body p-6 gap-3">
+                <h3 className="card-title text-lg font-custom-title text-black line-clamp-2">
+                  {article.title}
+                </h3>
+                <p className="text-sm text-black/60 font-custom-main line-clamp-2">
+                  {article.excerpt}
+                </p>
+                
+                
+                <div className="flex justify-between items-center mt-auto pt-2">
                   <span className="text-xs text-black/40 font-custom-main">{article.date}</span>
                   <div 
-                    className="badge text-white font-medium font-custom-main"
+                    className="badge badge-lg text-white font-medium font-custom-main px-3 py-2 rounded-lg"
                     style={{ backgroundColor: 'var(--primary-color)' }}
                   >
                     Lire
@@ -82,20 +65,29 @@ const ArticlesSection = ({ backgroundImage, onBackgroundChange, blogTitle }) => 
           ))}
         </div>
 
-        <div className="mt-12 text-center">
-          <button 
-            className="btn btn-lg text-white border-0 shadow-lg font-custom-main"
-            style={{ backgroundColor: 'var(--primary-color)' }}
-          >
-            Voir tous les articles
-          </button>
-        </div>
+      </div>
+
+      {/* Section d'appel à l'action final */}
+      <div className="relative z-10 flex flex-col items-center pb-20 px-6">
+        <div className="w-full max-w-md h-px bg-black/5 mb-12" /> 
+        
+        <button
+          onClick={onPublish}
+          className="group relative px-12 py-5 bg-[var(--primary-color)] text-white font-bold rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95 flex items-center gap-4 overflow-hidden"
+        >
+          <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out" />
+          
+          <span className="text-lg">
+            {hasBlog ? "Mettre à jour mon blog" : "Créer mon blog maintenant"}
+          </span>
+          <Send size={22} />
+        </button>
       </div>
 
       {/* Footer */}
       <div className="bg-[#0D0D0D] text-white px-6 sm:px-12 py-8 text-center">
         <p className="text-sm text-white/60 font-custom-main">
-          © 2024 {blogTitle} - Propulsé par Vibesss
+          © 2026 {blogTitle} - Propulsé par Vibesss
         </p>
       </div>
     </div>

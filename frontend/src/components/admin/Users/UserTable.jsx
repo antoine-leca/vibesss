@@ -5,46 +5,68 @@ const UserTable = ({
   users, 
   isLoading, 
   pagination, 
-  onDelete 
+  onDelete,
+  onRoleChange
 }) => {
   
-  // Skeleton de chargement
   if (isLoading) {
-    return <div className="p-10 text-center opacity-30 italic text-[12px]">Chargement...</div>;
+    return <div className="p-8 text-center text-[11px] italic text-gray-400">Chargement...</div>;
   }
 
   return (
-    <div className="space-y-4">
-      {/* Ton style de conteneur original */}
-      <div className="bg-white/20 backdrop-blur-md rounded-xl border border-white/30 overflow-hidden shadow-lg">
-        {users.length > 0 ? (
-          <div className="flex flex-col">
-            {users.map(user => (
-              <UserRow key={user.id} user={user} onDelete={onDelete} />
-            ))}
-          </div>
-        ) : (
-          <div className="p-10 text-center opacity-30 italic text-[12px]">Aucun membre</div>
-        )}
+    <div className="space-y-2">
+      {/* Table */}
+      <div className="overflow-x-auto">
+        <table className="w-full text-left text-[11px]">
+          <thead>
+            <tr className="border-b-2 border-white/40 bg-white/20 text-gray-700 uppercase font-black tracking-wider">
+              <th className="py-2.5 px-4">Avatar</th>
+              <th className="py-2.5 px-4">Pseudo</th>
+              <th className="py-2.5 px-4">Email</th>
+              <th className="py-2.5 px-4 text-center">Rôle</th>
+              <th className="py-2.5 px-4 text-center">Blogs</th>
+              <th className="py-2.5 px-4 text-center">Inscription</th>
+              <th className="py-2.5 px-4 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.length > 0 ? (
+              users.map(user => (
+                <UserRow 
+                  key={user.id} 
+                  user={user} 
+                  onDelete={onDelete}
+                  onRoleChange={onRoleChange}
+                />
+              ))
+            ) : (
+              <tr>
+                <td colSpan="7" className="py-8 text-center text-gray-400 opacity-50 italic">
+                  Aucun membre
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
       </div>
 
-      {/* Pagination masquée si 1 seule page ou 0 items */}
-      {pagination.totalPages > 1 && (
-        <div className="flex justify-center items-center gap-4 pt-2">
-          <button 
+      {/* Pagination */}
+      {pagination && pagination.totalPages > 1 && (
+        <div className="flex justify-center items-center gap-4 py-2 border-t-2 border-white/40">
+          <button
             onClick={pagination.prevPage}
             disabled={pagination.currentPage === 1}
-            className="p-2 disabled:opacity-30 hover:bg-black/5 rounded-full transition-colors font-bold text-gray-800"
+            className="p-1 px-3 disabled:opacity-20 hover:bg-black/5 rounded-full transition-all text-gray-600 font-black text-sm"
           >
             ←
           </button>
-          <span className="text-[10px] font-bold text-gray-500 uppercase">
+          <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest">
             Page {pagination.currentPage} / {pagination.totalPages}
           </span>
-          <button 
+          <button
             onClick={pagination.nextPage}
             disabled={pagination.currentPage === pagination.totalPages}
-            className="p-2 disabled:opacity-30 hover:bg-black/5 rounded-full transition-colors font-bold text-gray-800"
+            className="p-1 px-3 disabled:opacity-20 hover:bg-black/5 rounded-full transition-all text-gray-600 font-black text-sm"
           >
             →
           </button>

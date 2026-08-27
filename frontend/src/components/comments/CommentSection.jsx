@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import CommentCard from './CommentCard';
 import CommentForm from './CommentForm';
 
-
 const formatTime = (dateStr) => {
   const date = new Date(dateStr);
   const now = new Date();
@@ -18,7 +17,8 @@ const formatTime = (dateStr) => {
   return date.toLocaleDateString("fr-FR", { day: "numeric", month: "short", year: "numeric" });
 };
 
-export default function CommentSection() {
+// 💡 1. MODIFICATION : On récupère l'articleId en prop ici
+export default function CommentSection({ articleId }) {
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -26,13 +26,16 @@ export default function CommentSection() {
   const fetchComments = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/comments`);
+      const url = articleId 
+        ? `${import.meta.env.VITE_BACKEND_URL}/articles/${articleId}/comments`
+        : `${import.meta.env.VITE_BACKEND_URL}/comments`;
+      
+      const response = await fetch(url);
       if (!response.ok) {
         throw new Error("Failed to fetch comments");
       }
       const data = await response.json();
       
-      // Map database comments to UI structure
       const mappedComments = data.map((c) => ({
         id: c.id,
         author: c.pseudo || "Anonyme",
@@ -56,7 +59,7 @@ export default function CommentSection() {
 
   useEffect(() => {
     fetchComments();
-  }, []);
+  }, [articleId]);
 
   const handleCommentAdded = (newComment) => {
     const mapped = {
@@ -72,6 +75,10 @@ export default function CommentSection() {
     setComments((prev) => [mapped, ...prev]);
   };
 
+  const removeCommentFromState = (deletedCommentId) => {
+    setComments(previousComments => previousComments.filter(comment => comment.id !== deletedCommentId));
+  };
+
   return (
     <div className="max-w-3xl mx-auto px-4 py-8 font-sans bg-white min-h-screen">
       {/* Compteur de commentaires */}
@@ -79,8 +86,9 @@ export default function CommentSection() {
         Comments ({loading ? "..." : comments.length})
       </h2>
 
+      {/* 💡 2. MODIFICATION : On passe l'articleId reçu au formulaire */}
       {/* Appel du composant Formulaire */}
-      <CommentForm onCommentAdded={handleCommentAdded} />
+      <CommentForm onCommentAdded={handleCommentAdded} articleId={articleId} />
 
       {/* Chargement */}
       {loading && (
@@ -96,7 +104,6 @@ export default function CommentSection() {
         </div>
       )}
 
-      
       {!loading && !error && (
         <div className="space-y-5">
           {comments.length === 0 ? (
@@ -106,10 +113,18 @@ export default function CommentSection() {
           ) : (
             comments.map((comment) => (
               <div key={comment.id} className="space-y-4">
-                <CommentCard comment={comment} />
+                <CommentCard 
+                  comment={comment} 
+                  onDeleteSuccess={removeCommentFromState} 
+                />
                 
                 {comment.replies && comment.replies.map((reply) => (
-                  <CommentCard key={reply.id} comment={reply} isReply={true} />
+                  <CommentCard 
+                    key={reply.id} 
+                    comment={reply} 
+                    isReply={true} 
+                    onDeleteSuccess={removeCommentFromState} 
+                  />
                 ))}
               </div>
             ))

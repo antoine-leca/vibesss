@@ -1,32 +1,50 @@
-import React from "react";
+import React, { useMemo } from "react";
 import useReports from "../../hooks/admin/useReports";
 import { usePagination } from "../../hooks/usePagination";
 import ReportTable from "../../components/admin/Reports/ReportTable";
 
-const ReportsList = () => {
-  const { reports, isLoading, updateStatus, deleteReport } = useReports();
+const sortReportsByDate = (a, b) => {
+  const timeA = a.report_date ? new Date(a.report_date).getTime() : 0;
+  const timeB = b.report_date ? new Date(b.report_date).getTime() : 0;
+  return timeB - timeA;
+};
 
-  // On applique ta logique de pagination simplifiée
-  const { currentItems, ...pagination } = usePagination(reports, 10);
+const ReportsList = () => {
+  const { reports, isLoading, updateStatus, deleteReport, refresh } = useReports();
+  
+  const sortedReports = useMemo(() => [...reports].sort(sortReportsByDate), [reports]);
+  const { currentItems, ...pagination } = usePagination(sortedReports, 10);
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-end px-2">
-        <h1 className="text-2xl font-black text-white uppercase tracking-tighter">
-          Signalements
-        </h1>
-        <span className="text-[10px] font-black text-white/30 uppercase tracking-widest text-right">
-          {reports.length} alertes
-        </span>
+    <div className="max-w-4xl mx-auto space-y-3">
+      {/* Header */}
+      <div className="flex justify-between items-end px-1">
+        <div>
+          <h2 className="text-[10px] font-black text-gray-700/40 uppercase tracking-[0.3em]">Administration</h2>
+          <h1 className="text-2xl font-black text-gray-800 uppercase tracking-tighter">Signalements</h1>
+        </div>
+
+        <div className="text-right">
+          <button 
+            onClick={refresh}
+            className="text-[10px] font-black uppercase text-gray-400 hover:text-gray-700 tracking-widest"
+          >
+            {isLoading ? "..." : "Actualiser"}
+          </button>
+          <div className="text-[10px] font-black text-gray-400 uppercase tracking-wider mt-1">
+            {reports.length} alertes
+          </div>
+        </div>
       </div>
 
-      <div className="bg-white/5 backdrop-blur-md rounded-[2rem] border border-white/10 p-2 shadow-xl">
+      {/* Table Container */}
+      <div className="bg-white/55 backdrop-blur-md rounded-2xl border-2 border-white/70 overflow-hidden shadow-lg">
         <ReportTable 
-          reports={currentItems} // On passe les signalements découpés
+          reports={currentItems}
           isLoading={isLoading} 
           onStatusChange={updateStatus} 
           onDelete={deleteReport}
-          pagination={pagination} // On passe l'objet pagination
+          pagination={pagination}
         />
       </div>
     </div>
